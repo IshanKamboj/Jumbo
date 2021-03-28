@@ -280,5 +280,5 @@ bot.add_cog(UtilityCogs(bot))
 bot.add_cog(ActionCog(bot))
 bot.add_cog(InfoCogs(bot))
 
-
-bot.run(os.getenv('TOKEN'))
+TOKEN = os.getenv('TOKEN')
+bot.run(TOKEN)
