@@ -3,6 +3,7 @@ from discord.ext import commands
 from Database.db_files import firebase
 import random
 from helpEmbeds import HelpEmbeds
+from .Listeners import AllListeners
 import asyncio
 
 class Admin(commands.Cog):
@@ -205,3 +206,8 @@ class Admin(commands.Cog):
 
         elif isinstance(error,commands.MissingPermissions):
             await ctx.send("**You are missing the required permissions:** `administrator`")
+
+    # @commands.group(invoke_without_command=True)
+    # @commands.has_permissions(administrator=True)
+    # @commands.check(AllListeners.check_enabled)
+    # async def multi(self,ctx,)

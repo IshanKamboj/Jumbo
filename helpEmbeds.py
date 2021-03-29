@@ -174,3 +174,20 @@ class HelpEmbeds():
         em = discord.Embed(title=":dart: | Snipe Command",description="This command shows the last deleted message in a server. Show none if message is too old",color=discord.Color.random())
         em.add_field(name="**Syntax**",value="*snipe [channel]")
         return em
+    # def multi_embed():
+    #     em = discord.Embed(title="Multi Command",color=discord.Color.random())
+    #     em.add_field(name="*multi <channel> <multi>",value="Sets the multi for a specific channel.")
+    #     em.add_field(name="*multi <role/role_id> <multi>",value="Sets the multi for a ")
+
+    def gayrate_embed():
+        em = discord.Embed(title="Gayrate Command",description="This command tells how much gay a person is. LOL",color=discord.Color.random())
+        em.add_field(name="Syntax",value="*gayrate <user>")
+        return em
+    def joke_embed():
+        em = discord.Embed(title="Joke Command",description="This command returns a random joke")
+        em.add_field(name="Syntax",value="*joke")
+        return em
+    def botinfo_embed():
+        em = discord.Embed(title="Botinfo Command",description="This command returns info about the bot")
+        em.add_field(name="Syntax",value="*botinfo")
+        return em

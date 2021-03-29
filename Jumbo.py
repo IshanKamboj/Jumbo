@@ -68,7 +68,7 @@ async def admin(ctx):
 
 @help.command(name="fun")
 async def fun(ctx):
-    em = discord.Embed(title=":joystick: | Fun Commands",description="`Fact`, `Truth`, `Dare`, `Spam`, `8ball`, `Opinion`, `Roast`",color=discord.Color.random())
+    em = discord.Embed(title=":joystick: | Fun Commands",description="`Fact`, `Truth`, `Dare`, `Spam`, `8ball`, `Opinion`, `Roast`, `Joke`, `Gayrate`",color=discord.Color.random())
     await ctx.send(embed=em)
 
 @help.command(name="fights")
@@ -83,7 +83,7 @@ async def action(ctx):
 
 @help.command(name="info")
 async def action(ctx):
-    em = discord.Embed(title=":mag: | Info Commands",description="`Userinfo`, `Roleinfo`, `OnlineInfo`, `Ping`, `Avatar`, `Snipe`",color=discord.Color.random())
+    em = discord.Embed(title=":mag: | Info Commands",description="`Userinfo`, `Roleinfo`, `OnlineInfo`, `Ping`, `Avatar`, `Snipe`, `Botinfo`",color=discord.Color.random())
     await ctx.send(embed=em)
 
 
@@ -268,6 +268,19 @@ async def avatar(ctx):
 @help.command(name="snipe")
 async def snipe(ctx):
     await ctx.send(embed=HelpEmbeds.snipe_command())
+
+@help.command(name="gayrate",aliases=["gr","gay","gae"])
+async def gayrate(ctx):
+    await ctx.send(embed=HelpEmbeds.gayrate_embed())
+
+@help.command(name="joke",aliases=["jokes"])
+async def joke(ctx):
+    await ctx.send(embed=HelpEmbeds.joke_embed())
+
+@help.command(name="botinfo",aliases=["bi","binfo","boti"])
+async def botinfo(ctx):
+    await ctx.send(embed=HelpEmbeds.botinfo_embed())
+
 ##############################################################################################
 
 

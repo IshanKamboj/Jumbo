@@ -146,7 +146,18 @@ class InfoCogs(commands.Cog):
                 em.set_footer(text=f"Deleted in : #{channel}")
                 await ctx.send(embed=em)
             except KeyError:
-                await ctx.send("**`Nothing to Snipe ;)`**")
+                await ctx.send("**`Found Nothing to Snipe ;)`**")
         else:
             em = discord.Embed(description="This command is disabled in your server. Ask admin to enable it",color=discord.Color.random())
             await ctx.send(embed=em)
+
+    @commands.command(name="botinfo",aliases=["bi","binfo","boti"])
+    async def _botinfo(self,ctx):
+        user = self.bot.user
+        date_format = "%a, %d %b %Y %I:%M %p"
+        em = discord.Embed(title="Jumbo's Info",color=discord.Color.random())
+        em.add_field(name="Registered",value=user.created_at.strftime(date_format),inline=False)
+        em.add_field(name="Number of Commands",value=len(self.bot.commands),inline=False)
+        em.add_field(name="Guild",value=len(self.bot.guilds),inline=False)
+        em.set_thumbnail(url=str(user.avatar_url))
+        await ctx.send(embed=em)

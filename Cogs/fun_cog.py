@@ -5,6 +5,8 @@ import random
 from Database.db_files import firebase
 import asyncio
 from helpEmbeds import HelpEmbeds
+from .Listeners import AllListeners
+import pyjokes
 
 with open("truth.txt","r") as f:
     truth_text = f.readlines()
@@ -307,4 +309,22 @@ class Fun(commands.Cog):
         else:
             em = discord.Embed(description="This command is disabled in your server. Ask admin to enable it",color=discord.Color.random())
             await ctx.send(embed=em)
-        
+    
+    # @commands.command(name="joke")
+    # async def 
+
+    @commands.command(name="gayrate",aliases=["gr","gay","gae"])
+    @commands.check(AllListeners.check_enabled)
+    async def _gayrate(self,ctx,user:discord.Member=None):
+        x = random.randint(1,100)
+        if user is None:
+            user = ctx.author
+            em = discord.Embed(title=f"{user.name}'s Gayrate",description=f"{user.mention} is {100}% gay as he didn't mention the user. LMAO",color=discord.Color.random())
+        else:
+            em = discord.Embed(title=f"{user.name}'s Gayrate",description=f"{user.mention} is {x}% gay.",color=discord.Color.random())
+        await ctx.send(embed=em)
+    
+    @commands.command(name="joke",aliases=["jokes"])
+    async def _joke(self,ctx):
+        jk = pyjokes.get_joke()
+        await ctx.send(jk)
