@@ -213,7 +213,7 @@ class InfoCogs(commands.Cog):
             ("Uptime", uptime, True),
             ("Memory usage",f"{mem_usage:,.3f} / {mem_total:,.0f} MiB ({mem_of_total:.0f}%)", True),
             ("Number of Guilds", len(self.bot.guilds),True),
-            ("Users", f"{self.bot.guilds.member_count:,}", True),
+            ("Users", f"{len(self.bot.users)}", True),
             ("Registered", user.created_at.strftime(date_format), True),
             ("Number of Commands", len(self.bot.commands),True)
 
