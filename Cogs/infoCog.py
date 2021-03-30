@@ -8,7 +8,7 @@ from platform import python_version
 from time import time
 from discord import __version__ as discord_version
 from psutil import Process, virtual_memory
-
+from .Listeners import AllListeners
 
 class InfoCogs(commands.Cog):
     def __init__(self, bot):
@@ -197,6 +197,7 @@ class InfoCogs(commands.Cog):
             await ctx.send(embed=em)
 
     @commands.command(name="botinfo", aliases=["bi", "binfo", "boti"])
+    @commands.check(AllListeners.check_enabled)
     async def _botinfo(self, ctx):
         user = self.bot.user
         date_format = "%a, %d %b %Y %I:%M %p"
