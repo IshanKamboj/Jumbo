@@ -126,17 +126,17 @@ class InfoCogs(commands.Cog):
         em = discord.Embed(title=":ping_pong: | Pong!")
         if lat < 150:
             em.color = 0x008000
-            em.add_field(name="DWSP Latency:",value=lat)
+            em.add_field(name="DWSP Latency:",value=f"`{lat}ms.`")
         elif lat >= 150:
             em.color = 0xffff00
-            em.add_field(name="DWSP Latency:",value=lat)
+            em.add_field(name="DWSP Latency:",value=f"`{lat}ms.`")
         else:
             em.color = 0xff0000
-            em.add_field(name="DWSP Latency:",value=lat)
+            em.add_field(name="DWSP Latency:",value=f"`{lat}ms.`")
         start = time()
         message = await ctx.send(embed=em)
         end = time()
-        em.add_field(name="Response Time:",value=f"{(end-start)*1000:,.0f} ms.")
+        em.add_field(name="Response Time:",value=f"`{(end-start)*1000:,.0f} ms.`")
         await message.edit(embed=em)
     @commands.command(name="avatar", aliases=["av", "image", "pfp"])
     async def _avatar(self, ctx, user: discord.Member = None):
