@@ -163,6 +163,7 @@ class InfoCogs(commands.Cog):
         
         proc = Process()
 		with proc.oneshot():
+
 			uptime = timedelta(seconds=time()-proc.create_time())
 			cpu_time = timedelta(seconds=(cpu := proc.cpu_times()).system + cpu.user)
 			mem_total = virtual_memory().total / (1024**2)
