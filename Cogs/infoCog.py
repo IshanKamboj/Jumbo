@@ -203,8 +203,6 @@ class InfoCogs(commands.Cog):
         proc = Process()
         with proc.oneshot():
             uptime = timedelta(seconds=time()-proc.create_time())
-            cpu_time = timedelta(
-                seconds=(cpu := proc.cpu_times()).system + cpu.user)
             mem_total = virtual_memory().total / (1024**2)
             mem_of_total = proc.memory_percent()
             mem_usage = mem_total * (mem_of_total / 100)
@@ -212,7 +210,6 @@ class InfoCogs(commands.Cog):
             ("Python version", python_version(), True),
             ("discord.py version", discord_version, True),
             ("Uptime", uptime, True),
-            ("CPU time", cpu_time, True),
             ("Memory usage",f"{mem_usage:,.3f} / {mem_total:,.0f} MiB ({mem_of_total:.0f}%)", True),
             ("Number of Guilds", len(self.bot.guilds),True),
             ("Users", f"{self.bot.guild.member_count:,}", True),
