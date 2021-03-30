@@ -219,6 +219,6 @@ class InfoCogs(commands.Cog):
 
             ]
         for name, value, inline in fields:
-            embed.add_field(name=name, value=value, inline=inline)
+            em.add_field(name=name, value=value, inline=inline)
         em.set_thumbnail(url=str(user.avatar_url))
         await ctx.send(embed=em)
