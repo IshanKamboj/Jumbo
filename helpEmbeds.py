@@ -191,3 +191,8 @@ class HelpEmbeds():
         em = discord.Embed(title="Botinfo Command",description="This command returns info about the bot")
         em.add_field(name="Syntax",value="*botinfo")
         return em
+
+    def wikisearch_embed():
+        em = discord.Embed(title="Wikisearch Command",description="This command searches the wikipedia for the provided query.")
+        em.add_field(name="Syntax",value="*wikisearch <query>")
+        return em

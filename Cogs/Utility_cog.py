@@ -8,7 +8,8 @@ import asyncio
 from bs4 import BeautifulSoup
 import requests
 from googlesearch import search
-
+from .Listeners import AllListeners
+import wikipedia
 shop = [
     {
         "item":":boxing_glove: **Boxing Glove**",
@@ -435,3 +436,10 @@ class Utility(commands.Cog):
             await ctx.send(embed=em)
         # print(desc)
         # print(temp)
+
+    @commands.command(name="wikisearch",aliases=["wsearch","wikipedia"])
+    @commands.check(AllListeners.check_enabled)
+    async def _wikisearch(self,ctx,*,query:str):
+        x = wikipedia.summary(query)
+        await ctx.send(f"**{x}**")
+    

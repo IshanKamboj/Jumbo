@@ -21,7 +21,7 @@ def get_prefix(client,message):
     return data.val()['Prefix']    
 
 intent = Intents().all()   
-v = 2
+v = 1
 d = 300
 bot = commands.Bot(command_prefix=get_prefix,intents=intent,case_insensitive=True)
 bot.remove_command("help")
@@ -58,7 +58,7 @@ Use *help <command> for extended information on a command
 #------------------------------ Section of help cmds -----------------------------
 @help.command(name="utility")
 async def utility(ctx):
-    em = discord.Embed(title=":tools: | Utility commands",description="`Level`, `Leaderboard`, `AFK`, `Seen`, `Autoreact`, `DM`, `Google`",color=discord.Color.random())
+    em = discord.Embed(title=":tools: | Utility commands",description="`Level`, `Leaderboard`, `AFK`, `Seen`, `Autoreact`, `DM`, `Google`, `Wikisearch`",color=discord.Color.random())
     await ctx.send(embed=em)
 
 @help.command(name="admin")
@@ -280,6 +280,10 @@ async def joke(ctx):
 @help.command(name="botinfo",aliases=["bi","binfo","boti"])
 async def botinfo(ctx):
     await ctx.send(embed=HelpEmbeds.botinfo_embed())
+
+@help.command(name="wikisearch",aliases=["wsearch","wikipedia"])
+async def wikisearch(ctx):
+    await ctx.send(embed=HelpEmbeds.wikisearch_embed())
 
 ##############################################################################################
 
