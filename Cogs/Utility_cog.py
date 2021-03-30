@@ -444,6 +444,6 @@ class Utility(commands.Cog):
             x = wikipedia.summary(query,sentences=7)
             pg = wikipedia.page(query)
             link = pg.url
-            await ctx.send(f"**{y}**\n More info can be found here: {link}")
+            await ctx.send(f"**{x}**\n More info can be found here: {link}")
         except Exception as e:
             print(str(e))
