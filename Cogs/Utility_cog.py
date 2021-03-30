@@ -442,6 +442,7 @@ class Utility(commands.Cog):
     async def _wikisearch(self,ctx,*,query:str):
         try:
             x = wikipedia.summary(query)
-            await ctx.send(f"**{x}**")
+            y = x[0:500]
+            await ctx.send(f"**{y}**")
         except Exception as e:
             print(str(e))
