@@ -441,8 +441,10 @@ class Utility(commands.Cog):
     @commands.check(AllListeners.check_enabled)
     async def _wikisearch(self,ctx,*,query:str):
         try:
-            x = wikipedia.summary(query)
+            x = wikipedia.summary(query,sentences=7)
             y = x[0:500]
-            await ctx.send(f"**{y}**")
+            pg = wikipedia.page(query)
+            link = pg.url
+            await ctx.send(f"**{y}**\n More info can be found here: {link}")
         except Exception as e:
             print(str(e))
