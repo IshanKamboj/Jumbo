@@ -40,7 +40,7 @@ async def help(ctx):
 It also has many utility commands such as afk,dm,autreact. There are also fun commands.
 Don't forget levelling.... Jumbo also has a levelling system to check who's active or who's not.
 
-Default Prefix : `!` (Mention to know the prefix of your server)
+Default Prefix : `j!` (Mention to know the prefix of your server)
     
 Use *help <command> for extended information on a command
     
