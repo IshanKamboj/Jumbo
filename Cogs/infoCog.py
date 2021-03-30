@@ -120,27 +120,24 @@ class InfoCogs(commands.Cog):
             await ctx.send(embed=em)
 
     @commands.command(name="ping")
+    @commands.check(AllListeners.check_enabled)
     async def _ping(self, ctx):
-        db = firebase.database()
-        isEnabled = db.child('Disabled').child(
-            str(ctx.guild.id)).child(ctx.command).get()
-        if isEnabled.val() is None:
-            lat = round((self.bot.latency)*1000)
-            if lat < 150:
-                em = discord.Embed(
-                    title=":ping_pong: | Pong!", description=f":green_circle: Current Latency : `{lat}`ms", color=discord.Color.green())
-            elif lat >= 150:
-                em = discord.Embed(
-                    title=":ping_pong: | Pong!", description=f":yellow_circle: Current Latency : `{lat}`ms", color=discord.Color.from_rgb(255, 255, 0))
-            else:
-                em = discord.Embed(
-                    title=":ping_pong: | Pong!", description=f":red_circle: Current Latency : `{lat}`ms", color=discord.Color.red())
-            await ctx.send(embed=em)
+        lat = round((self.bot.latency)*1000)
+        em = discord.Embed(title=":ping_pong: | Pong!")
+        if lat < 150:
+            em.color = 0x008000
+            em.add_field(name="DWSP Latency:",value=lat)
+        elif lat >= 150:
+            em.color = 0xffff00
+            em.add_field(name="DWSP Latency:",value=lat)
         else:
-            em = discord.Embed(
-                description="This command is disabled in your server. Ask admin to enable it", color=discord.Color.random())
-            await ctx.send(embed=em)
-
+            em.color = 0xff0000
+            em.add_field(name="DWSP Latency:",value=lat)
+        start = time()
+        message = await ctx.send(embed=em)
+        end = time()
+        em.add_field(name="Response Time:",value=f"{(end-start)*1000:,.0f} ms.")
+        await message.edit(embed=em)
     @commands.command(name="avatar", aliases=["av", "image", "pfp"])
     async def _avatar(self, ctx, user: discord.Member = None):
         db = firebase.database()
@@ -209,6 +206,7 @@ class InfoCogs(commands.Cog):
             mem_of_total = proc.memory_percent()
             mem_usage = mem_total * (mem_of_total / 100)
         fields = [
+            ("Owner","TheMonkeyCoder#9860",True),
             ("Python version", python_version(), True),
             ("discord.py version", discord_version, True),
             ("Uptime", uptime, True),
@@ -217,7 +215,6 @@ class InfoCogs(commands.Cog):
             ("Users", f"{len(self.bot.users)}", True),
             ("Registered", user.created_at.strftime(date_format), True),
             ("Number of Commands", len(self.bot.commands),True)
-
             ]
         for name, value, inline in fields:
             em.add_field(name=name, value=value, inline=inline)
