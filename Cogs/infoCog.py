@@ -3,6 +3,10 @@ from discord.ext import commands
 import datetime
 from Database.db_files import firebase
 import asyncio
+from platform import python_version
+from time import time
+from discord import __version__ as discord_version
+from psutil import Process, virtual_memory
 class InfoCogs(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
@@ -156,8 +160,28 @@ class InfoCogs(commands.Cog):
         user = self.bot.user
         date_format = "%a, %d %b %Y %I:%M %p"
         em = discord.Embed(title="Jumbo's Info",color=discord.Color.random())
-        em.add_field(name="Registered",value=user.created_at.strftime(date_format),inline=False)
-        em.add_field(name="Number of Commands",value=len(self.bot.commands),inline=False)
-        em.add_field(name="Guild",value=len(self.bot.guilds),inline=False)
+        
+        proc = Process()
+		with proc.oneshot():
+			uptime = timedelta(seconds=time()-proc.create_time())
+			cpu_time = timedelta(seconds=(cpu := proc.cpu_times()).system + cpu.user)
+			mem_total = virtual_memory().total / (1024**2)
+			mem_of_total = proc.memory_percent()
+			mem_usage = mem_total * (mem_of_total / 100)
+
+		fields = [
+			("Python version", python_version(), True),
+			("discord.py version", discord_version, True),
+			("Uptime", uptime, True),
+			("CPU time", cpu_time, True),
+			("Memory usage", f"{mem_usage:,.3f} / {mem_total:,.0f} MiB ({mem_of_total:.0f}%)", True),
+            ("Number of Guilds",len(self.bot.guilds),True),
+			("Users", f"{self.bot.guild.member_count:,}", True),
+            ("Registered", user.created_at.strftime(date_format), True),
+            ("Number of Commands",len(self.bot.commands),True)
+            
+		]
+        for name, value, inline in fields:
+			embed.add_field(name=name, value=value, inline=inline)
         em.set_thumbnail(url=str(user.avatar_url))
         await ctx.send(embed=em)

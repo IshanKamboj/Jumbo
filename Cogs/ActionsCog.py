@@ -9,9 +9,9 @@ from helpEmbeds import HelpEmbeds
 import requests
 import json
 from .Listeners import AllListeners
+import os
 
-
-api_key = '0T8LU3ZHG4VF'
+api_key = os.getenv('TENOR_API_KEY')
 lmt = 50
 
 class ActionCog(commands.Cog):
