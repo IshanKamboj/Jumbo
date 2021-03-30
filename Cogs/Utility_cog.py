@@ -440,6 +440,8 @@ class Utility(commands.Cog):
     @commands.command(name="wikisearch",aliases=["wsearch","wikipedia"])
     @commands.check(AllListeners.check_enabled)
     async def _wikisearch(self,ctx,*,query:str):
-        x = wikipedia.summary(query)
-        await ctx.send(f"**{x}**")
-    
+        try:
+            x = wikipedia.summary(query)
+            await ctx.send(f"**{x}**")
+        except Exception as e:
+            print(str(e))
