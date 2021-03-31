@@ -192,3 +192,12 @@ class HelpEmbeds():
         em = discord.Embed(title="Wikisearch Command",description="This command searches the wikipedia for the provided query.")
         em.add_field(name="Syntax",value="*wikisearch <query>")
         return em
+
+    def wanted_embed():
+        em = discord.Embed(title="Wanted Command",description="This command returns a wanted image of someone.")
+        em.add_field(name="Syntax",value="*wanted <user>")
+        return em
+    def rip_embed():
+        em = discord.Embed(title="RIP Command",description="This command returns a RIP image of someone.")
+        em.add_field(name="Syntax",value="*rip <user>")
+        return em

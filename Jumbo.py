@@ -45,7 +45,7 @@ Default Prefix : `j!` (Mention to know the prefix of your server)
     
 Use *help <command> for extended information on a command
     
-[** •Invite me**](https://discord.com/api/oauth2/authorize?client_id=805430097426513941&permissions=469822528&scope=bot "Add the bot to your server") [**•GitHub**](https://github.com/IshanKamboj/Jumbo "Bots github repo link")
+[** •Invite me**](https://discord.com/api/oauth2/authorize?client_id=805430097426513941&permissions=469822528&scope=bot "Add the bot to your server"))
     
     """,color=discord.Color.random())
     em.add_field(name=":tools: | Utility Commands", value="`*help utility`")
@@ -90,7 +90,7 @@ async def action(ctx):
 
 @help.command(name='image')
 async def image(ctx):
-    em = discord.Embed(title=":camera: | Image Commands",description="`wanted`",color=discord.Color.random())
+    em = discord.Embed(title=":camera: | Image Commands",description="`wanted`,`rip`",color=discord.Color.random())
     await ctx.send(embed=em)
 #-------------------------------LEVEL HELP COMMAND-----------------------------------
 @help.command(name="Level",aliases=["level","lvl","rank","rnk"])
@@ -286,6 +286,13 @@ async def botinfo(ctx):
 async def wikisearch(ctx):
     await ctx.send(embed=HelpEmbeds.wikisearch_embed())
 
+@help.command(name="wanted")
+async def wanted(ctx):
+    await ctx.send(embed=HelpEmbeds.wanted_embed())
+
+@help.command(name="rip")
+async def rip(ctx):
+    await ctx.send(embed=HelpEmbeds.rip_embed())
 ##############################################################################################
 
 

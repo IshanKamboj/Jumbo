@@ -28,4 +28,19 @@ class ImageCommands(commands.Cog):
         wanted.save('wanted_img.jpg')
         await ctx.send(file=discord.File('wanted_img.jpg'))
     
-   # @commands.command(name="")
+    @commands.command(name="rip")
+    async def _rip(self,ctx,user:discord.Member=None):
+        try:
+            if user == None:
+                user = ctx.author
+            tomb = Image.open('tomb.jpg')
+            #width, height = wanted.size
+            asset = user.avatar_url
+            data = BytesIO(await asset.read())
+            pfp = Image.open(data)
+            pfp = pfp.resize((150,150))
+            tomb.paste(pfp,(100,320))
+            tomb.save('RIP.jpg')
+            await ctx.send(file=discord.File('RIP.jpg'))
+        except Exception as e:
+            print(str(e))
