@@ -3,7 +3,7 @@ from discord.ext import commands
 import asyncio
 from Database.db_files import firebase
 from helpEmbeds import HelpEmbeds
-
+from datetime import datetime
 default_prefix = "j!"
 
 class CommandDisabled(commands.CheckFailure):
@@ -28,6 +28,7 @@ class AllListeners(commands.Cog):
     async def on_ready(self):
         await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Everyone Fight"))
         print('Logged in as {0.user}'.format(self.bot))
+        await self.bot.get_channel('826719835630338058').send('Logged in as {0.user}'.format(self.bot))
      
     @commands.Cog.listener()
     async def on_guild_join(self,guild):
@@ -53,6 +54,14 @@ class AllListeners(commands.Cog):
             if "general" in channel.name:
                 await channel.send(embed=em)
                 break
+        emb = discord.Embed(title='Jumbo joined a guild.',color=discord.Color.random(),thumbnail=f'{guild.icon_url}')
+        emb.add_field(name='Guild Name',value=f'`{guild.name}`')
+        emb.add_field(name='Guild ID',value=f'`{guild.id}`')
+        emb.add_field(name='Guild owner',value=f'`{guild.owner}`')
+        emb.add_field(name='No. of members',value=f'`{guild.member_count}`')
+        emb.add_field(name='Joined on',value=f'`{datetime.utcnow()}`')
+        emb.add_field(name='Guild created at',value=f'{guild.created_at}')
+        await self.bot.get_channel('826719835630338058').send(embed=emb)
     @commands.Cog.listener()
     async def on_member_join(self,member):
         #print('yes')
