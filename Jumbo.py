@@ -54,6 +54,7 @@ Use *help <command> for extended information on a command
     em.add_field(name=":karate_uniform: | Fight Commands",value='`*help fights`')
     em.add_field(name=":hugging: | Action Commands",value="`*help action`")
     em.add_field(name=":mag: | Info Commands",value="`*help info`")
+    em.add_field(name=":camera: | Image Commands",value="`*help image`")
     await ctx.send(embed=em)
 
 #------------------------------ Section of help cmds -----------------------------
@@ -87,7 +88,10 @@ async def action(ctx):
     em = discord.Embed(title=":mag: | Info Commands",description="`Userinfo`, `Roleinfo`, `OnlineInfo`, `Ping`, `Avatar`, `Snipe`, `Botinfo`",color=discord.Color.random())
     await ctx.send(embed=em)
 
-
+@help.command(name='image')
+async def image(ctx):
+    em = discord.Embed(title=":camera: | Image Commands",description="`wanted`",color=discord.Color.random())
+    await ctx.send(embed=em)
 #-------------------------------LEVEL HELP COMMAND-----------------------------------
 @help.command(name="Level",aliases=["level","lvl","rank","rnk"])
 async def Level(ctx):
