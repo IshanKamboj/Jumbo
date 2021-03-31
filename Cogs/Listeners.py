@@ -28,7 +28,7 @@ class AllListeners(commands.Cog):
     async def on_ready(self):
         await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Everyone Fight"))
         print('Logged in as {0.user}'.format(self.bot))
-        await self.bot.get_channel('826719835630338058').send('Logged in as {0.user}'.format(self.bot))
+        await self.bot.get_channel(826719835630338058).send('Logged in as {0.user}'.format(self.bot))
      
     @commands.Cog.listener()
     async def on_guild_join(self,guild):
@@ -61,7 +61,7 @@ class AllListeners(commands.Cog):
         emb.add_field(name='No. of members',value=f'`{guild.member_count}`')
         emb.add_field(name='Joined on',value=f'`{datetime.utcnow()}`')
         emb.add_field(name='Guild created at',value=f'{guild.created_at}')
-        await self.bot.get_channel('826719835630338058').send(embed=emb)
+        await self.bot.get_channel(826719835630338058).send(embed=emb)
     @commands.Cog.listener()
     async def on_member_join(self,member):
         #print('yes')
