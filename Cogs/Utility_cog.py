@@ -246,30 +246,6 @@ class Utility(commands.Cog):
             em = HelpEmbeds.autoreact_embed()
             await ctx.send(f"**Missing required arguments. See help** :point_down::point_down:",embed=em)
 
-#------------------------ Dm command---------------------------
-    @commands.command(name="dm",aliases=["message","directmessage"])
-    @commands.cooldown(1, 30, commands.BucketType.user)
-    async def _dm(self,ctx,user:discord.Member,*,content):
-        db = firebase.database()
-        isEnabled = db.child('Disabled').child(str(ctx.guild.id)).child("dm").get()
-        if isEnabled.val() is None:
-            em = discord.Embed(title=f"Message by: `{ctx.author.name}`\n From server: `{ctx.guild.name}`",description=f"{content}",color=discord.Color.random())
-            await user.send(embed=em)
-            await ctx.send(f"**{ctx.author.mention} DM sent to user: `{user.name}`**")
-        else:
-            em = discord.Embed(description="This command is disabled in your server. Ask admin to enable it",color=discord.Color.random())
-            await ctx.send(embed=em)
-    @_dm.error
-    async def dm_error(self,ctx,error):
-        if isinstance(error,commands.MissingRequiredArgument):
-            em = HelpEmbeds.dm_embed()
-            await ctx.send('**Missing required arguments. See help** :point_down::point_down:',embed=em)
-
-        elif isinstance(error,commands.CommandOnCooldown):
-            em = discord.Embed(title="Take a hold of yourself",description="This command has a cooldown of `30` seconds. Use it after some time.",color=discord.Color.random())
-            await ctx.send(embed=em)
-        elif isinstance(ctx.channel, discord.DMChannel):
-            return
 
     @commands.command(name="train",aliases=["learn"])
     @commands.cooldown(1, 7200, commands.BucketType.user)

@@ -60,7 +60,7 @@ Use *help <command> for extended information on a command
 #------------------------------ Section of help cmds -----------------------------
 @help.command(name="utility")
 async def utility(ctx):
-    em = discord.Embed(title=":tools: | Utility commands",description="`Level`, `Leaderboard`, `AFK`, `Seen`, `Autoreact`, `DM`, `Google`, `Wikisearch`",color=discord.Color.random())
+    em = discord.Embed(title=":tools: | Utility commands",description="`Level`, `Leaderboard`, `AFK`, `Seen`, `Autoreact`, `Google`, `Wikisearch`",color=discord.Color.random())
     await ctx.send(embed=em)
 
 @help.command(name="admin")
@@ -165,11 +165,7 @@ async def autoreact(ctx):
     em = HelpEmbeds.autoreact_embed()
     await ctx.send(embed=em)
 
-#-------------------------------------- DM Command help--------------------
-@help.command(name="dm",aliases=["messages","directmessage"])
-async def dm(ctx):
-    em = HelpEmbeds.dm_embed()
-    await ctx.send(embed=em)
+
 
 #---------------------------------- Spam help--------------------------
 @help.command(name="spam",aliases=["sp"])

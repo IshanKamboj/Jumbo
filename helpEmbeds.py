@@ -24,10 +24,6 @@ class HelpEmbeds():
         em.add_field(name="**Syntax**",value="*ar <reaction>")
         em.add_field(name="**Example**",value="*ar :smile:")
         return em
-    def dm_embed():
-        em = discord.Embed(title=":calling: | DM Help",description="This command DMs a user the content you want to DM.",color=discord.Color.random())
-        em.add_field(name="**Syntax**",value="*dm <user> <content>")
-        return em
     
 #------------------- Admin commands help embeds --------------------------------
     def givelevel_embed():
