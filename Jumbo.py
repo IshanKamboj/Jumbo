@@ -266,7 +266,7 @@ async def roleinfo(ctx):
 @help.command(name="onlineinfo",aliases=["online"])
 async def onlineinfo(ctx):
     await ctx.send(embed=HelpEmbeds.onlineinfo_embed())
-@help.command(name="avatar",aliases=["av","image","pfp"])
+@help.command(name="avatar",aliases=["av","pfp"])
 async def avatar(ctx):
     await ctx.send(embed=HelpEmbeds.avatar_embed())
     

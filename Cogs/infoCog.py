@@ -139,7 +139,7 @@ class InfoCogs(commands.Cog):
         end = time()
         em.add_field(name="Response Time:",value=f"`{(end-start)*1000:,.0f} ms.`")
         await message.edit(embed=em)
-    @commands.command(name="avatar", aliases=["av", "image", "pfp"])
+    @commands.command(name="avatar", aliases=["av", "pfp"])
     async def _avatar(self, ctx, user: discord.Member = None):
         db = firebase.database()
         isEnabled = db.child('Disabled').child(
