@@ -27,3 +27,5 @@ class ImageCommands(commands.Cog):
         wanted.paste(pfp, (100,180))
         wanted.save('wanted_img.jpg')
         await ctx.send(file=discord.File('wanted_img.jpg'))
+    
+   # @commands.command(name="")

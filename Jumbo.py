@@ -45,7 +45,7 @@ Default Prefix : `j!` (Mention to know the prefix of your server)
     
 Use *help <command> for extended information on a command
     
-[** •Invite me**](https://discord.com/api/oauth2/authorize?client_id=805430097426513941&permissions=303070528&scope=bot "Add the bot to your server") [**•GitHub**](https://github.com/IshanKamboj/Jumbo "Bots github repo link")
+[** •Invite me**](https://discord.com/api/oauth2/authorize?client_id=805430097426513941&permissions=469822528&scope=bot "Add the bot to your server") [**•GitHub**](https://github.com/IshanKamboj/Jumbo "Bots github repo link")
     
     """,color=discord.Color.random())
     em.add_field(name=":tools: | Utility Commands", value="`*help utility`")
