@@ -11,4 +11,5 @@ ConfigVars = {
     'measurementId':os.getenv('measurementId'),
     'databaseURL':os.getenv('databaseURL')
 }
+
 firebase = pyrebase.initialize_app(ConfigVars)

@@ -102,6 +102,7 @@ class InfoCogs(commands.Cog):
         if isEnabled.val() is None:
             if str(user.status) == "offline":
                 await ctx.send(f'{user.name} is offline....... Please check about anyone else')
+                return
             if user.is_on_mobile():
                 em = discord.Embed(title=f"{user.name}'s info of device.",
                                    description=":white_check_mark: Mobile\n:x: Web\n:x: Desktop", color=user.color)

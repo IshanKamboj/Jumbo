@@ -13,6 +13,7 @@ from Cogs.Listeners import AllListeners
 from Cogs.Utility_cog import Utility
 from Cogs.ActionsCog import ActionCog
 from Cogs.infoCog import InfoCogs
+from Cogs.Image_Cog import ImageCommands
 
 #----------------------- Prefix getting and bot setup--------------------------------
 def get_prefix(client,message):
@@ -296,6 +297,6 @@ bot.add_cog(AdminCogs(bot))
 bot.add_cog(UtilityCogs(bot))
 bot.add_cog(ActionCog(bot))
 bot.add_cog(InfoCogs(bot))
-
+bot.add_cog(ImageCommands(bot))
 TOKEN = os.getenv('TOKEN')
 bot.run(TOKEN)
