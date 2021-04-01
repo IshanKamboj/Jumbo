@@ -4,6 +4,7 @@ import PIL
 from PIL import Image, ImageDraw, ImageFont
 from .Listeners import AllListeners
 from io import BytesIO
+from datetime import datetime
 class ImageCommands(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
@@ -34,13 +35,26 @@ class ImageCommands(commands.Cog):
             if user == None:
                 user = ctx.author
             tomb = Image.open('tomb.jpg')
+            width, height = tomb.size
+            d = ImageDraw.Draw(tomb)
+            font = ImageFont.truetype(font='Roboto-Bold.ttf',size=38)
+            w,h = d.textsize(user.name,font=font)
+            posX = (width-w)/2
+            d.text((posX,320),user.name,fill=(0,0,0),font=font)
             #width, height = wanted.size
-            asset = user.avatar_url
-            data = BytesIO(await asset.read())
-            pfp = Image.open(data)
-            pfp = pfp.resize((150,150))
-            tomb.paste(pfp,(100,320))
+            #asset = user.name
+            date_format = "%a, %d %b %Y "
+            timestamp = user.created_at.strftime(date_format)
+            w_time,h_time = d.textsize(timestamp,font=font)
+            time_font = ImageFont.truetype(font='Roboto-Bold.ttf',size=25)
+            d.text((40,360),f'From: {timestamp} to\n    {datetime.utcnow().strftime(date_format)} ',fill=(204,0,102),font=time_font)
+            #data = BytesIO(await asset.read())
+            #pfp = Image.open(data)
+            #pfp = pfp.resize((150,150))
+            #tomb.paste(pfp,(100,320))
             tomb.save('RIP.jpg')
             await ctx.send(file=discord.File('RIP.jpg'))
         except Exception as e:
             print(str(e))
+
+    
