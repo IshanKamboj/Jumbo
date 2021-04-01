@@ -8,7 +8,7 @@ from helpEmbeds import HelpEmbeds
 from .Listeners import AllListeners
 import pyjokes
 
-with open("truth.txt","r") as f:
+with open("truth.txt","r",encoding='utf-8') as f:
     truth_text = f.readlines()
 with open("dare.txt","r") as f:
     dare_text = f.readlines()
