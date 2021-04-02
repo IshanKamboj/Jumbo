@@ -9,6 +9,7 @@ from time import time
 from discord import __version__ as discord_version
 from psutil import Process, virtual_memory, cpu_percent
 from .Listeners import AllListeners
+import psutil
 
 class InfoCogs(commands.Cog):
     def __init__(self, bot):
@@ -206,13 +207,14 @@ class InfoCogs(commands.Cog):
             mem_total = virtual_memory().total / (1024**2)
             mem_of_total = proc.memory_percent()
             mem_usage = mem_total * (mem_of_total / 100)
+        usage = psutil.cpu_percent(2)
         fields = [
             ("Owner","TheMonkeyCoder#9860",True),
             ("Python version", python_version(), True),
             ("discord.py version", discord_version, True),
             ("Uptime", uptime, True),
             ("Memory usage",f"{mem_usage:,.3f} / {mem_total:,.0f} MiB ({mem_of_total:.0f}%)", True),
-            ('Cpu Usage',f'{cpu_percent(2)}%',True)
+            ("CPU usage",f"{usage}%", True),
             ("Number of Guilds", len(self.bot.guilds),True),
             ("Users", f"{len(self.bot.users)}", True),
             ("Registered", user.created_at.strftime(date_format), True),
