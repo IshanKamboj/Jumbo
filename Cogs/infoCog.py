@@ -15,6 +15,7 @@ class InfoCogs(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.sniped_msgs = {}
+        self.editsnipe_msgs = {}
     # async def cog_command_error(self, ctx: commands.Context, error: commands.CommandError):
     #     if error == UnboundLocalError:
     #         pass
@@ -224,3 +225,28 @@ class InfoCogs(commands.Cog):
             em.add_field(name=name, value=value, inline=inline)
         em.set_thumbnail(url=str(user.avatar_url))
         await ctx.send(embed=em)
+    
+    @commands.Cog.listener()
+    async def on_message_edit(self,message_before,message_after):
+        try:
+            self.editsnipe_msgs[message_after.channel.id] = (
+                message_before.content, message_after.content, message_after.author,message_after.channel, message_after.created_at)
+        except:
+            pass
+    
+    @commands.command(name="editsnipe", aliases=["editsniper"])
+    @commands.check(AllListeners.check_enabled)
+    async def _editsnipe(self, ctx, channel: discord.channel.TextChannel = None):
+        try:
+            if channel is None:
+                message_before, message_after, author, channel, time = self.editsnipe_msgs[ctx.channel.id]
+            else:
+                message_before, message_after, author, channel, time = self.editsnipe_msgs[channel.id]
+            em = discord.Embed(description=f'**Message Before:** {message_before}\n**Message After:** {message_after}',
+                                color=discord.Color.random(), timestamp=time)
+            em.set_author(
+                name=f"{author.name}#{author.discriminator}", icon_url=author.avatar_url)
+            em.set_footer(text=f"Deleted in : #{channel}")
+            await ctx.send(embed=em)
+        except KeyError:
+            await ctx.send("**`Found Nothing to Snipe ;)`**")
