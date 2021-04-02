@@ -212,6 +212,7 @@ class InfoCogs(commands.Cog):
             ("discord.py version", discord_version, True),
             ("Uptime", uptime, True),
             ("Memory usage",f"{mem_usage:,.3f} / {mem_total:,.0f} MiB ({mem_of_total:.0f}%)", True),
+            ('Cpu Usage',f'{psutil.cpu_percent(2)}%',True)
             ("Number of Guilds", len(self.bot.guilds),True),
             ("Users", f"{len(self.bot.users)}", True),
             ("Registered", user.created_at.strftime(date_format), True),
