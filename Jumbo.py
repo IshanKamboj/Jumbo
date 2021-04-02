@@ -90,7 +90,7 @@ async def action(ctx):
 
 @help.command(name='image')
 async def image(ctx):
-    em = discord.Embed(title=":camera: | Image Commands",description="`Wanted`, `Rip`, `Wallpaper`",color=discord.Color.random())
+    em = discord.Embed(title=":camera: | Image Commands",description="`Wanted`, `Rip`",color=discord.Color.random())
     await ctx.send(embed=em)
 #-------------------------------LEVEL HELP COMMAND-----------------------------------
 @help.command(name="Level",aliases=["level","lvl","rank","rnk"])
@@ -298,9 +298,6 @@ async def wanted(ctx):
 async def rip(ctx):
     await ctx.send(embed=HelpEmbeds.rip_embed())
 
-@help.command(name="wallpaper")
-async def wallpaper(ctx):
-    await ctx.send(embed=HelpEmbeds.wallpaper_embed())
 @help.command(name="hex")
 async def hex(ctx):
     await ctx.send(embed=HelpEmbeds.hex_embed())

@@ -211,7 +211,3 @@ class HelpEmbeds():
         em.add_field(name="Syntax",value="*rip <user>")
         return em
     
-    def wallpaper_embed():
-        em = discord.Embed(title="Wallpaper Command",description="This command returns a wallpaper for the given query.")
-        em.add_field(name="Syntax",value="*wallpaper [query]")
-        return em

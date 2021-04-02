@@ -5,6 +5,7 @@ from PIL import Image, ImageDraw, ImageFont
 from .Listeners import AllListeners
 from io import BytesIO
 from datetime import datetime
+import aiohttp
 class ImageCommands(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
@@ -55,11 +56,4 @@ class ImageCommands(commands.Cog):
         except Exception as e:
             print(str(e))
 
-    # https://source.unsplash.com/1600x900/?nature,water
-    @commands.command(name="wallpaper")
-    @commands.check(AllListeners.check_enabled)
-    async def _wallpaper(self,ctx,*,query):
-        em = discord.Embed(color=discord.Color.random())
-        em.set_image(url=f'https://source.unsplash.com/1600x900/?{query}')
-        await ctx.send(embed=em)
     
