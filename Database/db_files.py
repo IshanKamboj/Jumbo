@@ -12,4 +12,5 @@ ConfigVars = {
     'databaseURL':os.getenv('databaseURL')
 }
 
+
 firebase = pyrebase.initialize_app(ConfigVars)

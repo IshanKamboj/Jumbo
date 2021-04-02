@@ -4,6 +4,7 @@ import PIL
 from PIL import Image, ImageDraw, ImageFont
 from .Listeners import AllListeners
 from io import BytesIO
+from datetime import datetime
 class ImageCommands(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
@@ -34,13 +35,23 @@ class ImageCommands(commands.Cog):
             if user == None:
                 user = ctx.author
             tomb = Image.open('tomb.jpg')
+            width, height = tomb.size
+            d = ImageDraw.Draw(tomb)
+            font = ImageFont.truetype(font='Roboto-Bold.ttf',size=38)
             #width, height = wanted.size
             asset = user.avatar_url
+            date_format = "%a, %d %b %Y "
+            #d.text(())
             data = BytesIO(await asset.read())
             pfp = Image.open(data)
             pfp = pfp.resize((150,150))
-            tomb.paste(pfp,(100,320))
+            w,h = d.textsize(user.name,font=font)
+            posX = (width-w)/2
+            d.text((posX,440),f'{user.name}',fill=(204,0,102),font=font)
+            tomb.paste(pfp,(100,290))
             tomb.save('RIP.jpg')
             await ctx.send(file=discord.File('RIP.jpg'))
         except Exception as e:
             print(str(e))
+
+    
