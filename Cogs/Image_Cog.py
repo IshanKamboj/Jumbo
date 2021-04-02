@@ -30,6 +30,7 @@ class ImageCommands(commands.Cog):
         await ctx.send(file=discord.File('wanted_img.jpg'))
     
     @commands.command(name="rip")
+    @commands.check(AllListeners.check_enabled)
     async def _rip(self,ctx,user:discord.Member=None):
         try:
             if user == None:
@@ -54,4 +55,11 @@ class ImageCommands(commands.Cog):
         except Exception as e:
             print(str(e))
 
+    # https://source.unsplash.com/1600x900/?nature,water
+    @commands.command(name="wallpaper")
+    @commands.check(AllListeners.check_enabled)
+    async def _wallpaper(self,ctx,*,query):
+        em = discord.Embed(color=discord.Color.random())
+        em.set_image(url=f'https://source.unsplash.com/1600x900/?{query}')
+        await ctx.send(embed=em)
     

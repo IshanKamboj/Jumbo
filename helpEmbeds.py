@@ -113,6 +113,10 @@ class HelpEmbeds():
         em = discord.Embed(title=":mag: | Google",description="This command help you search on google for whatever you want",color=discord.Color.random())
         em.add_field(name="**Syntax**",value="*google <query>")
         return em
+    def hex_embed():
+        em = discord.Embed(title="Hex",description="This command gives you the hex value of the color.",color=discord.Color.random())
+        em.add_field(name="**Syntax**",value="*hex <color>")
+        return em
     def roast_embed():
         em = discord.Embed(title=":middle_finger: | Roast Command",description="This command is used to roast the user you mentioned.",color=discord.Color.random())
         em.add_field(name="**Syntax**",value="*roast <user>")
@@ -167,8 +171,13 @@ class HelpEmbeds():
         em.add_field(name="**Syntax**",value="*av <user>")
         return em
     def snipe_command():
-        em = discord.Embed(title=":dart: | Snipe Command",description="This command shows the last deleted message in a server. Show none if message is too old",color=discord.Color.random())
+        em = discord.Embed(title=":dart: | Snipe Command",description="This command shows the recent deleted message in last 10 mins in a specific channel. Show none if message is too old",color=discord.Color.random())
         em.add_field(name="**Syntax**",value="*snipe [channel]")
+        return em
+
+    def editsnipe_command():
+        em = discord.Embed(title=":dart: | Editsnipe Command",description="This command shows the recent edited message in last 10 mins in a specific channel. Show none if message is too old",color=discord.Color.random())
+        em.add_field(name="**Syntax**",value="*editsnipe [channel]")
         return em
     # def multi_embed():
     #     em = discord.Embed(title="Multi Command",color=discord.Color.random())
@@ -200,4 +209,9 @@ class HelpEmbeds():
     def rip_embed():
         em = discord.Embed(title="RIP Command",description="This command returns a RIP image of someone.")
         em.add_field(name="Syntax",value="*rip <user>")
+        return em
+    
+    def wallpaper_embed():
+        em = discord.Embed(title="Wallpaper Command",description="This command returns a wallpaper for the given query.")
+        em.add_field(name="Syntax",value="*wallpaper [query]")
         return em

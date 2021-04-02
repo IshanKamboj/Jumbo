@@ -60,7 +60,7 @@ Use *help <command> for extended information on a command
 #------------------------------ Section of help cmds -----------------------------
 @help.command(name="utility")
 async def utility(ctx):
-    em = discord.Embed(title=":tools: | Utility commands",description="`Level`, `Leaderboard`, `AFK`, `Seen`, `Autoreact`, `Google`, `Wikisearch`",color=discord.Color.random())
+    em = discord.Embed(title=":tools: | Utility commands",description="`Level`, `Leaderboard`, `AFK`, `Seen`, `Autoreact`, `Google`, `Wikisearch`, `Hex`",color=discord.Color.random())
     await ctx.send(embed=em)
 
 @help.command(name="admin")
@@ -85,12 +85,12 @@ async def action(ctx):
 
 @help.command(name="info")
 async def action(ctx):
-    em = discord.Embed(title=":mag: | Info Commands",description="`Userinfo`, `Roleinfo`, `OnlineInfo`, `Ping`, `Avatar`, `Snipe`, `Botinfo`",color=discord.Color.random())
+    em = discord.Embed(title=":mag: | Info Commands",description="`Userinfo`, `Roleinfo`, `OnlineInfo`, `Ping`, `Avatar`, `Snipe`, `Editsnipe`,`Botinfo`",color=discord.Color.random())
     await ctx.send(embed=em)
 
 @help.command(name='image')
 async def image(ctx):
-    em = discord.Embed(title=":camera: | Image Commands",description="`wanted`,`rip`",color=discord.Color.random())
+    em = discord.Embed(title=":camera: | Image Commands",description="`Wanted`, `Rip`, `Wallpaper`",color=discord.Color.random())
     await ctx.send(embed=em)
 #-------------------------------LEVEL HELP COMMAND-----------------------------------
 @help.command(name="Level",aliases=["level","lvl","rank","rnk"])
@@ -270,6 +270,10 @@ async def avatar(ctx):
 async def snipe(ctx):
     await ctx.send(embed=HelpEmbeds.snipe_command())
 
+@help.command(name="editsnipe")
+async def editsnipe(ctx):
+    await ctx.send(embed=HelpEmbeds.editsnipe_command())
+
 @help.command(name="gayrate",aliases=["gr","gay","gae"])
 async def gayrate(ctx):
     await ctx.send(embed=HelpEmbeds.gayrate_embed())
@@ -293,6 +297,13 @@ async def wanted(ctx):
 @help.command(name="rip")
 async def rip(ctx):
     await ctx.send(embed=HelpEmbeds.rip_embed())
+
+@help.command(name="wallpaper")
+async def wallpaper(ctx):
+    await ctx.send(embed=HelpEmbeds.wallpaper_embed())
+@help.command(name="hex")
+async def hex(ctx):
+    await ctx.send(embed=HelpEmbeds.hex_embed())
 ##############################################################################################
 
 

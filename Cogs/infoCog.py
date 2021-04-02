@@ -167,8 +167,8 @@ class InfoCogs(commands.Cog):
             message = payload.cached_message
             self.sniped_msgs[message.channel.id] = (
                 message.content, message.author, message.channel, message.created_at)
-            # await asyncio.sleep(300)
-            # del self.sniped_msgs[message.guild.id]
+            await asyncio.sleep(600)
+            del self.sniped_msgs[message.channel.id]
         except:
             pass
 
@@ -231,6 +231,8 @@ class InfoCogs(commands.Cog):
         try:
             self.editsnipe_msgs[message_after.channel.id] = (
                 message_before.content, message_after.content, message_after.author,message_after.channel, message_after.created_at)
+            await asyncio.sleep(600)
+            del self.editsnipe_msgs[message_after.channel.id]
         except:
             pass
     
@@ -246,7 +248,7 @@ class InfoCogs(commands.Cog):
                                 color=discord.Color.random(), timestamp=time)
             em.set_author(
                 name=f"{author.name}#{author.discriminator}", icon_url=author.avatar_url)
-            em.set_footer(text=f"Deleted in : #{channel}")
+            em.set_footer(text=f"Edited in : #{channel}")
             await ctx.send(embed=em)
         except KeyError:
             await ctx.send("**`Found Nothing to Snipe ;)`**")
