@@ -452,6 +452,6 @@ class Utility(commands.Cog):
             em.add_field(name=":tv: Episodes",value=f"{episodes}")
             em.set_image(url=image_url)
             await ctx.send(embed=em)
-        except Exception as e:
-            print(str(e))
+        except Exception as ei:
+            print(str(ei))
         
