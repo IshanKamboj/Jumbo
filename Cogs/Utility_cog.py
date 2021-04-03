@@ -430,8 +430,8 @@ class Utility(commands.Cog):
     async def _poll(self,ctx,*,question:str):
         try:
             msg = await ctx.send(f'**{str(ctx.author)} asks** {question}')
-            msg.add_reaction('👍')
-            msg.add_reaction('👎')
+            await msg.add_reaction('👍')
+            await msg.add_reaction('👎')
         except Exception as e:
             print(str(e))
     
