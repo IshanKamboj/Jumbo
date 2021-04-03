@@ -1,13 +1,16 @@
 aiohttp==3.6.3
+anime==1.1.0
 asgiref==3.3.1
 async-timeout==3.0.1
 attrs==20.3.0
 autopep8==1.5.6
 beautifulsoup4==4.9.3
+bs4==0.0.1
 cachetools==4.2.1
 certifi==2020.12.5
 cffi==1.14.5
 chardet==3.0.4
+click==7.1.2
 colorlib==0.1.0
 colorlog==4.7.2
 colour==0.1.5
@@ -18,6 +21,7 @@ discord.py==1.6.0
 Django==3.1.7
 dnspython==2.1.0
 fire==0.3.1
+futures==3.1.1
 gcloud==0.18.3
 giphy-client==1.0.0
 google==3.0.0
@@ -26,11 +30,15 @@ google-api-python-client==2.0.2
 google-auth==1.28.0
 google-auth-httplib2==0.1.0
 googleapis-common-protos==1.53.0
+goslate==1.5.1
 gsearch==1.6.0
 httplib2==0.19.0
 idna==2.10
 isodate==0.6.0
 jwcrypto==0.8
+lxml==4.6.3
+mal-api==0.4.0
+manga==0.1.13
 marshmallow==3.10.0
 marshmallow-enum==1.5.1
 multidict==4.7.6
@@ -46,6 +54,7 @@ pyasn1-modules==0.2.8
 pycodestyle==2.7.0
 pycparser==2.20
 pycryptodome==3.10.1
+PyDictionary==2.0.1
 pygame==2.0.1
 pyjokes==0.6.0
 pymongo==3.11.3
@@ -54,6 +63,7 @@ pyparsing==2.4.7
 Pyrebase4==4.4.3
 python-dateutil==2.8.1
 python-jwt==3.3.0
+python-mal==0.1.7
 python-youtube==0.6.4
 pytube3==9.6.4
 pytz==2021.1
