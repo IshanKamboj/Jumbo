@@ -424,3 +424,14 @@ class Utility(commands.Cog):
             await ctx.send(f"**{x}**\n More info can be found here: {link}")
         except Exception as e:
             print(str(e))
+    
+    @commands.command(name="poll")
+    @commands.check(AllListeners.check_enabled)
+    async def _poll(self,ctx,*,question:str):
+        try:
+            msg = await ctx.send(f'**{str(ctx.author)} asks** {question}')
+            msg.add_reaction('👍')
+            msg.add_reaction('👎')
+        except Exception as e:
+            print(str(e))
+    

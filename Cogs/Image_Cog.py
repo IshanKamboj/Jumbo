@@ -70,3 +70,4 @@ class ImageCommands(commands.Cog):
                     await ctx.send(file=discord.File(data, 'cool_image.png'))
         except Exception as e:
             print(str(e))
+    

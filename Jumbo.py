@@ -60,7 +60,7 @@ Use *help <command> for extended information on a command
 #------------------------------ Section of help cmds -----------------------------
 @help.command(name="utility")
 async def utility(ctx):
-    em = discord.Embed(title=":tools: | Utility commands",description="`Level`, `Leaderboard`, `AFK`, `Seen`, `Autoreact`, `Google`, `Wikisearch`, `Hex`",color=discord.Color.random())
+    em = discord.Embed(title=":tools: | Utility commands",description="`Level`, `Leaderboard`, `AFK`, `Seen`, `Autoreact`, `Google`, `Wikisearch`, `Hex`, `Poll`",color=discord.Color.random())
     await ctx.send(embed=em)
 
 @help.command(name="admin")
