@@ -60,7 +60,7 @@ Use *help <command> for extended information on a command
 #------------------------------ Section of help cmds -----------------------------
 @help.command(name="utility")
 async def utility(ctx):
-    em = discord.Embed(title=":tools: | Utility commands",description="`Level`, `Leaderboard`, `AFK`, `Seen`, `Autoreact`, `Google`, `Wikisearch`, `Hex`, `Poll`",color=discord.Color.random())
+    em = discord.Embed(title=":tools: | Utility commands",description="`Level`, `Leaderboard`, `AFK`, `Seen`, `Autoreact`, `Google`, `Wikisearch`, `Hex`, `Poll`, `Animesearch`",color=discord.Color.random())
     await ctx.send(embed=em)
 
 @help.command(name="admin")
@@ -305,6 +305,14 @@ async def hex(ctx):
 @help.command(name="wallpaper")
 async def wallpaper(ctx):
     await ctx.send(embed=HelpEmbeds.wallpaper_embed())
+
+@help.command(name="poll")
+async def poll(ctx):
+    await ctx.send(embed=HelpEmbeds.poll_embed())
+
+@help.command(name="animesearch",aliases=["anime"])
+async def anime(ctx):
+    await ctx.send(embed=HelpEmbeds.anime_embed())
 ##############################################################################################
 
 

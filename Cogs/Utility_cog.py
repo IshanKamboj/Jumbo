@@ -10,6 +10,7 @@ import requests
 from googlesearch import search
 from .Listeners import AllListeners
 import wikipedia
+from mal import AnimeSearch
 shop = [
     {
         "item":":boxing_glove: **Boxing Glove**",
@@ -434,4 +435,23 @@ class Utility(commands.Cog):
             await msg.add_reaction('👎')
         except Exception as e:
             print(str(e))
-    
+            
+    @commands.command(name="animesearch",aliases=['anime'])
+    @commands.check(AllListeners.check_enabled)
+    async def _animesearch(self,ctx,*,query:str):
+        try:
+            search = AnimeSearch(query)
+            x = search.results[0].synopsis
+            title = search.results[0].title
+            episodes = search.results[0].episodes
+            score = search.results[0].score
+            image_url = search.results[0].image_url
+            url = search.results[0].url
+            em = discord.Embed(title=title,description=f"**{x} [Read More]({url})**",color=discord.Color.random())
+            em.add_field(name=":star: Ratings:",value=f"{score}/10")
+            em.add_field(name=":tv: Episodes",value=f"{episodes}")
+            em.set_image(url=image_url)
+            await ctx.send(embed=em)
+        except Exception as e:
+            print(str(e))
+        

@@ -214,3 +214,11 @@ class HelpEmbeds():
         em = discord.Embed(title="Wallpaper Command",description="This command returns a random 1080p image for wallpaper.")
         em.add_field(name="Syntax",value="*wallpaper")
         return em
+    def poll_embed():
+        em = discord.Embed(title="Poll Command",description="This command is used to conduct a poll.")
+        em.add_field(name="Syntax",value="*poll <question>")
+        return em
+    def anime_embed():
+        em = discord.Embed(title="Animesearch Command",description="This command returns data about an anime.")
+        em.add_field(name="Syntax",value="*anime|animesearch <name>")
+        return em
