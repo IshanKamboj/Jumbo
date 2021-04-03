@@ -210,4 +210,7 @@ class HelpEmbeds():
         em = discord.Embed(title="RIP Command",description="This command returns a RIP image of someone.")
         em.add_field(name="Syntax",value="*rip <user>")
         return em
-    
+    def wallpaper_embed():
+        em = discord.Embed(title="Wallpaper Command",description="This command returns a random 1080p image for wallpaper.")
+        em.add_field(name="Syntax",value="*wallpaper")
+        return em

@@ -4,6 +4,7 @@ import PIL
 from PIL import Image, ImageDraw, ImageFont
 from .Listeners import AllListeners
 from io import BytesIO
+import io
 from datetime import datetime
 import aiohttp
 class ImageCommands(commands.Cog):
@@ -55,5 +56,17 @@ class ImageCommands(commands.Cog):
             await ctx.send(file=discord.File('RIP.jpg'))
         except Exception as e:
             print(str(e))
-
-    
+    # https://source.unsplash.com/1600x900/?nature,water
+    @commands.command(name="wallpaper")
+    @commands.check(AllListeners.check_enabled)
+    async def _wallpaper(self,ctx):
+        try:
+            url = 'https://source.unsplash.com/random/1920x1080'
+            async with aiohttp.ClientSession() as session:
+                async with session.get(url) as resp:
+                    if resp.status != 200:
+                        return await channel.send('Could not download file...')
+                    data = io.BytesIO(await resp.read())
+                    await ctx.send(file=discord.File(data, 'cool_image.png'))
+        except Exception as e:
+            print(str(e))

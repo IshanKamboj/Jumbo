@@ -97,9 +97,9 @@ class Admin(commands.Cog):
         if isEnabled.val() is None:
             try:
                 await ctx.channel.purge(limit=number+1)
-                em = discord.Embed(description=f"**Messages removed: `{number}`**\n**Removed by: `{ctx.author.name}`**",color=discord.Color.random())
+                # em = discord.Embed(description=f"**Messages removed: `{number}`**\n**Removed by: `{ctx.author.name}`**",color=discord.Color.random())
                 #await asyncio.sleep(0.1)
-                msg = await ctx.send(embed=em)
+                msg = await ctx.send(f'**Messages removed: **{number}\n\n**Removed by: **{ctx.author.name}')
                 await asyncio.sleep(2)
                 await msg.delete()
             except ValueError:

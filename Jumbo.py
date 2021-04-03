@@ -45,7 +45,7 @@ Default Prefix : `j!` (Mention to know the prefix of your server)
     
 Use *help <command> for extended information on a command
     
-[** •Invite me**](https://discord.com/api/oauth2/authorize?client_id=805430097426513941&permissions=469822528&scope=bot "Add the bot to your server"))
+[** •Invite me**](https://discord.com/api/oauth2/authorize?client_id=805430097426513941&permissions=469822528&scope=bot "Add the bot to your server")
     
     """,color=discord.Color.random())
     em.add_field(name=":tools: | Utility Commands", value="`*help utility`")
@@ -90,7 +90,7 @@ async def action(ctx):
 
 @help.command(name='image')
 async def image(ctx):
-    em = discord.Embed(title=":camera: | Image Commands",description="`Wanted`, `Rip`",color=discord.Color.random())
+    em = discord.Embed(title=":camera: | Image Commands",description="`Wanted`, `Rip`, `Wallpaper`",color=discord.Color.random())
     await ctx.send(embed=em)
 #-------------------------------LEVEL HELP COMMAND-----------------------------------
 @help.command(name="Level",aliases=["level","lvl","rank","rnk"])
@@ -301,6 +301,10 @@ async def rip(ctx):
 @help.command(name="hex")
 async def hex(ctx):
     await ctx.send(embed=HelpEmbeds.hex_embed())
+
+@help.command(name="wallpaper")
+async def wallpaper(ctx):
+    await ctx.send(embed=HelpEmbeds.wallpaper_embed())
 ##############################################################################################
 
 
