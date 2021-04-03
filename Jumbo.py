@@ -14,6 +14,7 @@ from Cogs.Utility_cog import Utility
 from Cogs.ActionsCog import ActionCog
 from Cogs.infoCog import InfoCogs
 from Cogs.Image_Cog import ImageCommands
+from Cogs.CalcCog import Calculations
 
 #----------------------- Prefix getting and bot setup--------------------------------
 def get_prefix(client,message):
@@ -55,6 +56,7 @@ Use *help <command> for extended information on a command
     em.add_field(name=":hugging: | Action Commands",value="`*help action`")
     em.add_field(name=":mag: | Info Commands",value="`*help info`")
     em.add_field(name=":camera: | Image Commands",value="`*help image`")
+    em.add_field(name=":triangular_ruler: | Calculation Commands",value="`*help calculation`")
     await ctx.send(embed=em)
 
 #------------------------------ Section of help cmds -----------------------------
@@ -91,6 +93,11 @@ async def action(ctx):
 @help.command(name='image')
 async def image(ctx):
     em = discord.Embed(title=":camera: | Image Commands",description="`Wanted`, `Rip`, `Wallpaper`",color=discord.Color.random())
+    await ctx.send(embed=em)
+
+@help.command(name='calculation')
+async def calculation(ctx):
+    em = discord.Embed(title=':triangular_ruler: | Calculation Commands',description="`Area`",color=discord.Color.random())
     await ctx.send(embed=em)
 #-------------------------------LEVEL HELP COMMAND-----------------------------------
 @help.command(name="Level",aliases=["level","lvl","rank","rnk"])
@@ -313,6 +320,9 @@ async def poll(ctx):
 @help.command(name="animesearch",aliases=["anime"])
 async def anime(ctx):
     await ctx.send(embed=HelpEmbeds.anime_embed())
+@help.command(name='area')
+async def area(ctx):
+    await ctx.send(embed=HelpEmbeds.area_embed())
 ##############################################################################################
 
 
@@ -325,5 +335,6 @@ bot.add_cog(UtilityCogs(bot))
 bot.add_cog(ActionCog(bot))
 bot.add_cog(InfoCogs(bot))
 bot.add_cog(ImageCommands(bot))
+bot.add_cog(Calculations(bot))
 TOKEN = os.getenv('TOKEN')
 bot.run(TOKEN)

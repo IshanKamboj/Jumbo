@@ -222,3 +222,10 @@ class HelpEmbeds():
         em = discord.Embed(title="Animesearch Command",description="This command returns data about an anime.")
         em.add_field(name="Syntax",value="*anime|animesearch <name>")
         return em
+    def area_embed():
+        em = discord.Embed(title="Area commands",description='**Values must be separated by "," **',color=discord.Color.red())
+        em.add_field(name='*area <triangle> <height,base>',value='Gives the area of a  triangle',inline=False)
+        em.add_field(name='*area <rectangle> <length,breadth>',value='Gives the area of a rectangle',inline=False)
+        em.add_field(name='*area <square> <side>',value='Gives the area of a square with the given side.',inline=False)
+        em.add_field(name='*area <circle> <radius>',value='Gives the area of the circle with the given side.',inline=False)
+        return em
