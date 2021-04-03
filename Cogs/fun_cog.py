@@ -189,30 +189,6 @@ class Fun(commands.Cog):
             em = HelpEmbeds.dare_embed()
             await ctx.send("**Pls mention whom to give the dare. See help for more details** :point_down::point_down:",embed=em)
     
-    #----------------------- Spam command--------------------------------------------
-    @commands.command(name="spam",aliases=["sp"])
-    async def _spam(self,ctx,number,*,message):
-        db = firebase.database()
-        isEnabled = db.child('Disabled').child(str(ctx.guild.id)).child("spam").get()
-        if isEnabled.val() is None:
-            try:
-                if int(number) <= 20:
-                    number = int(number)
-                else:
-                    await ctx.send(f"{ctx.author.mention} **Cannot spam more than 20 messages. SORRY BUT NOT SORRY**")
-            except ValueError:
-                await ctx.send(f"{ctx.author.mention} **Enter a valid argument u bitch**")
-            for i in range(0,number):
-                await ctx.send(message)
-                await asyncio.sleep(0.4)
-        else:
-            em = discord.Embed(description="This command is disabled in your server. Ask admin to enable it",color=discord.Color.random())
-            await ctx.send(embed=em)
-    @_spam.error
-    async def spam_error(self,ctx,error):
-        if isinstance(error,commands.MissingRequiredArgument):
-            em = HelpEmbeds.spam_embed()
-            await ctx.send("**Missing required arguments. See help** :point_down::point_down:",embed=em)
 
     #----------------------- 8ball command--------------------------------
     @commands.command(name="8ball",aliases=["predict"])
