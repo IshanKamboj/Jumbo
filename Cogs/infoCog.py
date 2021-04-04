@@ -24,9 +24,12 @@ class InfoCogs(commands.Cog):
     #         await ctx.send(embed=em)
 
     async def cog_command_error(self, ctx: commands.Context, error: commands.CommandError):
-        em = discord.Embed(
-            description=f'{str(error)}', color=discord.Color.random())
-        await ctx.send(embed=em)
+        if "cooldown" in str(error):
+            return
+        else:
+            em = discord.Embed(
+                description=f'{str(error)}', color=discord.Color.random())
+            await ctx.send(embed=em)
 
     @commands.command(name="userinfo", aliases=["ui"])
     @commands.cooldown(1, 7, commands.BucketType.user)
