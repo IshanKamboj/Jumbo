@@ -15,7 +15,6 @@ from Cogs.ActionsCog import ActionCog
 from Cogs.infoCog import InfoCogs
 from Cogs.Image_Cog import ImageCommands
 from Cogs.CalcCog import Calculations
-
 #----------------------- Prefix getting and bot setup--------------------------------
 def get_prefix(client,message):
     db = firebase.database()
@@ -87,7 +86,7 @@ async def action(ctx):
 
 @help.command(name="info")
 async def action(ctx):
-    em = discord.Embed(title=":mag: | Info Commands",description="`Userinfo`, `Roleinfo`, `OnlineInfo`, `Ping`, `Avatar`, `Snipe`, `Editsnipe`,`Botinfo`",color=discord.Color.random())
+    em = discord.Embed(title=":mag: | Info Commands",description="`Userinfo`, `Roleinfo`, `OnlineInfo`, `Ping`, `Avatar`, `Snipe`, `Editsnipe`,`Botinfo`, `Whois`",color=discord.Color.random())
     await ctx.send(embed=em)
 
 @help.command(name='image')
@@ -97,7 +96,7 @@ async def image(ctx):
 
 @help.command(name='calculation')
 async def calculation(ctx):
-    em = discord.Embed(title=':triangular_ruler: | Calculation Commands',description="`Area`",color=discord.Color.random())
+    em = discord.Embed(title=':triangular_ruler: | Calculation Commands',description="`Area`, `Volume`, `Factorial`",color=discord.Color.random())
     await ctx.send(embed=em)
 #-------------------------------LEVEL HELP COMMAND-----------------------------------
 @help.command(name="Level",aliases=["level","lvl","rank","rnk"])
@@ -293,6 +292,10 @@ async def joke(ctx):
 async def botinfo(ctx):
     await ctx.send(embed=HelpEmbeds.botinfo_embed())
 
+@help.command(name='whois')
+async def whois(ctx):
+    await ctx.send(embed=HelpEmbeds.whois_embed())
+
 @help.command(name="wikisearch",aliases=["wsearch","wikipedia"])
 async def wikisearch(ctx):
     await ctx.send(embed=HelpEmbeds.wikisearch_embed())
@@ -323,6 +326,15 @@ async def anime(ctx):
 @help.command(name='area')
 async def area(ctx):
     await ctx.send(embed=HelpEmbeds.area_embed())
+
+@help.command(name='volume')
+async def volume(ctx):
+    await ctx.send(embed=HelpEmbeds.volume_embed())
+
+@help.command(name='factorial')
+async def factorial(ctx):
+    await ctx.send(embed=HelpEmbeds.factorial_embed())
+
 ##############################################################################################
 
 

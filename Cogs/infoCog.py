@@ -219,7 +219,7 @@ class InfoCogs(commands.Cog):
             ("Number of Guilds", len(self.bot.guilds),True),
             ("Users", f"{len(self.bot.users)}", True),
             ("Registered", user.created_at.strftime(date_format), True),
-            ("Number of Commands", len(self.bot.commands)+4,True)
+            ("Number of Commands", len(self.bot.commands)+10,True)
             ]
         for name, value, inline in fields:
             em.add_field(name=name, value=value, inline=inline)
@@ -252,3 +252,15 @@ class InfoCogs(commands.Cog):
             await ctx.send(embed=em)
         except KeyError:
             await ctx.send("**`Found Nothing to Snipe ;)`**")
+    
+    @commands.command(name='whois')
+    @commands.check(AllListeners.check_enabled)
+    async def _whois(self,ctx,u_id:int):
+        date_format = "%a, %d %b %Y %I:%M %p"
+        user = await self.bot.fetch_user(u_id)
+        em = discord.Embed(title=f"{user.name}#{user.discriminator} ---- {user.id}",color=discord.Color.random())
+        em.set_thumbnail(url=f"{user.avatar_url}")
+        em.add_field(name="Created on:",value=user.created_at.strftime(date_format))
+        em.add_field(name="Animated Avatar:",value=user.is_avatar_animated())
+        em.add_field(name="Bot:",value=user.bot)
+        await ctx.send(embed=em)

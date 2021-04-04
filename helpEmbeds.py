@@ -196,7 +196,10 @@ class HelpEmbeds():
         em = discord.Embed(title="Botinfo Command",description="This command returns info about the bot")
         em.add_field(name="Syntax",value="*botinfo")
         return em
-
+    def whois_embed():
+        em = discord.Embed(title="Whois Command",description="This command returns some info about a user")
+        em.add_field(name="Syntax",value="*whois <user id>")
+        return em
     def wikisearch_embed():
         em = discord.Embed(title="Wikisearch Command",description="This command searches the wikipedia for the provided query.")
         em.add_field(name="Syntax",value="*wikisearch <query>")
@@ -228,4 +231,17 @@ class HelpEmbeds():
         em.add_field(name='*area <rectangle> <length,breadth>',value='Gives the area of a rectangle',inline=False)
         em.add_field(name='*area <square> <side>',value='Gives the area of a square with the given side.',inline=False)
         em.add_field(name='*area <circle> <radius>',value='Gives the area of the circle with the given side.',inline=False)
+        return em
+    def volume_embed():
+        em = discord.Embed(title="Volume commands",description='**Values must be separated by "," **',color=discord.Color.red())
+        em.add_field(name='*volume <cube> <side>',value='Gives the volume of the cube',inline=False)
+        em.add_field(name='*volume <cuboid> <length,breadth,width>',value='Gives the volume of cuboid',inline=False)
+        em.add_field(name='*volume <sphere> <radius>',value='Gives the volume of the sphere',inline=False)
+        em.add_field(name='*volume <hemisphere> <radius>',value='Gives the volume of hemisphere.',inline=False)
+        em.add_field(name='*volume <cone> <radius,height>',value='Gives the volume of the cone.',inline=False)
+        em.add_field(name='*volume <cylinder> <radius>',value='Gives the volume of the cylinder',inline=False)
+        return em
+    def factorial_embed():
+        em = discord.Embed(title="Factorial Embed",description="Gives the factorial of a number.[Click Here](https://en.wikipedia.org/wiki/Factorial) for more info",color=discord.Color.random())
+        em.add_field(name='Syntax',value="*factorial <number>")
         return em
