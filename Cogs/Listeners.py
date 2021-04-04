@@ -145,6 +145,22 @@ class AllListeners(commands.Cog):
         elif isinstance(error, CommandDisabled):
             em = discord.Embed(description="This command is disabled in your server. Ask admin to enable it",color=discord.Color.random())
             await ctx.send(embed=em)
+        elif isinstance(error,commands.CommandOnCooldown):
+            temp = str(error).split(" ")
+            time = str(temp[-1])
+            time = time.replace("s","")
+            time = float(time)
+            time = round(time)
+            if time >= 3600:
+                finalTime= round(time/3600)
+                em = discord.Embed(title="Take a hold of yourself",description=f"This command is on cooldown. You need to wait **{finalTime} hours** before using it again.",color=discord.Color.random())
+            elif time < 3600 and time > 60:
+                finalTime = round(time/60)
+                em = discord.Embed(title="Take a hold of yourself",description=f"This command is on cooldown. You need to wait **{finalTime} minutes** before using it again.",color=discord.Color.random())
+            elif time < 60:
+                em = discord.Embed(title="Take a hold of yourself",description=f"This command is on cooldown. You need to wait **{time} seconds** before using it again.",color=discord.Color.random())
+            #print(finalTime)
+            await ctx.send(embed=em)
         else:
             pass
             # if 'The check functions for command failed.' in str(error):

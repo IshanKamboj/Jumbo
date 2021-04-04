@@ -39,16 +39,6 @@ class ActionCog(commands.Cog):
             except Exception as e:
                 print(str(e))
         
-    @_slap.error
-    async def slap_error(self,ctx,error):
-        if isinstance(error,commands.CommandOnCooldown):
-            temp = str(error).split(" ")
-            time = str(temp[-1])
-            time = time.replace("s","")
-            time = float(time)
-            time = round(time)
-            em = discord.Embed(title="Hold your Horses",description=f"This command has a cooldown of `5` seconds. Wait **{time} seconds** to use it again.")   
-            await ctx.send(embed=em)
     @commands.command(name="punch")
     @commands.cooldown(1,5,commands.BucketType.user)
     @commands.check(AllListeners.check_enabled)
@@ -74,16 +64,6 @@ class ActionCog(commands.Cog):
             except Exception as e:
                 print(str(e))
         
-    @_punch.error
-    async def punch_error(self,ctx,error):
-        if isinstance(error,commands.CommandOnCooldown):
-            temp = str(error).split(" ")
-            time = str(temp[-1])
-            time = time.replace("s","")
-            time = float(time)
-            time = round(time)
-            em = discord.Embed(title="Hold your Horses",description=f"This command has a cooldown of `5` seconds. Wait **{time} seconds** to use it again.")   
-            await ctx.send(embed=em)
     @commands.command(name="lick",aliases=["suck"])
     @commands.cooldown(1,5,commands.BucketType.user)
     @commands.check(AllListeners.check_enabled)
@@ -104,16 +84,7 @@ class ActionCog(commands.Cog):
                     top_8gifs = None
             except Exception as e:
                 print(str(e))
-    @_lick.error
-    async def lick_error(self,ctx,error):
-        if isinstance(error,commands.CommandOnCooldown):
-            temp = str(error).split(" ")
-            time = str(temp[-1])
-            time = time.replace("s","")
-            time = float(time)
-            time = round(time)
-            em = discord.Embed(title="Hold your Horses",description=f"This command has a cooldown of `5` seconds. Wait **{time} seconds** to use it again.")   
-            await ctx.send(embed=em)
+
     @commands.command(name="bite")
     @commands.cooldown(1,5,commands.BucketType.user)
     @commands.check(AllListeners.check_enabled)
@@ -135,16 +106,6 @@ class ActionCog(commands.Cog):
             except Exception as e:
                 print(str(e))
         
-    @_bite.error
-    async def bite_error(self,ctx,error):
-        if isinstance(error,commands.CommandOnCooldown):
-            temp = str(error).split(" ")
-            time = str(temp[-1])
-            time = time.replace("s","")
-            time = float(time)
-            time = round(time)
-            em = discord.Embed(title="Hold your Horses",description=f"This command has a cooldown of `5` seconds. Wait **{time} seconds** to use it again.")   
-            await ctx.send(embed=em)
     @commands.command(name="bully")
     @commands.cooldown(1,5,commands.BucketType.user)
     @commands.check(AllListeners.check_enabled)
@@ -165,16 +126,6 @@ class ActionCog(commands.Cog):
                     top_8gifs = None
             except Exception as e:
                 print(str(e))
-    @_bully.error
-    async def bully_error(self,ctx,error):
-        if isinstance(error,commands.CommandOnCooldown):
-            temp = str(error).split(" ")
-            time = str(temp[-1])
-            time = time.replace("s","")
-            time = float(time)
-            time = round(time)
-            em = discord.Embed(title="Hold your Horses",description=f"This command has a cooldown of `5` seconds. Wait **{time} seconds** to use it again.")   
-            await ctx.send(embed=em)
     @commands.command(name="hug")
     @commands.cooldown(1,5,commands.BucketType.user)
     @commands.check(AllListeners.check_enabled)
@@ -195,17 +146,7 @@ class ActionCog(commands.Cog):
                     top_8gifs = None
             except Exception as e:
                 print(str(e))
-
-    @_hug.error
-    async def hug_error(self,ctx,error):
-        if isinstance(error,commands.CommandOnCooldown):
-            temp = str(error).split(" ")
-            time = str(temp[-1])
-            time = time.replace("s","")
-            time = float(time)
-            time = round(time)
-            em = discord.Embed(title="Hold your Horses",description=f"This command has a cooldown of `5` seconds. Wait **{time} seconds** to use it again.")   
-            await ctx.send(embed=em)    
+   
 
     @commands.command(name="kick",aliases=["laat"])
     @commands.cooldown(1,5,commands.BucketType.user)
@@ -232,16 +173,6 @@ class ActionCog(commands.Cog):
             except Exception as e:
                 print(str(e))
         
-    @_kick.error
-    async def kick_error(self,ctx,error):
-        if isinstance(error,commands.CommandOnCooldown):
-            temp = str(error).split(" ")
-            time = str(temp[-1])
-            time = time.replace("s","")
-            time = float(time)
-            time = round(time)
-            em = discord.Embed(title="Hold your Horses",description=f"This command has a cooldown of `5` seconds. Wait **{time} seconds** to use it again.")   
-            await ctx.send(embed=em)
     @commands.command(name="hardkick")
     @commands.cooldown(1,5,commands.BucketType.user)
     @commands.check(AllListeners.check_enabled)
@@ -262,16 +193,6 @@ class ActionCog(commands.Cog):
                     top_8gifs = None
             except Exception as e:
                 print(str(e))
-    @_hardkick.error
-    async def hardkick_error(self,ctx,error):
-        if isinstance(error,commands.CommandOnCooldown):
-            temp = str(error).split(" ")
-            time = str(temp[-1])
-            time = time.replace("s","")
-            time = float(time)
-            time = round(time)
-            em = discord.Embed(title="Hold your Horses",description=f"This command has a cooldown of `5` seconds. Wait **{time} seconds** to use it again.")   
-            await ctx.send(embed=em)
     
     @commands.command(name="pat")
     @commands.cooldown(1,5,commands.BucketType.user)
@@ -294,13 +215,3 @@ class ActionCog(commands.Cog):
         except Exception as e:
             print(str(e))
     
-    @_pat.error
-    async def pat_error(self,ctx,error):
-        if isinstance(error,commands.CommandOnCooldown):
-            temp = str(error).split(" ")
-            time = str(temp[-1])
-            time = time.replace("s","")
-            time = float(time)
-            time = round(time)
-            em = discord.Embed(title="Hold your Horses",description=f"This command has a cooldown of `5` seconds. Wait **{time} seconds** to use it again.")   
-            await ctx.send(embed=em)

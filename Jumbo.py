@@ -4,9 +4,10 @@ import os
 import random
 import asyncio
 from helpEmbeds import HelpEmbeds
-from Cogs.ExtraCogs import AdminCogs,UtilityCogs
 from discord import Intents
 from Database.db_files import firebase
+#----------------importing all cogs---------------
+
 from Cogs.admin_cog import Admin
 from Cogs.fun_cog import Fun
 from Cogs.Listeners import AllListeners
@@ -15,6 +16,7 @@ from Cogs.ActionsCog import ActionCog
 from Cogs.infoCog import InfoCogs
 from Cogs.Image_Cog import ImageCommands
 from Cogs.CalcCog import Calculations
+from Cogs.fight_cog import fights
 #----------------------- Prefix getting and bot setup--------------------------------
 def get_prefix(client,message):
     db = firebase.database()
@@ -24,7 +26,7 @@ def get_prefix(client,message):
 intent = Intents().all()   
 v = 1
 d = 300
-bot = commands.Bot(command_prefix=get_prefix,intents=intent,case_insensitive=True)
+bot = commands.AutoShardedBot(command_prefix=get_prefix,intents=intent,case_insensitive=True)
 bot.remove_command("help")
 
 
@@ -342,11 +344,10 @@ bot.add_cog(AllListeners(bot,d,v))
 bot.add_cog(Admin(bot,d))
 bot.add_cog(Utility(bot,d))
 bot.add_cog(Fun(bot))
-bot.add_cog(AdminCogs(bot))
-bot.add_cog(UtilityCogs(bot))
 bot.add_cog(ActionCog(bot))
 bot.add_cog(InfoCogs(bot))
 bot.add_cog(ImageCommands(bot))
 bot.add_cog(Calculations(bot))
+bot.add_cog(fights(bot))
 TOKEN = os.getenv('TOKEN')
 bot.run(TOKEN)

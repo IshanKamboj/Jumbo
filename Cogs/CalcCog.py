@@ -11,6 +11,7 @@ class Calculations(commands.Cog):
         self.bot = bot
     @commands.group(invoke_without_command=True)
     @commands.check(AllListeners.check_enabled)
+    @commands.cooldown(1, 7, commands.BucketType.user)
     async def area(self,ctx):
         await ctx.send(embed=HelpEmbeds.area_embed())
     
@@ -173,6 +174,8 @@ class Calculations(commands.Cog):
             await ctx.send(f'Error! :{str(e)}')
         
     @commands.command(name="factorial")
+    @commands.cooldown(1, 7, commands.BucketType.user)
+    @commands.check(AllListeners.check_enabled)
     async def _factorial(self,ctx,number:int):
         factorials = math.factorial(number)
         em = discord.Embed(title="Factorial",description=f"**{number}! == {factorials}**    ",color=discord.Color.random())

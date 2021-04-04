@@ -29,6 +29,7 @@ class InfoCogs(commands.Cog):
         await ctx.send(embed=em)
 
     @commands.command(name="userinfo", aliases=["ui"])
+    @commands.cooldown(1, 7, commands.BucketType.user)
     async def _userinfo(self, ctx, user: discord.Member = None):
         db = firebase.database()
         isEnabled = db.child('Disabled').child(
@@ -63,6 +64,7 @@ class InfoCogs(commands.Cog):
             await ctx.send(embed=em)
 
     @commands.command(name="roleinfo", aliases=["ri", "rinfo"])
+    @commands.cooldown(1, 7, commands.BucketType.user)
     async def _roleinfo(self, ctx, role: discord.Role):
         db = firebase.database()
         isEnabled = db.child('Disabled').child(
@@ -97,6 +99,7 @@ class InfoCogs(commands.Cog):
             await ctx.send(embed=em)
 
     @commands.command(name="onlineinfo", aliases=["online"])
+    @commands.cooldown(1, 7, commands.BucketType.user)
     async def _onlineinfo(self, ctx, user: discord.Member):
         db = firebase.database()
         isEnabled = db.child('Disabled').child(
@@ -124,6 +127,7 @@ class InfoCogs(commands.Cog):
 
     @commands.command(name="ping")
     @commands.check(AllListeners.check_enabled)
+    @commands.cooldown(1, 7, commands.BucketType.user)
     async def _ping(self, ctx):
         lat = round((self.bot.latency)*1000)
         em = discord.Embed(title=":ping_pong: | Pong!")
@@ -142,6 +146,7 @@ class InfoCogs(commands.Cog):
         em.add_field(name="Response Time:",value=f"`{(end-start)*1000:,.0f} ms.`")
         await message.edit(embed=em)
     @commands.command(name="avatar", aliases=["av", "pfp"])
+    @commands.cooldown(1, 7, commands.BucketType.user)
     async def _avatar(self, ctx, user: discord.Member = None):
         db = firebase.database()
         isEnabled = db.child('Disabled').child(
@@ -173,6 +178,7 @@ class InfoCogs(commands.Cog):
             pass
 
     @commands.command(name="snipe", aliases=["sniper"])
+    @commands.cooldown(1, 7, commands.BucketType.user)
     async def _snipe(self, ctx, channel: discord.channel.TextChannel = None):
         db = firebase.database()
         isEnabled = db.child('Disabled').child(
@@ -198,6 +204,7 @@ class InfoCogs(commands.Cog):
 
     @commands.command(name="botinfo", aliases=["bi", "binfo", "boti"])
     @commands.check(AllListeners.check_enabled)
+    @commands.cooldown(1, 7, commands.BucketType.user)
     async def _botinfo(self, ctx):
         user = self.bot.user
         date_format = "%a, %d %b %Y %I:%M %p"
@@ -238,6 +245,7 @@ class InfoCogs(commands.Cog):
     
     @commands.command(name="editsnipe", aliases=["editsniper"])
     @commands.check(AllListeners.check_enabled)
+    @commands.cooldown(1, 7, commands.BucketType.user)
     async def _editsnipe(self, ctx, channel: discord.channel.TextChannel = None):
         try:
             if channel is None:
@@ -255,6 +263,7 @@ class InfoCogs(commands.Cog):
     
     @commands.command(name='whois')
     @commands.check(AllListeners.check_enabled)
+    @commands.cooldown(1, 7, commands.BucketType.user)
     async def _whois(self,ctx,u_id:int):
         date_format = "%a, %d %b %Y %I:%M %p"
         user = await self.bot.fetch_user(u_id)

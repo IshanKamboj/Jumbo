@@ -19,6 +19,7 @@ class Fun(commands.Cog):
     
     #---------------------Fight Command and its errors---------------------------------------
     @commands.command(name="fight",aliases=["dumbfight"])
+    @commands.cooldown(1, 7, commands.BucketType.user)
     async def _fight(self,ctx:commands.Context,user:discord.Member):
         db = firebase.database()
         isEnabled = db.child('Disabled').child(str(ctx.guild.id)).child("fight").get()
@@ -79,6 +80,7 @@ class Fun(commands.Cog):
 
     #---------------------Shoot Command and its errors---------------------------------------           
     @commands.command(name="shoot",aliases=["fire","headshot","kill"])
+    @commands.cooldown(1, 7, commands.BucketType.user)
     async def _shoot(self,ctx:commands.Context,user:discord.Member):
         db = firebase.database()
         isEnabled = db.child('Disabled').child(str(ctx.guild.id)).child("shoot").get()
@@ -139,6 +141,7 @@ class Fun(commands.Cog):
     #----------------------- Facts getting command---------------------------------------
 
     @commands.command(name="facts",aliases=["knowledge","fact"])
+    @commands.cooldown(1, 7, commands.BucketType.user)
     async def _facts(self,ctx):
         db = firebase.database()
         isEnabled = db.child('Disabled').child(str(ctx.guild.id)).child("fact").get()
@@ -151,6 +154,7 @@ class Fun(commands.Cog):
             await ctx.send(embed=em)
     #-------------------------- Truth command ---------------------------------
     @commands.command(name="truth",aliases=["truths"])
+    @commands.cooldown(1, 7, commands.BucketType.user)
     async def _truth(self,ctx,user:discord.Member):
         db = firebase.database()
         isEnabled = db.child('Disabled').child(str(ctx.guild.id)).child("truth").get()
@@ -172,6 +176,7 @@ class Fun(commands.Cog):
 
     #----------------------- Dare command -----------------------------------------------
     @commands.command(name="dare",aliases=["dares"])
+    @commands.cooldown(1, 7, commands.BucketType.user)
     async def _dare(self,ctx,user:discord.Member):
         db = firebase.database()
         isEnabled = db.child('Disabled').child(str(ctx.guild.id)).child("dare").get()
@@ -192,6 +197,7 @@ class Fun(commands.Cog):
 
     #----------------------- 8ball command--------------------------------
     @commands.command(name="8ball",aliases=["predict"])
+    @commands.cooldown(1, 7, commands.BucketType.user)
     async def _8ball(self,ctx,*,question):
         db = firebase.database()
         isEnabled = db.child('Disabled').child(str(ctx.guild.id)).child("8ball").get()
@@ -229,6 +235,7 @@ class Fun(commands.Cog):
 
 #---------------------- Opinion command ----------------------------
     @commands.command(name="opinion",aliases=["op"])
+    @commands.cooldown(1, 7, commands.BucketType.user)
     async def _opinion(self,ctx,user:discord.Member):
         db = firebase.database()
         isEnabled = db.child('Disabled').child(str(ctx.guild.id)).child("opinion").get()
@@ -272,6 +279,8 @@ class Fun(commands.Cog):
 
     
     @commands.command(name="insult",aliases=["roast"])
+    @commands.cooldown(1, 7, commands.BucketType.user)
+    @commands.check(AllListeners.check_enabled)
     async def _insult(self,ctx,user:discord.Member):
         db = firebase.database()
         isEnabled = db.child('Disabled').child(str(ctx.guild.id)).child("insult").get()
@@ -290,6 +299,7 @@ class Fun(commands.Cog):
     # async def 
 
     @commands.command(name="gayrate",aliases=["gr","gay","gae"])
+    @commands.cooldown(1, 7, commands.BucketType.user)
     @commands.check(AllListeners.check_enabled)
     async def _gayrate(self,ctx,user:discord.Member=None):
         x = random.randint(1,100)
@@ -301,6 +311,8 @@ class Fun(commands.Cog):
         await ctx.send(embed=em)
     
     @commands.command(name="joke",aliases=["jokes"])
+    @commands.cooldown(1, 7, commands.BucketType.user)
+    @commands.check(AllListeners.check_enabled)
     async def _joke(self,ctx):
         jk = pyjokes.get_joke()
         await ctx.send(jk)

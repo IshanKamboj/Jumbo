@@ -13,6 +13,7 @@ class ImageCommands(commands.Cog):
 
     @commands.command(name="wanted")
     @commands.check(AllListeners.check_enabled)
+    @commands.cooldown(1, 7, commands.BucketType.user)
     async def _wanted(self,ctx, user:discord.Member=None):
         if user is None:
             user = ctx.author
@@ -33,6 +34,7 @@ class ImageCommands(commands.Cog):
     
     @commands.command(name="rip")
     @commands.check(AllListeners.check_enabled)
+    @commands.cooldown(1, 7, commands.BucketType.user)
     async def _rip(self,ctx,user:discord.Member=None):
         try:
             if user == None:
@@ -59,6 +61,7 @@ class ImageCommands(commands.Cog):
     # https://source.unsplash.com/1600x900/?nature,water
     @commands.command(name="wallpaper")
     @commands.check(AllListeners.check_enabled)
+    @commands.cooldown(1, 7, commands.BucketType.user)
     async def _wallpaper(self,ctx):
         try:
             url = 'https://source.unsplash.com/random/1920x1080'
