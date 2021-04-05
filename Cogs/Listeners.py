@@ -79,6 +79,12 @@ class AllListeners(commands.Cog):
         except:
             pass
         nsfw = ['fuck off','fk',"fuck u","fk u","f","fuck","wtf"]
+        seen_data = db.child("Last Seen").child(str(message.author.id)).get()
+        if seen_data.val() is None:
+            db.child("Last Seen").child(str(message.author.id)).set({"Time":str(datetime.utcnow())})
+        elif seen_data.val() is not None:
+            db.child("Last Seen").child(str(message.author.id)).update({"Time":str(datetime.utcnow())})
+        
         if str(message.content).lower() in nsfw and message.author != self.bot.user:
             await message.channel.send(f"**{message.author.mention} U Fuck off BITCH........smh** :face_with_symbols_over_mouth:")
         if "shit" in str(message.content).lower():
@@ -107,9 +113,7 @@ class AllListeners(commands.Cog):
                 await message.channel.send(embed = em)
             else:
                 if not message.author.bot:
-                    data = db.child("Levels").child(str(message.guild.id)).child(str(message.author.id)).get()
-                    
-                            
+                    data = db.child("Levels").child(str(message.guild.id)).child(str(message.author.id)).get()   
                     if data.val() is None:
                         newUser = {"userName":str(message.author),"lvl":1,"exp":1}
                         db.child("Levels").child(str(message.guild.id)).child(str(message.author.id)).set(newUser)

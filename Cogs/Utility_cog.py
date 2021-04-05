@@ -11,7 +11,7 @@ from googlesearch import search
 from .Listeners import AllListeners,difficulty
 import wikipedia
 from mal import AnimeSearch
-
+from datetime import datetime
 class Utility(commands.Cog):
     def __init__(self,bot,difficulty):
         self.bot = bot
@@ -162,34 +162,28 @@ class Utility(commands.Cog):
 
 #---------------------------Last seen command---------------------
     @commands.command(name="seen",aliases=["lastseen","last"])
+    @commands.check(AllListeners.check_enabled)
     async def _seen(self,ctx:commands.Context,user:discord.Member):
         db = firebase.database()
-        isEnabled = db.child('Disabled').child(str(ctx.guild.id)).child("seen").get()
-        if isEnabled.val() is None:
-            lastMsg = None
-            fetchMsg = await ctx.channel.history(limit=350).find(lambda m: m.author.id == user.id)
-            if fetchMsg is None:
-                em = discord.Embed(description=f"**No message found from the author `{user.name}`. The last message by the author may be very old.**",color=discord.Color.random())
-                await ctx.send(embed=em) 
-            a = ctx.message.created_at
-            b = fetchMsg.created_at
-            c = a-b
-            total_min = round((c.total_seconds())/60)
+        seen_data = db.child("Last Seen").child(str(user.id)).get()
+        if seen_data.val() is None:
+            await ctx.send("**I have not seen that user so far.**")
+        else:
+            time = seen_data.val()["Time"]
+            time_seen = datetime.strptime(time, "%Y-%m-%d %H:%M:%S.%f")
+            final_time = datetime.utcnow()-time_seen
+            total_min = round((final_time.total_seconds())/60)
             temp = 0
             while total_min >= 60:
                 total_min -= 60
                 temp += 1
             minutes = total_min-temp*(60)
-            
             if temp == 0:
-                em = discord.Embed(description=f"**`{user.name}` was last seen `{minutes} minutes` ago in this channel.**",color=discord.Color.random())
+                em = discord.Embed(description=f"**`{user.name}` was last seen `{minutes} minutes` ago.**",color=discord.Color.random())
                 await ctx.send(embed=em)
             else:
-                em = discord.Embed(description=f"**`{user.name}` was last seen more than `{temp} hours` ago in this channel.**",color=discord.Color.random())
+                em = discord.Embed(description=f"**`{user.name}` was last seen more than `{temp} hours` ago.**",color=discord.Color.random())
                 await ctx.send(embed=em)
-        else:
-            em = discord.Embed(description="This command is disabled in your server. Ask admin to enable it",color=discord.Color.random())
-            await ctx.send(embed=em)
 
     @_seen.error
     async def seen_error(self,ctx,error):
