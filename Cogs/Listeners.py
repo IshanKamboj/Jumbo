@@ -171,4 +171,4 @@ class AllListeners(commands.Cog):
             #     await ctx.send(embed=em)
 
 def setup(bot):
-    bot.add_cog(AllListeners(bot,v,d))
+    bot.add_cog(AllListeners(bot,d,v))
