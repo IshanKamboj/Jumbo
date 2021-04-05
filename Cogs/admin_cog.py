@@ -3,7 +3,7 @@ from discord.ext import commands
 from Database.db_files import firebase
 import random
 from helpEmbeds import HelpEmbeds
-from .Listeners import AllListeners
+from .Listeners import AllListeners,d
 import asyncio
 
 class Admin(commands.Cog):
@@ -309,3 +309,6 @@ class Admin(commands.Cog):
     # @commands.has_permissions(administrator=True)
     # @commands.check(AllListeners.check_enabled)
     # async def multi(self,ctx,)
+
+def setup(bot):
+    bot.add_cog(Admin(bot,d))

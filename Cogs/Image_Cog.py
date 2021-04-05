@@ -74,3 +74,5 @@ class ImageCommands(commands.Cog):
         except Exception as e:
             print(str(e))
     
+def setup(bot):
+    bot.add_cog(ImageCommands(bot))

@@ -24,7 +24,127 @@ gun_alias = ["gun","pistol"]
 class fights(commands.Cog):
     def __init__(self,bot):
         self.bot=bot
-    
+    #---------------------Fight Command and its errors---------------------------------------
+    @commands.command(name="fight",aliases=["dumbfight"])
+    @commands.cooldown(1, 7, commands.BucketType.user)
+    async def _fight(self,ctx:commands.Context,user:discord.Member):
+        db = firebase.database()
+        isEnabled = db.child('Disabled').child(str(ctx.guild.id)).child("fight").get()
+        if isEnabled.val() is None:
+            gloves = db.child('Items').child("gloves").child(str(ctx.author.id)).get()
+            gloves_user = db.child('Items').child("gloves").child(str(user.id)).get()
+            if gloves.val() is None and gloves_user.val() is None:
+                a = random.choice([ctx.author,user])
+            elif gloves_user is not None and gloves.val() is None:
+                a = random.choice([ctx.author,ctx.author,user,user,user])
+
+            elif gloves.val() is not None and gloves_user is None:
+                a = random.choice([ctx.author,ctx.author,ctx.author,user,user])
+            else:
+                a = random.choice([ctx.author,user])
+
+            mutedRole = discord.utils.get(ctx.guild.roles,name='Muted')
+            if not mutedRole:
+                mutedRole = await ctx.guild.create_role(name='Muted')
+                for channel in ctx.guild.channels:
+                    await channel.set_permissions(mutedRole, speak=False, send_messages=False)
+            if mutedRole in user.roles:
+                await ctx.send(f"**{user.name} is already unconsicious.... Pick someone else to fight.... YOU COWARD**")
+            elif mutedRole in ctx.author.roles:
+                await ctx.send(f"**{ctx.author.name} u cannot fight....... U were already beaten up LMAO**")
+            else:
+                if ctx.author == user:
+                    await ctx.send(f"**{ctx.author.mention}.... Was So stupid he punched himself and couldn't take it.... he has been muted for 60 seconds**")
+                    await user.add_roles(mutedRole)
+                    await asyncio.sleep(60)
+                    await user.remove_roles(mutedRole)
+                elif user == self.bot.user:
+                    await ctx.send(f"{ctx.author.mention} **U cannot fight me......LMAO**")
+                else:
+                    mute_time = random.randint(20,60)
+                    if a == ctx.author:
+                        await ctx.send(f"{ctx.author.name} fought with {user.name}. **{a.name} was punched in the face by {user.name} and knocked unconsicious. He is now muted for {mute_time} seconds.\n{user.name} was given 5 points for winning.**")
+                        x = db.child('FightPoints').child(str(user.id)).get()
+                        db.child('FightPoints').child(str(user.id)).update({"points":x.val()["points"]+5})
+                    else:
+                        await ctx.send(f"{ctx.author.name} fought with {user.name}. **{a.name} was punched in the face by {ctx.author.name} and knocked unconsicious. He is now muted for {mute_time} seconds. \n{ctx.author.name} was given 5 points for winning.**")
+                        x = db.child('FightPoints').child(str(ctx.author.id)).get()
+                        db.child('FightPoints').child(str(ctx.author.id)).update({"points":x.val()["points"]+5})
+                    await a.add_roles(mutedRole)
+                    await asyncio.sleep(mute_time)
+                    
+                    await a.remove_roles(mutedRole)
+                    await ctx.send(f"**{a.name} has been umuted..... Better not fight now**")
+        else:
+            em = discord.Embed(description="This command is disabled in your server. Ask admin to enable it",color=discord.Color.random())
+            await ctx.send(embed=em)
+                
+    @_fight.error
+    async def fight_error(self,ctx,error):
+        if isinstance(error,commands.MissingRequiredArgument):
+            em = HelpEmbeds.fight_embed()
+            await ctx.send("**Missing required argument. See help** :point_down::point_down:",embed = em)
+
+    #---------------------Shoot Command and its errors---------------------------------------           
+    @commands.command(name="shoot",aliases=["fire","headshot","kill"])
+    @commands.cooldown(1, 7, commands.BucketType.user)
+    async def _shoot(self,ctx:commands.Context,user:discord.Member):
+        db = firebase.database()
+        isEnabled = db.child('Disabled').child(str(ctx.guild.id)).child("shoot").get()
+        if isEnabled.val() is None:
+            gun = db.child('Items').child("gun").child(str(ctx.author.id)).get()
+            break_chance = random.randint(0,11)
+            if gun.val() is None or gun.val()["amount"] == 0:
+                await ctx.send(f"{ctx.author.mention} **You dont have a gun so you cannot shoot. Purchase one from shop.....smh**")
+            else:
+                a = random.choice([ctx.author,user])
+                b = random.randint(0,1)
+                
+                mutedRole = discord.utils.get(ctx.guild.roles,name='Muted')
+                def check(msg):
+                    return msg.content.lower() in ["hospital","ambulance"] and msg.author != a
+                if not mutedRole:
+                    mutedRole = await ctx.guild.create_role(name='Muted')
+                    for channel in ctx.guild.channels:
+                        await channel.set_permissions(mutedRole, speak=False, send_messages=False)
+                if mutedRole in user.roles:
+                    await ctx.send(f"**{user.name} is already dead or fainted.... Try to shoot someone else.... YOU BITCH**")
+                elif mutedRole in ctx.author.roles:
+                    await ctx.send(f"**{ctx.author.name} u cannot shoot....... U are in hospital LMAO**")
+                elif user == self.bot.user:
+                    await ctx.send(f"{ctx.author.mention} **U cannot shoot me......LMAO**")
+                else:
+                    if ctx.author == user:
+                        await ctx.send(f"{ctx.author.name} takes out a pistol and shoots himself. **He is now muted for 60 minutes**")
+                    elif ctx.author == a:
+                        await ctx.send(f"{ctx.author.name} tried to shoot {user.name} but did not know how to use the gun. **He shot himself and is on the brink of death**\n **Type `hospital` in next 10 seconds to save him.**")
+                    else:
+                        await ctx.send(f"{ctx.author.name} takes out a pistol and shoots {user.name} in head.**{user.name} is on the brink of death**\n **Type `hospital` in next 10 seconds to save him.**")
+                    await a.add_roles(mutedRole)
+                    try:
+                        msg = await self.bot.wait_for("message", check=check, timeout=10) # 10 seconds to reply
+                        if b != 1:
+                            raise asyncio.TimeoutError
+                        await ctx.send(f"**Hush! It was a close call. {a.name} was saved**")
+                        await a.remove_roles(mutedRole)
+                    except asyncio.TimeoutError:
+                        await ctx.send(f"Sorry, either it was too late or doctors were not able to save {a.name}. **he is now muted for 5 minutes**")
+                        if break_chance == 9 or break_chance == 10:
+                            number = gun.val()["amount"]
+                            db.child('Items').child("gun").child(str(ctx.author.id)).update({"amount":number-1})
+                            await ctx.send(f"Oh! {ctx.author.mention} Your gun broke. Now you have {number-1} remaining")
+                        await asyncio.sleep(300)
+                        
+                        await a.remove_roles(mutedRole)
+                        await ctx.send(f"**{a.name} has been umuted..... Better not use gun now**")
+        else:
+            em = discord.Embed(description="This command is disabled in your server. Ask admin to enable it",color=discord.Color.random())
+            await ctx.send(embed=em)
+    @_shoot.error
+    async def shoot_error(self,ctx,error):
+        if isinstance(error,commands.MissingRequiredArgument):
+            em = HelpEmbeds.shoot_embed()
+            await ctx.send("**Missing required argument. See help** :point_down::point_down:",embed = em)
     @commands.command(name="train",aliases=["learn"])
     @commands.cooldown(1, 7200, commands.BucketType.user)
     async def _train(self,ctx):
@@ -146,3 +266,6 @@ class fights(commands.Cog):
         else:
             em = discord.Embed(description="This command is disabled in your server. Ask admin to enable it",color=discord.Color.random())
             await ctx.send(embed=em)
+
+def setup(bot):
+    bot.add_cog(fights(bot))

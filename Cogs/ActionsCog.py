@@ -215,3 +215,5 @@ class ActionCog(commands.Cog):
         except Exception as e:
             print(str(e))
     
+def setup(bot):
+    bot.add_cog(ActionCog(bot))

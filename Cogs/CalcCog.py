@@ -181,3 +181,5 @@ class Calculations(commands.Cog):
         em = discord.Embed(title="Factorial",description=f"**{number}! == {factorials}**    ",color=discord.Color.random())
         await ctx.send(embed=em)
         
+def setup(bot):
+    bot.add_cog(Calculations(bot))

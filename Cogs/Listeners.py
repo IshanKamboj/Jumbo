@@ -6,6 +6,8 @@ from helpEmbeds import HelpEmbeds
 from datetime import datetime
 default_prefix = "j!"
 
+v = 1
+d = 300
 class CommandDisabled(commands.CheckFailure):
     pass
 class AllListeners(commands.Cog):
@@ -167,3 +169,6 @@ class AllListeners(commands.Cog):
             #     #print('yes')
             #     em = discord.Embed(description="This command is disabled in your server. Ask admin to enable it",color=discord.Color.random())
             #     await ctx.send(embed=em)
+
+def setup(bot):
+    bot.add_cog(AllListeners(bot,v,d))

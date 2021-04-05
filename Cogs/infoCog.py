@@ -276,3 +276,6 @@ class InfoCogs(commands.Cog):
         em.add_field(name="Animated Avatar:",value=user.is_avatar_animated())
         em.add_field(name="Bot:",value=user.bot)
         await ctx.send(embed=em)
+
+def setup(bot):
+    bot.add_cog(InfoCogs(bot))
