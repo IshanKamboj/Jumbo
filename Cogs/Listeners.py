@@ -6,8 +6,8 @@ from helpEmbeds import HelpEmbeds
 from datetime import datetime
 default_prefix = "j!"
 
-v = 1
-d = 300
+lvl_add = 1
+difficulty = 300
 class CommandDisabled(commands.CheckFailure):
     pass
 class AllListeners(commands.Cog):
@@ -171,4 +171,4 @@ class AllListeners(commands.Cog):
             #     await ctx.send(embed=em)
 
 def setup(bot):
-    bot.add_cog(AllListeners(bot,d,v))
+    bot.add_cog(AllListeners(bot=bot,lvl_add=lvl_add,difficulty=difficulty))

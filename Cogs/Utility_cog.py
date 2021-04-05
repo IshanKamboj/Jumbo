@@ -8,7 +8,7 @@ import asyncio
 from bs4 import BeautifulSoup
 import requests
 from googlesearch import search
-from .Listeners import AllListeners,d
+from .Listeners import AllListeners,difficulty
 import wikipedia
 from mal import AnimeSearch
 
@@ -312,4 +312,4 @@ class Utility(commands.Cog):
         await ctx.send(f"The hex value for {color} color is: {c.hex_l}")
 
 def setup(bot):
-    bot.add_cog(Utility(bot,d))
+    bot.add_cog(Utility(bot,difficulty))

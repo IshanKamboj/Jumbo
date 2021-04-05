@@ -3,7 +3,7 @@ from discord.ext import commands
 from Database.db_files import firebase
 import random
 from helpEmbeds import HelpEmbeds
-from .Listeners import AllListeners,d
+from .Listeners import AllListeners, difficulty
 import asyncio
 
 class Admin(commands.Cog):
@@ -22,9 +22,7 @@ class Admin(commands.Cog):
         if isEnabled.val() is None:
             try:
                 if level >= 1:
-                    print("yes")  
-                    exp = self.difficulty+(x.val()["lvl"]-1)*self.difficulty-self.difficulty
-                    
+                    exp = self.difficulty+((level-1)*self.difficulty)-self.difficulty
                     database.child("Levels").child(str(ctx.guild.id)).child(str(user.id)).update({'exp':exp,'lvl':level})
                     lvl_embed = (discord.Embed(title="**Level Up**",
                                     description= f"Congratulations {user.mention}. You just reached level {level}",
@@ -311,4 +309,4 @@ class Admin(commands.Cog):
     # async def multi(self,ctx,)
 
 def setup(bot):
-    bot.add_cog(Admin(bot,d))
+    bot.add_cog(Admin(bot,difficulty))
