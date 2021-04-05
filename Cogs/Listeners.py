@@ -102,7 +102,7 @@ class AllListeners(commands.Cog):
                 pass
             if message.content.startswith(prefix_data.val()['Prefix']):
                 return
-            elif str(self.bot.user.id) in message.content:
+            elif self.bot.user.mentioned_in(message):
                 em = (discord.Embed(description=f"Yo! My prefix here is `{prefix_data.val()['Prefix']}`. You can use `{prefix_data.val()['Prefix']}help` for more information",color=discord.Color.random()))
                 await message.channel.send(embed = em)
             else:

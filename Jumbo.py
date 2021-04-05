@@ -10,7 +10,7 @@ from Database.db_files import firebase
 def get_prefix(client,message):
     db = firebase.database()
     data = db.child('Prefixes').child(str(message.guild.id)).get()
-    return commands.when_mentioned_or(data.val()['Prefix'])    
+    return data.val()['Prefix'] 
 
 intent = Intents().all()   
 
