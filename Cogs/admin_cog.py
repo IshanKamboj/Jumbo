@@ -307,6 +307,19 @@ class Admin(commands.Cog):
     # @commands.has_permissions(administrator=True)
     # @commands.check(AllListeners.check_enabled)
     # async def multi(self,ctx,)
+    # @commands.group(name="settings",aliases=["setting"],invoke_without_command=True)
+    # @commands.has_permissions(administrator=True)
+    # async def settings(self,ctx):
+    #     em = discord.Embed(title=f"Settings for {ctx.guild.name}",color=discord.Color.random(),thumbnail=f"{ctx.guild.icon_url}")
+    #     em.add_field(name="*settings <cmdrole> <command_name> <role_id/role>",value="Sets the required for using any command. Removes the role if it is already there.",inline=False)
+        
+    #     await ctx.send(embed=em)
+    # @settings.command(name="cmdrole")
+    # @commands.has_permissions(administrator=True)
+    # async def _cmdrole(self,ctx,command,role:discord.Role):
+    #     db = firebase.datetime()
+    #     x = db.child("Settings").child(str(ctx.guild.id)).
+    #     command_ = self.bot.get_command(command)
 
 def setup(bot):
     bot.add_cog(Admin(bot,difficulty))

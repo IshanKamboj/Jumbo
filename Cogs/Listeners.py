@@ -34,6 +34,14 @@ class AllListeners(commands.Cog):
      
     @commands.Cog.listener()
     async def on_guild_join(self,guild):
+        emb = discord.Embed(title='Jumbo joined a guild.',color=discord.Color.random(),thumbnail=f'{guild.icon_url}')
+        emb.add_field(name='Guild Name',value=f'`{guild.name}`')
+        emb.add_field(name='Guild ID',value=f'`{guild.id}`')
+        emb.add_field(name='Guild owner',value=f'`{guild.owner}`')
+        emb.add_field(name='No. of members',value=f'`{guild.member_count}`')
+        emb.add_field(name='Joined on',value=f'`{datetime.utcnow()}`')
+        emb.add_field(name='Guild created at',value=f'{guild.created_at}')
+        await self.bot.get_channel(826719835630338058).send(embed=emb)
         db = firebase.database()
         db.child('Prefixes').child(str(guild.id)).set({'Prefix':default_prefix})
         em = discord.Embed(title="Hola Nabs, I am Jumbo",description="""
@@ -56,14 +64,7 @@ class AllListeners(commands.Cog):
             if "general" in channel.name:
                 await channel.send(embed=em)
                 break
-        emb = discord.Embed(title='Jumbo joined a guild.',color=discord.Color.random(),thumbnail=f'{guild.icon_url}')
-        emb.add_field(name='Guild Name',value=f'`{guild.name}`')
-        emb.add_field(name='Guild ID',value=f'`{guild.id}`')
-        emb.add_field(name='Guild owner',value=f'`{guild.owner}`')
-        emb.add_field(name='No. of members',value=f'`{guild.member_count}`')
-        emb.add_field(name='Joined on',value=f'`{datetime.utcnow()}`')
-        emb.add_field(name='Guild created at',value=f'{guild.created_at}')
-        await self.bot.get_channel(826719835630338058).send(embed=emb)
+        
     @commands.Cog.listener()
     async def on_member_join(self,member):
         #print('yes')
@@ -78,17 +79,12 @@ class AllListeners(commands.Cog):
             prefix_data = db.child('Prefixes').child(str(message.guild.id)).get()
         except:
             pass
-        nsfw = ['fuck off','fk',"fuck u","fk u","f","fuck","wtf"]
         seen_data = db.child("Last Seen").child(str(message.author.id)).get()
         if seen_data.val() is None:
             db.child("Last Seen").child(str(message.author.id)).set({"Time":str(datetime.utcnow())})
         elif seen_data.val() is not None:
             db.child("Last Seen").child(str(message.author.id)).update({"Time":str(datetime.utcnow())})
         
-        if str(message.content).lower() in nsfw and message.author != self.bot.user:
-            await message.channel.send(f"**{message.author.mention} U Fuck off BITCH........smh** :face_with_symbols_over_mouth:")
-        if "shit" in str(message.content).lower():
-            await message.channel.send(f"**{message.author.mention} :poop: Put it in your mouth..... LMAO**")
         if message.author != self.bot.user:
             if message.raw_mentions:
                 for i in message.raw_mentions:
