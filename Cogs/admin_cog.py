@@ -143,7 +143,7 @@ class Admin(commands.Cog):
             elif disabledCommands.val() is not None:
                 if command_disable is None:
                     await ctx.send("`No command with that name found`")
-                elif command_disable == ctx.command:
+                elif command_disable == ctx.command or command_disable == 'settings':
                     await ctx.send("`You cannot enable/disable this command`")
                 else:
                     if disabledCommands.val()["isEnabled"] is True:
@@ -333,9 +333,28 @@ class Admin(commands.Cog):
             else:
                 temp = x.val()["roles_id"]
                 temp.append(role.id)
-                print(temp)
                 db.child("Settings").child(str(ctx.guild.id)).child(str(command_)).set({"roles_id":temp})
 
                 await ctx.send(f"Role: `{role}` was also  added as requirment for using `{command_}` command")
+    @settings.command(name='show')
+    async def _show(self,ctx):
+        db = firebase.database()
+        x = db.child("Settings").child(str(ctx.guild.id)).get()
+        if not x.val() is None:
+            temp_text=""
+            em = discord.Embed(title=f"Role Settings for {ctx.guild.name}",thumbnail=f"{ctx.guild.icon_url}",color=discord.Color.random())
+            for i in x.val():
+                y = db.child("Settings").child(str(ctx.guild.id)).child(str(i)).get()
+                for j in y.val()["roles_id"]:
+                    role = ctx.guild.get_role(j)
+                    if temp_text == "":
+                        temp_text = f"{role.mention}"
+                    else:
+                        temp_text += f", {role.mention}"
+                em.add_field(name=f"{i} Command",value=temp_text,inline=False)
+            
+            await ctx.send(embed=em)
+        else:
+            await ctx.send("No server settings for this guild")
 def setup(bot):
     bot.add_cog(Admin(bot,difficulty))

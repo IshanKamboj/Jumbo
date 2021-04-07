@@ -33,6 +33,7 @@ class InfoCogs(commands.Cog):
 
     @commands.command(name="userinfo", aliases=["ui"])
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _userinfo(self, ctx, user: discord.Member = None):
         db = firebase.database()
@@ -69,6 +70,7 @@ class InfoCogs(commands.Cog):
 
     @commands.command(name="roleinfo", aliases=["ri", "rinfo"])
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _roleinfo(self, ctx, role: discord.Role):
         db = firebase.database()
@@ -105,6 +107,7 @@ class InfoCogs(commands.Cog):
 
     @commands.command(name="onlineinfo", aliases=["online"])
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _onlineinfo(self, ctx, user: discord.Member):
         db = firebase.database()
@@ -133,6 +136,7 @@ class InfoCogs(commands.Cog):
 
     @commands.command(name="ping")
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _ping(self, ctx):
         lat = round((self.bot.latency)*1000)
@@ -153,6 +157,7 @@ class InfoCogs(commands.Cog):
         await message.edit(embed=em)
     @commands.command(name="avatar", aliases=["av", "pfp"])
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _avatar(self, ctx, user: discord.Member = None):
         db = firebase.database()
@@ -186,6 +191,7 @@ class InfoCogs(commands.Cog):
 
     @commands.command(name="snipe", aliases=["sniper"])
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _snipe(self, ctx, channel: discord.channel.TextChannel = None):
         db = firebase.database()
@@ -212,6 +218,7 @@ class InfoCogs(commands.Cog):
 
     @commands.command(name="botinfo", aliases=["bi", "binfo", "boti"])
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _botinfo(self, ctx):
         user = self.bot.user
@@ -253,6 +260,7 @@ class InfoCogs(commands.Cog):
     
     @commands.command(name="editsnipe", aliases=["editsniper"])
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _editsnipe(self, ctx, channel: discord.channel.TextChannel = None):
         try:
@@ -271,6 +279,7 @@ class InfoCogs(commands.Cog):
     
     @commands.command(name='whois')
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _whois(self,ctx,u_id:int):
         date_format = "%a, %d %b %Y %I:%M %p"

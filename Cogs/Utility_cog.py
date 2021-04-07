@@ -20,6 +20,7 @@ class Utility(commands.Cog):
     #---------------------level Command and its errors---------------------------------------
     @commands.command(name = "level", aliases = ["lvl","rank","rnk"])
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _level(self,ctx:commands.Context,*,user=""):
         """Check ur Level with this.        
@@ -94,6 +95,7 @@ class Utility(commands.Cog):
 #---------------------leaderboard Command and its errors---------------------------------------
     @commands.command(name="leaderboard",aliases=["lb","leader","top"])
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _leaderboard(self,ctx:commands.Context):
         database = firebase.database()
@@ -214,6 +216,7 @@ class Utility(commands.Cog):
         
     @commands.command(name="google",aliases=["search","find"])
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _google(self,ctx,*,query):
         db = firebase.database()
@@ -241,6 +244,7 @@ class Utility(commands.Cog):
 
     @commands.command(name="wikisearch",aliases=["wsearch","wikipedia"])
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _wikisearch(self,ctx,*,query:str):
         try:
@@ -254,6 +258,7 @@ class Utility(commands.Cog):
     
     @commands.command(name="poll")
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _poll(self,ctx,*,question:str):
         try:
@@ -265,6 +270,7 @@ class Utility(commands.Cog):
             
     @commands.command(name="animesearch",aliases=['anime'])
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _animesearch(self,ctx,*,query:str):
         try:
@@ -285,6 +291,7 @@ class Utility(commands.Cog):
     
     @commands.command(name="hex",aliases=["gethex"])
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _hex(self,ctx,*,color:str):
         c = Color(color=color)

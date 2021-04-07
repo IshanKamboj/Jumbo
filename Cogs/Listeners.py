@@ -178,8 +178,8 @@ class AllListeners(commands.Cog):
                 role = ctx.guild.get_role(i)
                 if description == "":
                     description = f"{role.mention}"
-                else:
-                    description += f",{role.mention}"
+                else: 
+                    description += f", {role.mention}"
             em = discord.Embed(title="Missing Role Requirement",description=f"You are missing these roles: {description}",color=discord.Color.random())
             await ctx.send(embed=em)
         elif isinstance(error,commands.CommandOnCooldown):
