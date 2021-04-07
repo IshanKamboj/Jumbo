@@ -139,7 +139,6 @@ class InfoCogs(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _avatar(self, ctx, user: discord.Member = None):
-    if isEnabled.val() is None:
         if user == None:
             user = ctx.author
         em = discord.Embed(
