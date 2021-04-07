@@ -23,11 +23,7 @@ class InfoCogs(commands.Cog):
     #         em = discord.Embed(description=f'{str(error)}',color=discord.Color.random())
     #         await ctx.send(embed=em)
 
-    async def cog_command_error(self, ctx: commands.Context, error: commands.CommandError):
-        if "cooldown" in str(error):
-            return
-        else:
-            pass
+    
 
     @commands.command(name="userinfo", aliases=["ui"])
     @commands.check(AllListeners.check_enabled)
