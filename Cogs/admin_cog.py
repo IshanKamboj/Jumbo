@@ -14,43 +14,39 @@ class Admin(commands.Cog):
     #---------------------Give level Command and its errors---------------------------------------
     @commands.command(name="givelevel",aliases=["gl"])
     @commands.has_permissions(manage_guild=True)
+    @commands.check(AllListeners.check_enabled)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _givelevel(self,ctx:commands.Context,user:discord.Member,level:int):
         database = firebase.database()
-        isEnabled = database.child('Disabled').child(str(ctx.guild.id)).child("givelevel").get()
         x = database.child("Levels").child(str(ctx.guild.id)).child(str(user.id)).get()
-        if isEnabled.val() is None:
-            try:
-                if level >= 1:
-                    exp = self.difficulty+((level-1)*self.difficulty)-self.difficulty
-                    database.child("Levels").child(str(ctx.guild.id)).child(str(user.id)).update({'exp':exp,'lvl':level})
-                    lvl_embed = (discord.Embed(title="**Level Up**",
-                                    description= f"Congratulations {user.mention}. You just reached level {level}",
-                                    color = discord.Color.from_rgb(0,255,185)
-                                    )
-                                    .set_thumbnail(url=f"{user.avatar_url}")
-                                    )
-                    await ctx.send(user.mention,embed=lvl_embed)
-                elif level<1:
-                    await ctx.send(f"{ctx.author.mention} **Are u a DumbASS??......... U cannot give level below one**")
-            except TypeError:
-                if level >=1:
-                    exp = self.difficulty+(level-1)*self.difficulty-self.difficulty
-                    database.child('Levels').child(str(ctx.guild.id)).child(str(user.id)).update({'lvl':level,'exp':exp,'userName':str(user)})
-                    lvl_embed = (discord.Embed(title="**Level Up**",
-                                    description= f"Congratulations {user.mention}. You just reached level {level}",
-                                    color = discord.Color.from_rgb(0,255,185)
-                                    )
-                                    .set_thumbnail(url=f"{user.avatar_url}")
-                                    )
-                    await ctx.send(user.mention,embed=lvl_embed)
-                elif level<1:
-                    await ctx.send(f"{ctx.author.mention} **Are u a DumbASS??......... U cannot give level below one**")
-            except:
-                await ctx.send("Pls mention the user or use ID.")
-        else:
-            em = discord.Embed(description="This command is disabled in your server. Ask admin to enable it",color=discord.Color.random())
-            await ctx.send(embed=em)
+        try:
+            if level >= 1:
+                exp = self.difficulty+((level-1)*self.difficulty)-self.difficulty
+                database.child("Levels").child(str(ctx.guild.id)).child(str(user.id)).update({'exp':exp,'lvl':level})
+                lvl_embed = (discord.Embed(title="**Level Up**",
+                                description= f"Congratulations {user.mention}. You just reached level {level}",
+                                color = discord.Color.from_rgb(0,255,185)
+                                )
+                                .set_thumbnail(url=f"{user.avatar_url}")
+                                )
+                await ctx.send(user.mention,embed=lvl_embed)
+            elif level<1:
+                await ctx.send(f"{ctx.author.mention} **Are u a DumbASS??......... U cannot give level below one**")
+        except TypeError:
+            if level >=1:
+                exp = self.difficulty+(level-1)*self.difficulty-self.difficulty
+                database.child('Levels').child(str(ctx.guild.id)).child(str(user.id)).update({'lvl':level,'exp':exp,'userName':str(user)})
+                lvl_embed = (discord.Embed(title="**Level Up**",
+                                description= f"Congratulations {user.mention}. You just reached level {level}",
+                                color = discord.Color.from_rgb(0,255,185)
+                                )
+                                .set_thumbnail(url=f"{user.avatar_url}")
+                                )
+                await ctx.send(user.mention,embed=lvl_embed)
+            elif level<1:
+                await ctx.send(f"{ctx.author.mention} **Are u a DumbASS??......... U cannot give level below one**")
+        except:
+            await ctx.send("Pls mention the user or use ID.")
     @_givelevel.error
     async def givelevel_error(self,ctx,error):
         if isinstance(error,commands.MissingRequiredArgument):
@@ -66,18 +62,14 @@ class Admin(commands.Cog):
 #---------------------Change prefix Command and its errors---------------------------------------
     @commands.command(name="prefix",aliases=["cp","changeprefix"])
     @commands.has_permissions(administrator=True)
+    @commands.check(AllListeners.check_enabled)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _prefix(self,ctx:commands.Context,*,newPrefix):
         db = firebase.database()
-        isEnabled = db.child('Disabled').child(str(ctx.guild.id)).child("prefix").get()
-        if isEnabled.val() is None:
-            prefixs = {"Prefix":newPrefix}
-            db.child('Prefixes').child(str(ctx.guild.id)).update({"Prefix":newPrefix})
-            em = discord.Embed(description=f"Prefix update for this Sever. New Prefix `{newPrefix}`, use `{newPrefix}help` for more info.")
-            await ctx.send(embed=em)
-        else:
-            em = discord.Embed(description="This command is disabled in your server. Ask admin to enable it",color=discord.Color.random())
-            await ctx.send(embed=em)
+        prefixs = {"Prefix":newPrefix}
+        db.child('Prefixes').child(str(ctx.guild.id)).update({"Prefix":newPrefix})
+        em = discord.Embed(description=f"Prefix update for this Sever. New Prefix `{newPrefix}`, use `{newPrefix}help` for more info.")
+        await ctx.send(embed=em)
 
     @_prefix.error
     async def prefix_error(self,ctx,error):
@@ -91,23 +83,19 @@ class Admin(commands.Cog):
     #----------------------- Purge command added-----------------------------
     @commands.command(name="purge",aliases=["pu","delete"])
     @commands.has_permissions(manage_guild=True)
+    @commands.check(AllListeners.check_enabled)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _purge(self,ctx,number:int):
         db = firebase.database()
-        isEnabled = db.child('Disabled').child(str(ctx.guild.id)).child("purge").get()
-        if isEnabled.val() is None:
-            try:
-                await ctx.channel.purge(limit=number+1)
-                # em = discord.Embed(description=f"**Messages removed: `{number}`**\n**Removed by: `{ctx.author.name}`**",color=discord.Color.random())
-                #await asyncio.sleep(0.1)
-                msg = await ctx.send(f'**Messages removed: **`{number}`\n**Removed by: **`{str(ctx.author)}`')
-                await asyncio.sleep(2)
-                await msg.delete()
-            except ValueError:
-                await ctx.send("Please enter a valid number")
-        else:
-            em = discord.Embed(description="This command is disabled in your server. Ask admin to enable it",color=discord.Color.random())
-            await ctx.send(embed=em)
+        try:
+            await ctx.channel.purge(limit=number+1)
+            # em = discord.Embed(description=f"**Messages removed: `{number}`**\n**Removed by: `{ctx.author.name}`**",color=discord.Color.random())
+            #await asyncio.sleep(0.1)
+            msg = await ctx.send(f'**Messages removed: **`{number}`\n**Removed by: **`{str(ctx.author)}`')
+            await asyncio.sleep(2)
+            await msg.delete()
+        except ValueError:
+            await ctx.send("Please enter a valid number")
     @_purge.error
     async def purge_error(self,ctx,error):
         if isinstance(error,commands.MissingPermissions):
@@ -211,15 +199,11 @@ class Admin(commands.Cog):
             await ctx.send("**You are missing the required permissions:** `administrator`")
 
     @commands.group(invoke_without_command=True)
+    @commands.check(AllListeners.check_enabled)
     @commands.has_permissions(manage_roles=True)
     async def role(self,ctx):
         db = firebase.database()
-        isEnabled = db.child('Disabled').child(str(ctx.guild.id)).child("role").get()
-        if isEnabled.val() is None:
-            await ctx.send(embed=HelpEmbeds.role_embed())
-        else:
-            em = discord.Embed(description="This command is disabled in your server. Ask admin to enable it",color=discord.Color.random())
-            await ctx.send(embed=em)
+        await ctx.send(embed=HelpEmbeds.role_embed())
     @role.command(name="add")
     @commands.has_permissions(manage_roles=True)
     async def _addrole(self,ctx,user:discord.Member,role:discord.Role):

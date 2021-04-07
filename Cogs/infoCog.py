@@ -32,6 +32,7 @@ class InfoCogs(commands.Cog):
             await ctx.send(embed=em)
 
     @commands.command(name="userinfo", aliases=["ui"])
+    @commands.check(AllListeners.check_enabled)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _userinfo(self, ctx, user: discord.Member = None):
         db = firebase.database()
@@ -67,6 +68,7 @@ class InfoCogs(commands.Cog):
             await ctx.send(embed=em)
 
     @commands.command(name="roleinfo", aliases=["ri", "rinfo"])
+    @commands.check(AllListeners.check_enabled)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _roleinfo(self, ctx, role: discord.Role):
         db = firebase.database()
@@ -102,6 +104,7 @@ class InfoCogs(commands.Cog):
             await ctx.send(embed=em)
 
     @commands.command(name="onlineinfo", aliases=["online"])
+    @commands.check(AllListeners.check_enabled)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _onlineinfo(self, ctx, user: discord.Member):
         db = firebase.database()
@@ -149,6 +152,7 @@ class InfoCogs(commands.Cog):
         em.add_field(name="Response Time:",value=f"`{(end-start)*1000:,.0f} ms.`")
         await message.edit(embed=em)
     @commands.command(name="avatar", aliases=["av", "pfp"])
+    @commands.check(AllListeners.check_enabled)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _avatar(self, ctx, user: discord.Member = None):
         db = firebase.database()
@@ -181,6 +185,7 @@ class InfoCogs(commands.Cog):
             pass
 
     @commands.command(name="snipe", aliases=["sniper"])
+    @commands.check(AllListeners.check_enabled)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _snipe(self, ctx, channel: discord.channel.TextChannel = None):
         db = firebase.database()
