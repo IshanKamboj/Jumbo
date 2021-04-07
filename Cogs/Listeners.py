@@ -36,7 +36,7 @@ class AllListeners(commands.Cog):
                 if i in req_role.val()["roles_id"]:
                     return True
                     break
-            raise MissingRequiredServerRoles()
+            raise MissingRequiredServerRoles
             return False
         else:
             return True
