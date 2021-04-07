@@ -10,6 +10,8 @@ lvl_add = 1
 difficulty = 300
 class CommandDisabled(commands.CheckFailure):
     pass
+class MissingRequiredServerRoles(commands.CheckFailure):
+    pass
 class AllListeners(commands.Cog):
     def __init__(self,bot,difficulty,lvl_add):
         self.bot = bot
@@ -24,8 +26,20 @@ class AllListeners(commands.Cog):
         else:
             raise CommandDisabled
             return isEnabled.val() is None
-        
-        
+    
+    def role_check(ctx):
+        db = firebase.database()
+        req_role = db.child("Settings").child(str(ctx.guild.id)).child(str(ctx.command)).get()
+        user_role = list(map(int, [r.id for r in ctx.author.roles]))
+        if req_role.val() is not None:
+            for i in user_role:
+                if i in req_role.val()["roles_id"]:
+                    return True
+                    break
+            raise MissingRequiredServerRoles("You are missing required server roles for using this command.")
+            return False
+        else:
+            return True
     @commands.Cog.listener()
     async def on_ready(self):
         await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Everyone Fight"))
@@ -146,6 +160,9 @@ class AllListeners(commands.Cog):
             pass
         elif isinstance(error, CommandDisabled):
             em = discord.Embed(description="This command is disabled in your server. Ask admin to enable it",color=discord.Color.random())
+            await ctx.send(embed=em)
+        elif isinstance(error, MissingRequiredServerRoles):
+            em = discord.Embed(description=f"{str(error)}",color=discord.Color.random())
             await ctx.send(embed=em)
         elif isinstance(error,commands.CommandOnCooldown):
             temp = str(error).split(" ")

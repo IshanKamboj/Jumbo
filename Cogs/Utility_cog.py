@@ -130,6 +130,7 @@ class Utility(commands.Cog):
 #---------------------AFK Command and its errors---------------------------------------
     @commands.command(name="afk")
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     # @commands.has_permissions(manage_nickname)
     async def _afk(self,ctx:commands.Context,*,reason="Busy...smh"):
@@ -155,6 +156,7 @@ class Utility(commands.Cog):
 #---------------------------Last seen command---------------------
     @commands.command(name="seen",aliases=["lastseen","last"])
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _seen(self,ctx:commands.Context,user:discord.Member):
         db = firebase.database()
@@ -188,6 +190,7 @@ class Utility(commands.Cog):
 #------------------------ Custom auto react------------------------------------------
     @commands.command(name="autoreact",aliases=["ar","react","reaction"])
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _autoreact(self,ctx,*,reaction):
         db = firebase.database()

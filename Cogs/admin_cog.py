@@ -304,6 +304,38 @@ class Admin(commands.Cog):
     #     db = firebase.datetime()
     #     x = db.child("Settings").child(str(ctx.guild.id)).
     #     command_ = self.bot.get_command(command)
+    @commands.group(name="settings",aliases=["setting"],invoke_without_command=True)
+    @commands.has_permissions(administrator=True)
+    async def settings(self,ctx):
+        em = discord.Embed(title=f"Settings for {ctx.guild.name}",color=discord.Color.random(),thumbnail=f"{ctx.guild.icon_url}")
+        em.add_field(name="*settings <cmdrole> <command_name> <role_id/role>",value="Sets the required for using any command. Removes the role if it is already there.",inline=False)
+        
+        await ctx.send(embed=em)
+        
+    @settings.command(name="cmdrole")
+    @commands.has_permissions(administrator=True)
+    async def _cmdrole(self,ctx,command,role:discord.Role):
+        db = firebase.database()
+        command_ = self.bot.get_command(command)
+        x = db.child("Settings").child(str(ctx.guild.id)).child(str(command_)).get()
+        if x.val() is None:
+            db.child("Settings").child(str(ctx.guild.id)).child(str(command_)).set({"roles_id":[role.id]})
+            await ctx.send(f"`{role}` was added as requirment for using `{command_}` command")
+        else:
+            temp =[]
+            if role.id in x.val()["roles_id"]:
+                temp = x.val()["roles_id"]
+                for i in temp:
+                    if i == role.id:
+                        temp.remove(i)
+                db.child("Settings").child(str(ctx.guild.id)).child(str(command_)).set({"roles_id":temp})
+                await ctx.send(f"Role: `{role}` was removed as requirment for using `{command_}` command")
+            else:
+                temp = x.val()["roles_id"]
+                temp.append(role.id)
+                print(temp)
+                db.child("Settings").child(str(ctx.guild.id)).child(str(command_)).set({"roles_id":temp})
 
+                await ctx.send(f"Role: `{role}` was also  added as requirment for using `{command_}` command")
 def setup(bot):
     bot.add_cog(Admin(bot,difficulty))
