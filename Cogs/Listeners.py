@@ -36,7 +36,7 @@ class AllListeners(commands.Cog):
                 if i in req_role.val()["roles_id"]:
                     return True
                     break
-            x = db.child("Settings").child(str(ctx.guild.id)).child(str(ctx.command)).get()
+            x = db.child("Settings").child(str(ctx.guild.id)).get()
             temp = []
             for i in x.val():
                 y  = db.child("Settings").child(str(ctx.guild.id)).child(str(i)).get()
