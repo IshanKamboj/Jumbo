@@ -352,7 +352,7 @@ class Admin(commands.Cog):
                     else:
                         temp_text += f", {role.mention}"
                 em.add_field(name=f"{i} Command",value=temp_text,inline=False)
-            
+                temp_text = ""
             await ctx.send(embed=em)
         else:
             await ctx.send("No server settings for this guild")
