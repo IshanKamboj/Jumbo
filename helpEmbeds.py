@@ -245,3 +245,8 @@ class HelpEmbeds():
         em = discord.Embed(title="Factorial Embed",description="Gives the factorial of a number.[Click Here](https://en.wikipedia.org/wiki/Factorial) for more info",color=discord.Color.random())
         em.add_field(name='Syntax',value="*factorial <number>")
         return em
+    def settings_embed():
+        em = discord.Embed(title=f"Settings Commands",color=discord.Color.random())
+        em.add_field(name="*settings show",value="Shows the command roles settings for this server.",inline=False)
+        em.add_field(name="*settings <cmdrole> <command_name> <role_id/role>",value="Sets the required for using any command. Removes the role if it is already there.",inline=False)
+        return em

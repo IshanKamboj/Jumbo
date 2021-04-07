@@ -56,7 +56,7 @@ async def utility(ctx):
 
 @help.command(name="admin")
 async def admin(ctx):
-    em = discord.Embed(title=":lock: | Admin Commands",description="`Givelevel`, `Prefix`, `Purge`, `Disable`, `Enable`, `Role`",color=discord.Color.random())
+    em = discord.Embed(title=":lock: | Admin Commands",description="`Givelevel`, `Prefix`, `Purge`, `Disable`, `Enable`, `Role`, `Settings`",color=discord.Color.random())
     await ctx.send(embed=em)
 
 @help.command(name="fun")
@@ -325,6 +325,9 @@ async def volume(ctx):
 async def factorial(ctx):
     await ctx.send(embed=HelpEmbeds.factorial_embed())
 
+@help.command(name="settings",aliases=["setting"])
+async def settings(ctx):
+    await ctx.send(embed=HelpEmbeds.settings_embed())
 #####################################    LOADING COGS    #########################################################
 for filename in os.listdir('./Cogs'):
     if filename.endswith('.py'):

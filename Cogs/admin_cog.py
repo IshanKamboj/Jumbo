@@ -307,10 +307,7 @@ class Admin(commands.Cog):
     @commands.group(name="settings",aliases=["setting"],invoke_without_command=True)
     @commands.has_permissions(administrator=True)
     async def settings(self,ctx):
-        em = discord.Embed(title=f"Settings for {ctx.guild.name}",color=discord.Color.random(),thumbnail=f"{ctx.guild.icon_url}")
-        em.add_field(name="*settings <cmdrole> <command_name> <role_id/role>",value="Sets the required for using any command. Removes the role if it is already there.",inline=False)
-        
-        await ctx.send(embed=em)
+        await  ctx.send(embed=HelpEmbeds.settings_embed())
         
     @settings.command(name="cmdrole")
     @commands.has_permissions(administrator=True)
@@ -342,7 +339,7 @@ class Admin(commands.Cog):
         x = db.child("Settings").child(str(ctx.guild.id)).get()
         if not x.val() is None:
             temp_text=""
-            em = discord.Embed(title=f"Role Settings for {ctx.guild.name}",thumbnail=f"{ctx.guild.icon_url}",color=discord.Color.random())
+            em = discord.Embed(title=f"Role Settings for {ctx.guild.name}",color=discord.Color.random()).set_thumbnail(url=f"{str(ctx.guild.icon_url)}")
             for i in x.val():
                 y = db.child("Settings").child(str(ctx.guild.id)).child(str(i)).get()
                 for j in y.val()["roles_id"]:

@@ -241,7 +241,7 @@ class InfoCogs(commands.Cog):
             ("Number of Guilds", len(self.bot.guilds),True),
             ("Users", f"{len(self.bot.users)}", True),
             ("Registered", user.created_at.strftime(date_format), True),
-            ("Number of Commands", len(self.bot.commands)+10,True)
+            ("Number of Commands", len(self.bot.commands)+12,True)
             ]
         for name, value, inline in fields:
             em.add_field(name=name, value=value, inline=inline)
