@@ -36,25 +36,7 @@ class AllListeners(commands.Cog):
                 if i in req_role.val()["roles_id"]:
                     return True
                     break
-            x = db.child("Settings").child(str(ctx.guild.id)).get()
-            temp = []
-            for i in x.val():
-                y  = db.child("Settings").child(str(ctx.guild.id)).child(str(i)).get()
-                
-                if len(y.val()["roles_id"]) == 1:
-                    
-                    temp= y.val()["roles_id"]
-                else:
-                    for j in y.val()["roles_id"]:
-                        temp.append(j)
-            description = ""
-            for i in temp:
-                role = ctx.guild.get_role(i)
-                if description == "":
-                    description = f"{role.mention}"
-                else:
-                    description += f",{role.mention}"
-            raise MissingRequiredServerRoles(description)
+            raise MissingRequiredServerRoles()
             return False
         else:
             return True
@@ -180,7 +162,25 @@ class AllListeners(commands.Cog):
             em = discord.Embed(description="This command is disabled in your server. Ask admin to enable it",color=discord.Color.random())
             await ctx.send(embed=em)
         elif isinstance(error, MissingRequiredServerRoles):
-            em = discord.Embed(title="Missing Role Requirement",description=f"You are missing these roles: {error}",color=discord.Color.random())
+            x = db.child("Settings").child(str(ctx.guild.id)).get()
+            temp = []
+            for i in x.val():
+                y  = db.child("Settings").child(str(ctx.guild.id)).child(str(i)).get()
+                
+                if len(y.val()["roles_id"]) == 1:
+                    
+                    temp= y.val()["roles_id"]
+                else:
+                    for j in y.val()["roles_id"]:
+                        temp.append(j)
+            description = ""
+            for i in temp:
+                role = ctx.guild.get_role(i)
+                if description == "":
+                    description = f"{role.mention}"
+                else:
+                    description += f",{role.mention}"
+            em = discord.Embed(title="Missing Role Requirement",description=f"You are missing these roles: {description}",color=discord.Color.random())
             await ctx.send(embed=em)
         elif isinstance(error,commands.CommandOnCooldown):
             temp = str(error).split(" ")
