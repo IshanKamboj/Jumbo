@@ -162,6 +162,7 @@ class AllListeners(commands.Cog):
             em = discord.Embed(description="This command is disabled in your server. Ask admin to enable it",color=discord.Color.random())
             await ctx.send(embed=em)
         elif isinstance(error, MissingRequiredServerRoles):
+            print('yes')
             x = db.child("Settings").child(str(ctx.guild.id)).get()
             temp = []
             for i in x.val():
@@ -180,7 +181,7 @@ class AllListeners(commands.Cog):
                     description = f"{role.mention}"
                 else: 
                     description += f", {role.mention}"
-            em = discord.Embed(title="Missing Role Requirement",description=f"You are missing these roles: {description}",color=discord.Color.random())
+            em = discord.Embed(title="Missing Role Requirement",description=f"You are missing any of these roles: {description}",color=discord.Color.random())
             await ctx.send(embed=em)
         elif isinstance(error,commands.CommandOnCooldown):
             temp = str(error).split(" ")
