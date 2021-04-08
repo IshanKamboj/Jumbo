@@ -116,8 +116,8 @@ class AllListeners(commands.Cog):
                             # await message.channel.send(str(emoji))
                             await message.delete()
                             # break
-            except Exception as e:
-                print(str(e))
+            except:
+                pass
             if message.raw_mentions:
                 for i in message.raw_mentions:
                     afk_data = db.child("AFK").child(str(message.guild.id)).child(str(i)).get()
