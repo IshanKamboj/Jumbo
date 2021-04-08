@@ -21,6 +21,7 @@ class ActionCog(commands.Cog):
     @commands.command(name="slap")
     @commands.cooldown(1,5,commands.BucketType.user)
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     async def _slap(self,ctx,user:discord.Member):
             try:
                 r = requests.get("https://g.tenor.com/v1/search?q=%s&key=%s&limit=%s" % ('anime-slap', api_key, lmt))
@@ -42,6 +43,7 @@ class ActionCog(commands.Cog):
     @commands.command(name="punch")
     @commands.cooldown(1,5,commands.BucketType.user)
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     async def _punch(self,ctx,user:discord.Member):
             try:
                 x = random.randint(0,10)
@@ -67,6 +69,7 @@ class ActionCog(commands.Cog):
     @commands.command(name="lick",aliases=["suck"])
     @commands.cooldown(1,5,commands.BucketType.user)
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     async def _lick(self,ctx,user:discord.Member):
             try:
                 r = requests.get("https://g.tenor.com/v1/search?q=%s&key=%s&limit=%s" % ('anime-lick', api_key, lmt))
@@ -88,6 +91,7 @@ class ActionCog(commands.Cog):
     @commands.command(name="bite")
     @commands.cooldown(1,5,commands.BucketType.user)
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     async def _bite(self,ctx,user:discord.Member):
             try:
                 r = requests.get("https://g.tenor.com/v1/search?q=%s&key=%s&limit=%s" % ('anime-bite', api_key, lmt))
@@ -109,6 +113,7 @@ class ActionCog(commands.Cog):
     @commands.command(name="bully")
     @commands.cooldown(1,5,commands.BucketType.user)
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     async def _bully(self,ctx,user:discord.Member):
             try:
                 r = requests.get("https://g.tenor.com/v1/search?q=%s&key=%s&limit=%s" % ('anime-bully', api_key, lmt))
@@ -129,6 +134,7 @@ class ActionCog(commands.Cog):
     @commands.command(name="hug")
     @commands.cooldown(1,5,commands.BucketType.user)
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     async def _hug(self,ctx,user:discord.Member):
             try:
                 r = requests.get("https://g.tenor.com/v1/search?q=%s&key=%s&limit=%s" % ('anime-hug', api_key, lmt))
@@ -151,6 +157,7 @@ class ActionCog(commands.Cog):
     @commands.command(name="kick",aliases=["laat"])
     @commands.cooldown(1,5,commands.BucketType.user)
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     async def _kick(self,ctx,user:discord.Member):
             try:
                 x = random.randint(0,10)
@@ -176,6 +183,7 @@ class ActionCog(commands.Cog):
     @commands.command(name="hardkick")
     @commands.cooldown(1,5,commands.BucketType.user)
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     async def _hardkick(self,ctx,user:discord.Member):
             try:
                 r = requests.get("https://g.tenor.com/v1/search?q=%s&key=%s&limit=%s" % ('levi-kick', api_key, 8))
@@ -197,6 +205,7 @@ class ActionCog(commands.Cog):
     @commands.command(name="pat")
     @commands.cooldown(1,5,commands.BucketType.user)
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     async def _pat(self,ctx,user:discord.Member):
         try:
             r = requests.get("https://g.tenor.com/v1/search?q=%s&key=%s&limit=%s" % ('anime-pat', api_key, lmt))

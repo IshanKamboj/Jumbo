@@ -17,20 +17,24 @@ class ImageCommands(commands.Cog):
     async def _wanted(self,ctx, user:discord.Member=None):
         if user is None:
             user = ctx.author
-        wanted = Image.open('wanted.jpg')
+        wanted = Image.open('template_imgs/wanted.jpg')
         width, height = wanted.size
         asset = user.avatar_url
         data = BytesIO(await asset.read())
         pfp = Image.open(data)
         pfp = pfp.resize((300,300))
         d = ImageDraw.Draw(wanted)
-        font = ImageFont.truetype(font='wanted.otf',size=35)
+        font = ImageFont.truetype(font='fonts/wanted.otf',size=35)
         w,h = d.textsize(user.name,font=font)
         posX = (width-w)/2
         d.text((posX,500),user.name,fill=(0,0,0),font=font)
         wanted.paste(pfp, (100,180))
-        wanted.save('wanted_img.jpg')
-        await ctx.send(file=discord.File('wanted_img.jpg'))
+        with io.BytesIO() as image_binary:
+            wanted.save(image_binary,"PNG")
+            image_binary.seek(0)
+            await ctx.send(file=discord.File(fp=image_binary, filename='image.png'))
+        # wanted.save('wanted_img.jpg')
+        # await ctx.send(file=discord.File('wanted_img.jpg'))
     
     @commands.command(name="rip")
     @commands.check(AllListeners.check_enabled)
@@ -39,10 +43,10 @@ class ImageCommands(commands.Cog):
         try:
             if user == None:
                 user = ctx.author
-            tomb = Image.open('tomb.jpg')
+            tomb = Image.open('template_imgs/tomb.jpg')
             width, height = tomb.size
             d = ImageDraw.Draw(tomb)
-            font = ImageFont.truetype(font='Roboto-Bold.ttf',size=38)
+            font = ImageFont.truetype(font='fonts/Roboto-Bold.ttf',size=38)
             #width, height = wanted.size
             asset = user.avatar_url
             date_format = "%a, %d %b %Y "
@@ -54,8 +58,10 @@ class ImageCommands(commands.Cog):
             posX = (width-w)/2
             d.text((posX,440),f'{user.name}',fill=(204,0,102),font=font)
             tomb.paste(pfp,(100,290))
-            tomb.save('RIP.jpg')
-            await ctx.send(file=discord.File('RIP.jpg'))
+            with io.BytesIO() as image_binary:
+                tomb.save(image_binary,"PNG")
+                image_binary.seek(0)
+                await ctx.send(file=discord.File(fp=image_binary, filename='image.png'))
         except Exception as e:
             print(str(e))
     # https://source.unsplash.com/1600x900/?nature,water
@@ -73,6 +79,6 @@ class ImageCommands(commands.Cog):
                     await ctx.send(file=discord.File(data, 'cool_image.png'))
         except Exception as e:
             print(str(e))
-    
+            
 def setup(bot):
     bot.add_cog(ImageCommands(bot))

@@ -21,6 +21,7 @@ class Fun(commands.Cog):
 
     @commands.command(name="facts",aliases=["knowledge","fact"])
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _facts(self,ctx):
         x = randfacts.getFact(filter=True)
@@ -28,6 +29,7 @@ class Fun(commands.Cog):
     #-------------------------- Truth command ---------------------------------
     @commands.command(name="truth",aliases=["truths"])
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _truth(self,ctx,user:discord.Member):
         db = firebase.database()
@@ -47,6 +49,7 @@ class Fun(commands.Cog):
     #----------------------- Dare command -----------------------------------------------
     @commands.command(name="dare",aliases=["dares"])
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _dare(self,ctx,user:discord.Member):
         db = firebase.database()
@@ -65,6 +68,7 @@ class Fun(commands.Cog):
     #----------------------- 8ball command--------------------------------
     @commands.command(name="8ball",aliases=["predict"])
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _8ball(self,ctx,*,question):
         db = firebase.database()
@@ -99,6 +103,7 @@ class Fun(commands.Cog):
 #---------------------- Opinion command ----------------------------
     @commands.command(name="opinion",aliases=["op"])
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _opinion(self,ctx,user:discord.Member):
         db = firebase.database()
@@ -139,6 +144,7 @@ class Fun(commands.Cog):
     
     @commands.command(name="insult",aliases=["roast"])
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _insult(self,ctx,user:discord.Member):
         db = firebase.database()
@@ -154,6 +160,7 @@ class Fun(commands.Cog):
 
     @commands.command(name="gayrate",aliases=["gr","gay","gae"])
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _gayrate(self,ctx,user:discord.Member=None):
         x = random.randint(1,100)
@@ -166,6 +173,7 @@ class Fun(commands.Cog):
     
     @commands.command(name="joke",aliases=["jokes"])
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _joke(self,ctx):
         jk = pyjokes.get_joke()

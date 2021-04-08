@@ -28,9 +28,9 @@ class LevelIMG:
         userName,tag = self.Username.split('#')
         
         ## font for username
-        font = ImageFont.truetype('arial.ttf',45)
+        font = ImageFont.truetype('fonts/arial.ttf',45)
         ## font for user tag
-        tag_font = ImageFont.truetype('arial.ttf',30)
+        tag_font = ImageFont.truetype('fonts/arial.ttf',30)
         ## width and height of username
         t_width , t_ht = d.textsize(userName,font=font)
         ## width and ht of tag

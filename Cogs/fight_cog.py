@@ -27,6 +27,7 @@ class fights(commands.Cog):
     #---------------------Fight Command and its errors---------------------------------------
     @commands.command(name="fight",aliases=["dumbfight"])
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _fight(self,ctx:commands.Context,user:discord.Member):
         db = firebase.database()
@@ -84,6 +85,7 @@ class fights(commands.Cog):
     #---------------------Shoot Command and its errors---------------------------------------           
     @commands.command(name="shoot",aliases=["fire","headshot","kill"])
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _shoot(self,ctx:commands.Context,user:discord.Member):
         db = firebase.database()
@@ -140,6 +142,7 @@ class fights(commands.Cog):
             await ctx.send("**Missing required argument. See help** :point_down::point_down:",embed = em)
     @commands.command(name="train",aliases=["learn"])
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7200, commands.BucketType.user)
     async def _train(self,ctx):
         db = firebase.database()
@@ -162,6 +165,7 @@ class fights(commands.Cog):
 
     @commands.command(name="profile")
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _profile(self,ctx):
         db = firebase.database()
@@ -196,6 +200,7 @@ class fights(commands.Cog):
     
     @commands.command(name="shop",aliases=["items","item"])
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _shop(self,ctx):
         db = firebase.database()
@@ -208,6 +213,7 @@ class fights(commands.Cog):
         await ctx.send(embed=em)
     @commands.command(name="buy",aliases=["acquire","get"])
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _buy(self,ctx,item:str,amount=1):
         db = firebase.database()

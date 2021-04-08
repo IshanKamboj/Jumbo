@@ -287,25 +287,10 @@ class Admin(commands.Cog):
             em = discord.Embed(description="This command is disabled in your server. Ask admin to enable it",color=discord.Color.random())
             await ctx.send(embed=em)
 
-    # @commands.group(invoke_without_command=True)
-    # @commands.has_permissions(administrator=True)
-    # @commands.check(AllListeners.check_enabled)
-    # async def multi(self,ctx,)
-    # @commands.group(name="settings",aliases=["setting"],invoke_without_command=True)
-    # @commands.has_permissions(administrator=True)
-    # async def settings(self,ctx):
-    #     em = discord.Embed(title=f"Settings for {ctx.guild.name}",color=discord.Color.random(),thumbnail=f"{ctx.guild.icon_url}")
-    #     em.add_field(name="*settings <cmdrole> <command_name> <role_id/role>",value="Sets the required for using any command. Removes the role if it is already there.",inline=False)
-        
-    #     await ctx.send(embed=em)
-    # @settings.command(name="cmdrole")
-    # @commands.has_permissions(administrator=True)
-    # async def _cmdrole(self,ctx,command,role:discord.Role):
-    #     db = firebase.datetime()
-    #     x = db.child("Settings").child(str(ctx.guild.id)).
-    #     command_ = self.bot.get_command(command)
+    
     @commands.group(name="settings",aliases=["setting"],invoke_without_command=True)
     @commands.has_permissions(administrator=True)
+    @commands.check(AllListeners.check_enabled)
     async def settings(self,ctx):
         await  ctx.send(embed=HelpEmbeds.settings_embed())
         
@@ -313,45 +298,55 @@ class Admin(commands.Cog):
     @commands.has_permissions(administrator=True)
     async def _cmdrole(self,ctx,command,role:discord.Role):
         db = firebase.database()
-        command_ = self.bot.get_command(command)
-        x = db.child("Settings").child(str(ctx.guild.id)).child(str(command_)).get()
-        if x.val() is None:
-            db.child("Settings").child(str(ctx.guild.id)).child(str(command_)).set({"roles_id":[role.id]})
-            await ctx.send(f"`{role}` was added as requirment for using `{command_}` command")
-        else:
-            temp =[]
-            if role.id in x.val()["roles_id"]:
-                temp = x.val()["roles_id"]
-                for i in temp:
-                    if i == role.id:
-                        temp.remove(i)
-                db.child("Settings").child(str(ctx.guild.id)).child(str(command_)).set({"roles_id":temp})
-                await ctx.send(f"Role: `{role}` was removed as requirment for using `{command_}` command")
+        isEnabled = db.child('Disabled').child(str(ctx.guild.id)).child("settings").get()
+        if isEnabled.val() is None:
+            command_ = self.bot.get_command(command)
+            x = db.child("Settings").child(str(ctx.guild.id)).child(str(command_)).get()
+            if x.val() is None:
+                db.child("Settings").child(str(ctx.guild.id)).child(str(command_)).set({"roles_id":[role.id]})
+                await ctx.send(f"`{role}` was added as requirment for using `{command_}` command")
             else:
-                temp = x.val()["roles_id"]
-                temp.append(role.id)
-                db.child("Settings").child(str(ctx.guild.id)).child(str(command_)).set({"roles_id":temp})
+                temp =[]
+                if role.id in x.val()["roles_id"]:
+                    temp = x.val()["roles_id"]
+                    for i in temp:
+                        if i == role.id:
+                            temp.remove(i)
+                    db.child("Settings").child(str(ctx.guild.id)).child(str(command_)).set({"roles_id":temp})
+                    await ctx.send(f"Role: `{role}` was removed as requirment for using `{command_}` command")
+                else:
+                    temp = x.val()["roles_id"]
+                    temp.append(role.id)
+                    db.child("Settings").child(str(ctx.guild.id)).child(str(command_)).set({"roles_id":temp})
 
-                await ctx.send(f"Role: `{role}` was also  added as requirment for using `{command_}` command")
+                    await ctx.send(f"Role: `{role}` was also  added as requirment for using `{command_}` command")
+        else:
+            em = discord.Embed(description="This command is disabled in your server. Ask admin to enable it",color=discord.Color.random())
+            await ctx.send(embed=em)
     @settings.command(name='show')
     async def _show(self,ctx):
         db = firebase.database()
-        x = db.child("Settings").child(str(ctx.guild.id)).get()
-        if not x.val() is None:
-            temp_text=""
-            em = discord.Embed(title=f"Role Settings for {ctx.guild.name}",color=discord.Color.random()).set_thumbnail(url=f"{str(ctx.guild.icon_url)}")
-            for i in x.val():
-                y = db.child("Settings").child(str(ctx.guild.id)).child(str(i)).get()
-                for j in y.val()["roles_id"]:
-                    role = ctx.guild.get_role(j)
-                    if temp_text == "":
-                        temp_text = f"{role.mention}"
-                    else:
-                        temp_text += f", {role.mention}"
-                em.add_field(name=f"{i} Command",value=temp_text,inline=False)
-                temp_text = ""
-            await ctx.send(embed=em)
+        isEnabled = db.child('Disabled').child(str(ctx.guild.id)).child("settings").get()
+        if isEnabled.val() is None:
+            x = db.child("Settings").child(str(ctx.guild.id)).get()
+            if not x.val() is None:
+                temp_text=""
+                em = discord.Embed(title=f"Role Settings for {ctx.guild.name}",color=discord.Color.random()).set_thumbnail(url=f"{str(ctx.guild.icon_url)}")
+                for i in x.val():
+                    y = db.child("Settings").child(str(ctx.guild.id)).child(str(i)).get()
+                    for j in y.val()["roles_id"]:
+                        role = ctx.guild.get_role(j)
+                        if temp_text == "":
+                            temp_text = f"{role.mention}"
+                        else:
+                            temp_text += f", {role.mention}"
+                    em.add_field(name=f"{i} Command",value=temp_text,inline=False)
+                    temp_text = ""
+                await ctx.send(embed=em)
+            else:
+                await ctx.send("No server settings for this guild")
         else:
-            await ctx.send("No server settings for this guild")
+            em = discord.Embed(description="This command is disabled in your server. Ask admin to enable it",color=discord.Color.random())
+            await ctx.send(embed=em)
 def setup(bot):
     bot.add_cog(Admin(bot,difficulty))
