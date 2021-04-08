@@ -116,8 +116,8 @@ class AllListeners(commands.Cog):
                             # await message.channel.send()
                             # await message.delete()
                             # break
-            except:
-                pass
+            except Exception as e:
+                print(str(e))
             if message.raw_mentions:
                 for i in message.raw_mentions:
                     afk_data = db.child("AFK").child(str(message.guild.id)).child(str(i)).get()
