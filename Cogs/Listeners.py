@@ -94,12 +94,13 @@ class AllListeners(commands.Cog):
         except:
             pass
         seen_data = db.child("Last Seen").child(str(message.author.id)).get()
-        if seen_data.val() is None:
-            db.child("Last Seen").child(str(message.author.id)).set({"Time":str(datetime.utcnow())})
-        elif seen_data.val() is not None:
-            db.child("Last Seen").child(str(message.author.id)).update({"Time":str(datetime.utcnow())})
+        
         
         if message.author != self.bot.user:
+            if seen_data.val() is None:
+                db.child("Last Seen").child(str(message.author.id)).set({"Time":str(datetime.utcnow())})
+            elif seen_data.val() is not None:
+                db.child("Last Seen").child(str(message.author.id)).update({"Time":str(datetime.utcnow())})
             #msg = message.content
             try:
                 if ":" == message.content[0] and ":" == message.content[-1]:
