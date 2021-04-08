@@ -107,7 +107,7 @@ class AllListeners(commands.Cog):
                     for emoji in message.guild.emojis:
                         if emoji_name == emoji.name:
                             webhooks = await message.channel.webhooks()
-                            webhook = utils.get(webhooks, name = "Imposter NQN")
+                            webhook = discord.utils.get(webhooks, name = "Imposter NQN")
                             if webhook is None:
                                 webhook = await message.channel.create_webhook(name = "Imposter NQN")
 
