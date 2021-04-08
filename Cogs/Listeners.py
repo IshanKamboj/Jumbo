@@ -106,9 +106,16 @@ class AllListeners(commands.Cog):
                     emoji_name = message.content[1:-1]
                     for emoji in message.guild.emojis:
                         if emoji_name == emoji.name:
-                            await message.channel.send(str(emoji))
-                            await message.delete()
-                            break
+                            webhooks = await message.channel.webhooks()
+                            webhook = utils.get(webhooks, name = "Imposter NQN")
+                            if webhook is None:
+                                webhook = await message.channel.create_webhook(name = "Imposter NQN")
+
+                            await webhook.send(str(emoji), username = message.author.name, avatar_url = message.author.avatar_url)
+                            # await message.delete()
+                            # await message.channel.send()
+                            # await message.delete()
+                            # break
             except:
                 pass
             if message.raw_mentions:
