@@ -100,6 +100,17 @@ class AllListeners(commands.Cog):
             db.child("Last Seen").child(str(message.author.id)).update({"Time":str(datetime.utcnow())})
         
         if message.author != self.bot.user:
+            #msg = message.content
+            try:
+                if ":" == message.content[0] and ":" == message.content[-1]:
+                    emoji_name = message.content[1:-1]
+                    for emoji in message.guild.emojis:
+                        if emoji_name == emoji.name:
+                            await message.channel.send(str(emoji))
+                            await message.delete()
+                            break
+            except:
+                pass
             if message.raw_mentions:
                 for i in message.raw_mentions:
                     afk_data = db.child("AFK").child(str(message.guild.id)).child(str(i)).get()
