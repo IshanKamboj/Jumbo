@@ -1,14 +1,14 @@
-import discord
 from discord.ext import commands
 from discord import utils
-
+import discord
 
 class emoji(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
+	def __init__(self, bot):
+		self.bot = bot
 
-    async def getemote(self, arg):
-		emoji = utils.get(self.bot.emojis, name=arg.strip(":"))
+	async def getemote(self, arg):
+		emoji = utils.get(self.bot.emojis, name = arg.strip(":"))
+
 		if emoji is not None:
 			if emoji.animated:
 				add = "a"
@@ -59,8 +59,11 @@ class emoji(commands.Cog):
 			return content
 
 		return ret
-    
-    @commands.Cog.listener()
+
+
+	# i added extra indent by mistake -_-
+
+	@commands.Cog.listener()
 	async def on_message(self, message):
 		if message.author.bot:
 			return
