@@ -99,23 +99,23 @@ class AllListeners(commands.Cog):
         if message.author != self.bot.user:
             
             #msg = message.content
-            try:
-                if ":" == message.content[0] and ":" == message.content[-1]:
-                    emoji_name = message.content[1:-1]
-                    for emoji in self.bot.emojis:
-                        if emoji_name == emoji.name:
-                            webhooks = await message.channel.webhooks()
-                            webhook = discord.utils.get(webhooks, name = "Imposter NQN")
-                            if webhook is None:
-                                webhook = await message.channel.create_webhook(name = "Imposter NQN")
+            # try:
+            #     if ":" == message.content[0] and ":" == message.content[-1]:
+            #         emoji_name = message.content[1:-1]
+            #         for emoji in self.bot.emojis:
+            #             if emoji_name == emoji.name:
+            #                 webhooks = await message.channel.webhooks()
+            #                 webhook = discord.utils.get(webhooks, name = "Imposter NQN")
+            #                 if webhook is None:
+            #                     webhook = await message.channel.create_webhook(name = "Imposter NQN")
 
-                            await webhook.send(str(emoji), username = message.author.name, avatar_url = message.author.avatar_url)
-                            # await message.delete()
-                            # await message.channel.send(str(emoji))
-                            await message.delete()
-                            # break
-            except:
-                pass
+            #                 await webhook.send(str(emoji), username = message.author.name, avatar_url = message.author.avatar_url)
+            #                 # await message.delete()
+            #                 # await message.channel.send(str(emoji))
+            #                 await message.delete()
+            #                 # break
+            # except:
+            #     pass
             if message.raw_mentions:
                 for i in message.raw_mentions:
                     afk_data = db.child("AFK").child(str(message.guild.id)).child(str(i)).get()
