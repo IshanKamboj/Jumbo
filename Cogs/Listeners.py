@@ -97,15 +97,12 @@ class AllListeners(commands.Cog):
         
         
         if message.author != self.bot.user:
-            if seen_data.val() is None:
-                db.child("Last Seen").child(str(message.author.id)).set({"Time":str(datetime.utcnow())})
-            elif seen_data.val() is not None:
-                db.child("Last Seen").child(str(message.author.id)).update({"Time":str(datetime.utcnow())})
+            
             #msg = message.content
             try:
                 if ":" == message.content[0] and ":" == message.content[-1]:
                     emoji_name = message.content[1:-1]
-                    for emoji in message.guild.emojis:
+                    for emoji in self.bot.emojis:
                         if emoji_name == emoji.name:
                             webhooks = await message.channel.webhooks()
                             webhook = discord.utils.get(webhooks, name = "Imposter NQN")
@@ -142,6 +139,11 @@ class AllListeners(commands.Cog):
                 await message.channel.send(embed = em)
             else:
                 if not message.author.bot:
+                    if seen_data.val() is None:
+                        db.child("Last Seen").child(str(message.author.id)).set({"Time":str(datetime.utcnow())})
+                    elif seen_data.val() is not None:
+                        db.child("Last Seen").child(str(message.author.id)).update({"Time":str(datetime.utcnow())})
+                    
                     data = db.child("Levels").child(str(message.guild.id)).child(str(message.author.id)).get()   
                     if data.val() is None:
                         newUser = {"userName":str(message.author),"lvl":1,"exp":1}
