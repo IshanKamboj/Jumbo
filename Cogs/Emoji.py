@@ -9,7 +9,6 @@ class emoji(commands.Cog):
 
     async def getemote(self, arg):
 		emoji = utils.get(self.bot.emojis, name=arg.strip(":"))
-
 		if emoji is not None:
 			if emoji.animated:
 				add = "a"
