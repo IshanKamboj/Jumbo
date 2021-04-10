@@ -1,5 +1,5 @@
 import discord
-from discord.ext import commands
+from discord.ext import commands, tasks
 import os
 from .Listeners import AllListeners
 import sys
@@ -9,6 +9,13 @@ class OwnerCommands(commands.Cog):
         self.bot = bot
         self.token = os.getenv('DBL_TOKEN')
         self.dblpy = dbl.DBLClient(self.bot, self.token, autopost=True)
+    @tasks.loop(minutes=30.0)
+    async def update_stats(self):
+        try:
+            await self.dblpy.post_guild_count()
+        except Exception as e:
+            print(str(e))
+    
     @commands.command(name="shutdown")
     @commands.is_owner()
     async def _shutdown(self,ctx):
@@ -17,8 +24,7 @@ class OwnerCommands(commands.Cog):
             await self.bot.logout()
         except Exception as e:
             print(str(e))
-    async def on_guild_post():
-        print("Server count posted successfully")
+    
     def restart_program(self):
         python = sys.executable
         os.execl(python,python,* sys.argv)

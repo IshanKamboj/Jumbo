@@ -79,13 +79,7 @@ class AllListeners(commands.Cog):
                 await channel.send(embed=em)
                 break
         
-    @commands.Cog.listener()
-    async def on_member_join(self,member):
-        #print('yes')
-        for channel in member.server.channels:
-            if str(channel) == "general":
-                await client.send_message(f'Hello {member.mention}')
-                break
+        
     @commands.Cog.listener()
     async def on_message(self,message):
         db = firebase.database()
