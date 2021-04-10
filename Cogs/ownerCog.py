@@ -17,7 +17,8 @@ class OwnerCommands(commands.Cog):
             await self.bot.logout()
         except Exception as e:
             print(str(e))
-
+    async def on_guild_post():
+        print("Server count posted successfully")
     def restart_program(self):
         python = sys.executable
         os.execl(python,python,* sys.argv)
