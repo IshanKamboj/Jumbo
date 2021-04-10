@@ -61,8 +61,6 @@ class emoji(commands.Cog):
 		return ret
 
 
-	# i added extra indent by mistake -_-
-
 	@commands.Cog.listener()
 	async def on_message(self, message):
 		if message.author.bot:

@@ -3,10 +3,12 @@ from discord.ext import commands
 import os
 from .Listeners import AllListeners
 import sys
+import dbl
 class OwnerCommands(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
-    
+        self.token = os.getenv('DBL_TOKEN')
+        self.dblpy = dbl.DBLClient(self.bot, self.token, autopost=True)
     @commands.command(name="shutdown")
     @commands.is_owner()
     async def _shutdown(self,ctx):
