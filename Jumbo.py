@@ -8,9 +8,12 @@ from discord import Intents
 from Database.db_files import firebase
 #----------------------- Prefix getting and bot setup--------------------------------
 def get_prefix(client,message):
-    db = firebase.database()
-    data = db.child('Prefixes').child(str(message.guild.id)).get()
-    return data.val()['Prefix'] 
+    try:
+        db = firebase.database()
+        data = db.child('Prefixes').child(str(message.guild.id)).get()
+        return data.val()['Prefix'] 
+    except:
+        return "j!"
 
 intent = Intents().all()   
 
