@@ -82,87 +82,90 @@ class AllListeners(commands.Cog):
         
     @commands.Cog.listener()
     async def on_message(self,message):
-        db = firebase.database()
-        try:
-            prefix_data = db.child('Prefixes').child(str(message.guild.id)).get()
-        except:
-            pass
-        seen_data = db.child("Last Seen").child(str(message.author.id)).get()
-        
-        
-        if message.author != self.bot.user:
+        if not message.guild:
+            return
+        else:
+            db = firebase.database()
+            try:
+                prefix_data = db.child('Prefixes').child(str(message.guild.id)).get()
+            except:
+                pass
+            seen_data = db.child("Last Seen").child(str(message.author.id)).get()
             
-            #msg = message.content
-            # try:
-            #     if ":" == message.content[0] and ":" == message.content[-1]:
-            #         emoji_name = message.content[1:-1]
-            #         for emoji in self.bot.emojis:
-            #             if emoji_name == emoji.name:
-            #                 webhooks = await message.channel.webhooks()
-            #                 webhook = discord.utils.get(webhooks, name = "Imposter NQN")
-            #                 if webhook is None:
-            #                     webhook = await message.channel.create_webhook(name = "Imposter NQN")
+            
+            if message.author != self.bot.user:
+                
+                #msg = message.content
+                # try:
+                #     if ":" == message.content[0] and ":" == message.content[-1]:
+                #         emoji_name = message.content[1:-1]
+                #         for emoji in self.bot.emojis:
+                #             if emoji_name == emoji.name:
+                #                 webhooks = await message.channel.webhooks()
+                #                 webhook = discord.utils.get(webhooks, name = "Imposter NQN")
+                #                 if webhook is None:
+                #                     webhook = await message.channel.create_webhook(name = "Imposter NQN")
 
-            #                 await webhook.send(str(emoji), username = message.author.name, avatar_url = message.author.avatar_url)
-            #                 # await message.delete()
-            #                 # await message.channel.send(str(emoji))
-            #                 await message.delete()
-            #                 # break
-            # except:
-            #     pass
-            if message.raw_mentions:
-                for i in message.raw_mentions:
-                    afk_data = db.child("AFK").child(str(message.guild.id)).child(str(i)).get()
+                #                 await webhook.send(str(emoji), username = message.author.name, avatar_url = message.author.avatar_url)
+                #                 # await message.delete()
+                #                 # await message.channel.send(str(emoji))
+                #                 await message.delete()
+                #                 # break
+                # except:
+                #     pass
+                if message.raw_mentions:
+                    for i in message.raw_mentions:
+                        afk_data = db.child("AFK").child(str(message.guild.id)).child(str(i)).get()
 
-            try:
-                for i in message.raw_mentions:
-                    reaction_data =  db.child('Reactions').child(str(message.guild.id)).child(str(i)).get()
-                    await message.add_reaction(reaction_data.val()['Reaction'])
-            except:
-                pass
-            try:
-                reason = afk_data.val()["reason"]
-                em = discord.Embed(title=f"User AFK",description=f"The Mentioned user is AFK....... **Reason: {reason}**",color=discord.Color.from_rgb(255,20,147))
-                await message.channel.send(message.author.mention,embed=em)
-            except:
-                pass
-            if message.content.startswith(prefix_data.val()['Prefix']):
-                return
-            elif self.bot.user.mentioned_in(message):
-                em = (discord.Embed(description=f"Yo! My prefix here is `{prefix_data.val()['Prefix']}`. You can use `{prefix_data.val()['Prefix']}help` for more information",color=discord.Color.random()))
-                await message.channel.send(embed = em)
-            else:
-                if not message.author.bot:
-                    if seen_data.val() is None:
-                        db.child("Last Seen").child(str(message.author.id)).set({"Time":str(datetime.utcnow())})
-                    elif seen_data.val() is not None:
-                        db.child("Last Seen").child(str(message.author.id)).update({"Time":str(datetime.utcnow())})
-                    
-                    data = db.child("Levels").child(str(message.guild.id)).child(str(message.author.id)).get()   
-                    if data.val() is None:
-                        newUser = {"userName":str(message.author),"lvl":1,"exp":1}
-                        db.child("Levels").child(str(message.guild.id)).child(str(message.author.id)).set(newUser)
-                    elif data.val() is not None:
-                        exp = data.val()['exp']
-                        lvl = data.val()['lvl']
-                        exp += self.lvl_add
-                        
-                        a = self.difficulty+(lvl-1)*self.difficulty
-                        mention = message.author.mention
-                        if exp >= a:
-                            lvl += 1
-                            lvl_embed = (discord.Embed(title="**Level Up**",
-                            description= f"Congratulations {mention}. You just reached level {lvl}",
-                            color = discord.Color.from_rgb(0,255,185)
-                            )
-                            .set_thumbnail(url=f"{message.author.avatar_url}")
-                            )
-                            await message.channel.send(mention,embed=lvl_embed)
-                        db.child("Levels").child(str(message.guild.id)).child(str(message.author.id)).update({"exp":exp,"lvl":lvl})
-                    await asyncio.sleep(2)
-                else:
+                try:
+                    for i in message.raw_mentions:
+                        reaction_data =  db.child('Reactions').child(str(message.guild.id)).child(str(i)).get()
+                        await message.add_reaction(reaction_data.val()['Reaction'])
+                except:
                     pass
-        await self.bot.process_commands(message)
+                try:
+                    reason = afk_data.val()["reason"]
+                    em = discord.Embed(title=f"User AFK",description=f"The Mentioned user is AFK....... **Reason: {reason}**",color=discord.Color.from_rgb(255,20,147))
+                    await message.channel.send(message.author.mention,embed=em)
+                except:
+                    pass
+                if message.content.startswith(prefix_data.val()['Prefix']):
+                    return
+                elif self.bot.user.mentioned_in(message):
+                    em = (discord.Embed(description=f"Yo! My prefix here is `{prefix_data.val()['Prefix']}`. You can use `{prefix_data.val()['Prefix']}help` for more information",color=discord.Color.random()))
+                    await message.channel.send(embed = em)
+                else:
+                    if not message.author.bot:
+                        if seen_data.val() is None:
+                            db.child("Last Seen").child(str(message.author.id)).set({"Time":str(datetime.utcnow())})
+                        elif seen_data.val() is not None:
+                            db.child("Last Seen").child(str(message.author.id)).update({"Time":str(datetime.utcnow())})
+                        
+                        data = db.child("Levels").child(str(message.guild.id)).child(str(message.author.id)).get()   
+                        if data.val() is None:
+                            newUser = {"userName":str(message.author),"lvl":1,"exp":1}
+                            db.child("Levels").child(str(message.guild.id)).child(str(message.author.id)).set(newUser)
+                        elif data.val() is not None:
+                            exp = data.val()['exp']
+                            lvl = data.val()['lvl']
+                            exp += self.lvl_add
+                            
+                            a = self.difficulty+(lvl-1)*self.difficulty
+                            mention = message.author.mention
+                            if exp >= a:
+                                lvl += 1
+                                lvl_embed = (discord.Embed(title="**Level Up**",
+                                description= f"Congratulations {mention}. You just reached level {lvl}",
+                                color = discord.Color.from_rgb(0,255,185)
+                                )
+                                .set_thumbnail(url=f"{message.author.avatar_url}")
+                                )
+                                await message.channel.send(mention,embed=lvl_embed)
+                            db.child("Levels").child(str(message.guild.id)).child(str(message.author.id)).update({"exp":exp,"lvl":lvl})
+                        await asyncio.sleep(2)
+                    else:
+                        pass
+            await self.bot.process_commands(message)
     @commands.Cog.listener()
     async def on_command_error(self,ctx,error):
         db = firebase.database()
