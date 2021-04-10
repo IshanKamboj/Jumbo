@@ -61,7 +61,6 @@ PyDictionary==2.0.1
 pyfiglet==0.8.post1
 pygame==2.0.1
 pyjokes==0.6.0
-pymongo==3.11.3
 PyNaCl==1.4.0
 pyparsing==2.4.7
 Pyrebase4==4.4.3
