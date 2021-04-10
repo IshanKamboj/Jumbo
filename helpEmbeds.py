@@ -250,3 +250,7 @@ class HelpEmbeds():
         em.add_field(name="*settings show",value="Shows the command roles settings for this server.",inline=False)
         em.add_field(name="*settings cmdrole <command_name> <role_id/role>",value="Sets the required role for using any command. Removes the role if it is already there.",inline=False)
         return em
+    def vote_embed():
+        em =  discord.Embed(title=":envelope_with_arrow: Vote Command",description="Vote for the bot on top.gg to show some support",color=discord.Color.random())
+        em.add_field(name="Syntax",value="*vote")
+        return em

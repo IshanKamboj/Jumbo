@@ -296,6 +296,11 @@ class Utility(commands.Cog):
     async def _hex(self,ctx,*,color:str):
         c = Color(color=color)
         await ctx.send(f"The hex value for {color} color is: {c.hex_l}")
-
+    @commands.command(name="vote",aliases=["upvote"])
+    @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
+    @commands.cooldown(1, 7, commands.BucketType.user)
+    async def _vote(self,ctx):
+        await ctx.send(f"Vote for the bot at : https://top.gg/bot/805430097426513941/vote")
 def setup(bot):
     bot.add_cog(Utility(bot,difficulty))
