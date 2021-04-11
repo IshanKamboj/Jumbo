@@ -12,6 +12,7 @@ from .Listeners import AllListeners,difficulty
 import wikipedia
 from mal import AnimeSearch
 from datetime import datetime
+from colour import Color
 class Utility(commands.Cog):
     def __init__(self,bot,difficulty):
         self.bot = bot
