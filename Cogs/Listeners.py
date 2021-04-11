@@ -95,24 +95,7 @@ class AllListeners(commands.Cog):
             
             if message.author != self.bot.user:
                 
-                #msg = message.content
-                # try:
-                #     if ":" == message.content[0] and ":" == message.content[-1]:
-                #         emoji_name = message.content[1:-1]
-                #         for emoji in self.bot.emojis:
-                #             if emoji_name == emoji.name:
-                #                 webhooks = await message.channel.webhooks()
-                #                 webhook = discord.utils.get(webhooks, name = "Imposter NQN")
-                #                 if webhook is None:
-                #                     webhook = await message.channel.create_webhook(name = "Imposter NQN")
-
-                #                 await webhook.send(str(emoji), username = message.author.name, avatar_url = message.author.avatar_url)
-                #                 # await message.delete()
-                #                 # await message.channel.send(str(emoji))
-                #                 await message.delete()
-                #                 # break
-                # except:
-                #     pass
+                
                 if message.raw_mentions:
                     for i in message.raw_mentions:
                         afk_data = db.child("AFK").child(str(message.guild.id)).child(str(i)).get()
@@ -136,36 +119,38 @@ class AllListeners(commands.Cog):
                     em = (discord.Embed(description=f"Yo! My prefix here is `{prefix_data.val()['Prefix']}`. You can use `{prefix_data.val()['Prefix']}help` for more information",color=discord.Color.random()))
                     await message.channel.send(embed = em)
                 else:
-                    if not message.author.bot:
-                        if seen_data.val() is None:
-                            db.child("Last Seen").child(str(message.author.id)).set({"Time":str(datetime.utcnow())})
-                        elif seen_data.val() is not None:
-                            db.child("Last Seen").child(str(message.author.id)).update({"Time":str(datetime.utcnow())})
-                        
-                        data = db.child("Levels").child(str(message.guild.id)).child(str(message.author.id)).get()   
-                        if data.val() is None:
-                            newUser = {"userName":str(message.author),"lvl":1,"exp":1}
-                            db.child("Levels").child(str(message.guild.id)).child(str(message.author.id)).set(newUser)
-                        elif data.val() is not None:
-                            exp = data.val()['exp']
-                            lvl = data.val()['lvl']
-                            exp += self.lvl_add
+                    isEnabled = db.child('Disabled').child(str(ctx.guild.id)).child("level").get()
+                    if isEnabled.val() is None:
+                        if not message.author.bot:
+                            if seen_data.val() is None:
+                                db.child("Last Seen").child(str(message.author.id)).set({"Time":str(datetime.utcnow())})
+                            elif seen_data.val() is not None:
+                                db.child("Last Seen").child(str(message.author.id)).update({"Time":str(datetime.utcnow())})
                             
-                            a = self.difficulty+(lvl-1)*self.difficulty
-                            mention = message.author.mention
-                            if exp >= a:
-                                lvl += 1
-                                lvl_embed = (discord.Embed(title="**Level Up**",
-                                description= f"Congratulations {mention}. You just reached level {lvl}",
-                                color = discord.Color.from_rgb(0,255,185)
-                                )
-                                .set_thumbnail(url=f"{message.author.avatar_url}")
-                                )
-                                await message.channel.send(mention,embed=lvl_embed)
-                            db.child("Levels").child(str(message.guild.id)).child(str(message.author.id)).update({"exp":exp,"lvl":lvl})
-                        await asyncio.sleep(2)
-                    else:
-                        pass
+                            data = db.child("Levels").child(str(message.guild.id)).child(str(message.author.id)).get()   
+                            if data.val() is None:
+                                newUser = {"userName":str(message.author),"lvl":1,"exp":1}
+                                db.child("Levels").child(str(message.guild.id)).child(str(message.author.id)).set(newUser)
+                            elif data.val() is not None:
+                                exp = data.val()['exp']
+                                lvl = data.val()['lvl']
+                                exp += self.lvl_add
+                                
+                                a = self.difficulty+(lvl-1)*self.difficulty
+                                mention = message.author.mention
+                                if exp >= a:
+                                    lvl += 1
+                                    lvl_embed = (discord.Embed(title="**Level Up**",
+                                    description= f"Congratulations {mention}. You just reached level {lvl}",
+                                    color = discord.Color.from_rgb(0,255,185)
+                                    )
+                                    .set_thumbnail(url=f"{message.author.avatar_url}")
+                                    )
+                                    await message.channel.send(mention,embed=lvl_embed)
+                                db.child("Levels").child(str(message.guild.id)).child(str(message.author.id)).update({"exp":exp,"lvl":lvl})
+                            await asyncio.sleep(2)
+                        else:
+                            pass
             await self.bot.process_commands(message)
     @commands.Cog.listener()
     async def on_command_error(self,ctx,error):

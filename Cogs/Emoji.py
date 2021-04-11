@@ -1,7 +1,8 @@
 from discord.ext import commands
 from discord import utils
 import discord
-
+from Database.db_files import firebase
+from .Listeners import AllListeners
 class emoji(commands.Cog):
 	def __init__(self, bot):
 		self.bot = bot
@@ -63,39 +64,45 @@ class emoji(commands.Cog):
 
 	@commands.Cog.listener()
 	async def on_message(self, message):
-		if message.author.bot:
-			return
+		db = firebase.database()
+		isEnabled = db.child('Disabled').child(str(ctx.guild.id)).child("emojisearch").get()
+        if isEnabled.val() is None:
+			if message.author.bot:
+				return
 
-		if ":" in message.content:
-			msg = await self.getinstr(message.content)
-			ret = ""
-			em = False
-			smth = message.content.split(":")
-			if len(smth) > 1:
-				for word in msg:
-					if word.startswith(":") and word.endswith(":") and len(word) > 1:
-						emoji = await self.getemote(word)
-						if emoji is not None:
-							em = True
-							ret += f" {emoji}"
+			if ":" in message.content:
+				msg = await self.getinstr(message.content)
+				ret = ""
+				em = False
+				smth = message.content.split(":")
+				if len(smth) > 1:
+					for word in msg:
+						if word.startswith(":") and word.endswith(":") and len(word) > 1:
+							emoji = await self.getemote(word)
+							if emoji is not None:
+								em = True
+								ret += f" {emoji}"
+							else:
+								ret += f" {word}"
 						else:
 							ret += f" {word}"
-					else:
-						ret += f" {word}"
 
-			else:
-				ret += msg
-			
+				else:
+					ret += msg
+				
 
-			if em:
-				webhooks = await message.channel.webhooks()
-				webhook = utils.get(webhooks, name = "Imposter NQN")
-				if webhook is None:
-					webhook = await message.channel.create_webhook(name = "Imposter NQN")
+				if em:
+					webhooks = await message.channel.webhooks()
+					webhook = utils.get(webhooks, name = "Imposter NQN")
+					if webhook is None:
+						webhook = await message.channel.create_webhook(name = "Imposter NQN")
 
-				await webhook.send(ret, username = message.author.name, avatar_url = message.author.avatar_url)
-				await message.delete()
-	@commands.command(name="emojisearch",aliases=["esearch","emoji"])
+					await webhook.send(ret, username = message.author.name, avatar_url = message.author.avatar_url)
+					await message.delete()
+	@commands.command(name="emojisearch",aliases=["esearch","emoji","emotesearch","emoji"])
+	@commands.check(AllListeners.check_enabled)
+	@commands.check(AllListeners.role_check)
+	@commands.cooldown(1, 7, commands.BucketType.user)
 	async def _emojisearch(self,ctx,*,query:str):
 		emoji_list =  list(map(str, [r.name for r in self.bot.emojis]))
 		new_query = query.replace(" ","_")

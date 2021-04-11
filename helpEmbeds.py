@@ -4,7 +4,7 @@ from discord.ext import commands
 class HelpEmbeds():
 #-------------------- Utility commands help embed-----------------------------
     def level_embed():
-        em = discord.Embed(title = ":first_place: | Level", description = "Is used to check level of your and others",color=discord.Color.random())
+        em = discord.Embed(title = ":first_place: | Level", description = "Is used to check level of your and others. Disabling this command will disable the full levelling system",color=discord.Color.random())
         em.add_field(name="**Syntax**", value="*lvl <user(optional)>")
         return em
     def leaderboard_embed():
@@ -255,6 +255,6 @@ class HelpEmbeds():
         em.add_field(name="Syntax",value="*vote")
         return em
     def emojisearch_embed():
-        em =  discord.Embed(title=":mag: Emojisearch Command",description="Search for different emoji names for the query and then use them.",color=discord.Color.random())
+        em =  discord.Embed(title=":mag: Emojisearch Command",description="Search for different emoji names for the query and then use them. If this command is disabled then bot would not send emotes",color=discord.Color.random())
         em.add_field(name="Syntax",value="*emoji <query>")
         return em
