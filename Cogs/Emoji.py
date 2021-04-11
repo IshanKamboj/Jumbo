@@ -3,6 +3,8 @@ from discord import utils
 import discord
 from Database.db_files import firebase
 from .Listeners import AllListeners
+import math
+import asyncio
 class emoji(commands.Cog):
 	def __init__(self, bot):
 		self.bot = bot
@@ -104,14 +106,51 @@ class emoji(commands.Cog):
 		emoji_list =  list(map(str, [r.name for r in self.bot.emojis]))
 		new_query = query.replace(" ","_")
 		em = discord.Embed(title=f"Search Results for: {query}",description="",color=discord.Color.random())
-		for i in emoji_list:
-			if new_query in i:
-				em.description += f"`{i}` "
-		if em.description=="":
-			em = discord.Embed(title="No Results Found",description="Why not add jumbo to more servers?",color=discord.Color.random())
-			await ctx.send(embed=em)
-		else:
-			em.set_footer(text="You can use these as `:name:` to send emojis")
-			await ctx.send(embed=em)
+		temp_dict = {}
+		
+		for i in self.bot.emojis:
+			if new_query in str(i):
+				x = str(i).split(":")
+				temp_dict[str(i)]=x[1]			
+			
+		temp = list(temp_dict.items())	
+		items_per_page = 5
+		current_page = 1
+		pages = math.ceil(len(temp) / items_per_page)
+		start = (current_page - 1) * items_per_page
+		end = start + items_per_page
+		buttons = ["⬅️","➡️"]
+		for i in temp[start:end]:
+			k,v = i
+			em.add_field(name=k,value=f"`{v}`",inline=False)
+		em.set_footer(text="You can use these as `:name:` to send emojis")
+		msg = await ctx.send(embed=em)
+		for button in buttons:
+			await msg.add_reaction(button)
+		while True:
+			try:
+				reaction, user = await self.bot.wait_for("reaction_add",check=lambda reaction, user: user == ctx.author and reaction.emoji in buttons, timeout=60.0)
+			except asyncio.TimeoutError:
+				await msg.clear_reactions()
+			else:
+				previous_pg = current_page
+				if reaction.emoji == "⬅️":
+					if current_page > 1:
+						current_page -= 1
+				elif reaction.emoji == "➡️":
+					if current_page < pages:
+						current_page += 1
+				for button in buttons:
+					await msg.remove_reaction(button,ctx.author)
+				if previous_pg != current_page:
+					pages = math.ceil(len(temp) / items_per_page)
+					start = (current_page - 1) * items_per_page
+					end = start + items_per_page
+					em = discord.Embed(title=f"Search Results for: {query}",description="",color=discord.Color.random())
+					for i in temp[start:end]:
+						k,v = i
+						em.add_field(name=k,value=f"`{v}`",inline=False)
+					em.set_footer(text="You can use these as `:name:` to send emojis")
+					await msg.edit(embed=em)
 def setup(bot):
 	bot.add_cog(emoji(bot))
