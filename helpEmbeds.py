@@ -21,8 +21,8 @@ class HelpEmbeds():
         return em
     def autoreact_embed():
         em = discord.Embed(title=":upside_down: | Auto react help",description="This command helps set an auto react will will be triggered when u are mentioned")
-        em.add_field(name="**Syntax**",value="*ar <reaction>")
-        em.add_field(name="**Example**",value="*ar :smile:")
+        em.add_field(name="**Syntax**",value="*ar <+/-> <reaction>")
+        em.add_field(name="**Example**",value="*ar <+/-> :smile:")
         return em
     
 #------------------- Admin commands help embeds --------------------------------

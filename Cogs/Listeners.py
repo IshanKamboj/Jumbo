@@ -120,9 +120,10 @@ class AllListeners(commands.Cog):
                 try:
                     for i in message.raw_mentions:
                         reaction_data =  db.child('Reactions').child(str(message.guild.id)).child(str(i)).get()
-                        await message.add_reaction(reaction_data.val()['Reaction'])
-                except:
-                    pass
+                        for j in reaction_data.val()["Reaction"]:
+                            await message.add_reaction(j)
+                except Exception as e:
+                    print(str(e))
                 try:
                     reason = afk_data.val()["reason"]
                     em = discord.Embed(title=f"User AFK",description=f"The Mentioned user is AFK....... **Reason: {reason}**",color=discord.Color.from_rgb(255,20,147))

@@ -194,18 +194,36 @@ class Utility(commands.Cog):
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
-    async def _autoreact(self,ctx,*,reaction):
-        db = firebase.database()
-        react_data = db.child('Reactions').child(str(ctx.guild.id)).child(str(ctx.author.id)).get()
-        if react_data is None:
-            db.child('Reactions').child(str(ctx.guild.id)).child(str(ctx.author.id)).set({'Reaction':reaction})
-            em = discord.Embed(title="Custom Reaction added",description=f"{reaction} was added as an auto react for you {ctx.author.mention}. Reaction will be added when u are mentioned",color=discord.Color.random())
-            await ctx.send(embed=em)
-        elif react_data is not None:
-            db.child('Reactions').child(str(ctx.guild.id)).child(str(ctx.author.id)).update({'Reaction':reaction})
-            em = discord.Embed(title="Custom Reaction updated",description=f"{reaction} was updated as your auto react {ctx.author.mention}. Reaction will be added when u are mentioned",color=discord.Color.random())
-            await ctx.send(embed=em)
-    
+    async def _autoreact(self,ctx,c:str,*,reaction):
+        try:
+            db = firebase.database()
+            react_data = db.child('Reactions').child(str(ctx.guild.id)).child(str(ctx.author.id)).get()
+            if react_data.val() is None:
+                if c=="+":
+                    db.child('Reactions').child(str(ctx.guild.id)).child(str(ctx.author.id)).set({'Reaction':[reaction]})
+                    em = discord.Embed(title="Custom Reaction added",description=f"{reaction} was added as an auto react for you {ctx.author.mention}. Reaction will be added when u are mentioned",color=discord.Color.random())
+                    await ctx.send(embed=em)
+                elif c =="-":
+                    await ctx.send("You have no autoreact setup")
+            elif len(react_data.val()["Reaction"]) < 3 and c=="+":
+                if react_data.val() is not None:
+                    temp = react_data.val()["Reaction"]
+                    temp.append(reaction)
+                    db.child('Reactions').child(str(ctx.guild.id)).child(str(ctx.author.id)).update({'Reaction':temp})
+                    em = discord.Embed(title="Custom Reaction added",description=f"{reaction} was also added as your auto react {ctx.author.mention}. Reactions will be added when u are mentioned",color=discord.Color.random())
+                    await ctx.send(embed=em)
+            elif c == "-":
+                if react_data.val() is not None:
+                    temp = react_data.val()["Reaction"]
+                    temp.remove(reaction)
+                    db.child('Reactions').child(str(ctx.guild.id)).child(str(ctx.author.id)).update({'Reaction':temp})
+                    em = discord.Embed(title="Custom Reaction removed",description=f"{reaction} was removed as your auto react {ctx.author.mention}.",color=discord.Color.random())
+                    await ctx.send(embed=em)
+            else:
+                await ctx.send("**You can only add upto 3 autoreacts.**")
+        except Exception as e:
+            pass
+            #print(str(e))
     @_autoreact.error
     async def autoreact_error(self,ctx,error):
         if isinstance(error,commands.MissingRequiredArgument):
