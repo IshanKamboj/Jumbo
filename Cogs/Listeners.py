@@ -119,7 +119,7 @@ class AllListeners(commands.Cog):
                     em = (discord.Embed(description=f"Yo! My prefix here is `{prefix_data.val()['Prefix']}`. You can use `{prefix_data.val()['Prefix']}help` for more information",color=discord.Color.random()))
                     await message.channel.send(embed = em)
                 else:
-                    isEnabled = db.child('Disabled').child(str(ctx.guild.id)).child("level").get()
+                    isEnabled = db.child('Disabled').child(str(message.guild.id)).child("level").get()
                     if isEnabled.val() is None:
                         if not message.author.bot:
                             if seen_data.val() is None:
