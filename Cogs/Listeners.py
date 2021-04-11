@@ -113,6 +113,11 @@ class AllListeners(commands.Cog):
                     await message.channel.send(message.author.mention,embed=em)
                 except:
                     pass
+                if not message.author.bot:
+                    if seen_data.val() is None:
+                        db.child("Last Seen").child(str(message.author.id)).set({"Time":str(datetime.utcnow())})
+                    elif seen_data.val() is not None:
+                        db.child("Last Seen").child(str(message.author.id)).update({"Time":str(datetime.utcnow())})
                 if message.content.startswith(prefix_data.val()['Prefix']):
                     return
                 elif self.bot.user.mentioned_in(message):
@@ -122,10 +127,7 @@ class AllListeners(commands.Cog):
                     isEnabled = db.child('Disabled').child(str(message.guild.id)).child("level").get()
                     if isEnabled.val() is None:
                         if not message.author.bot:
-                            if seen_data.val() is None:
-                                db.child("Last Seen").child(str(message.author.id)).set({"Time":str(datetime.utcnow())})
-                            elif seen_data.val() is not None:
-                                db.child("Last Seen").child(str(message.author.id)).update({"Time":str(datetime.utcnow())})
+                            
                             
                             data = db.child("Levels").child(str(message.guild.id)).child(str(message.author.id)).get()   
                             if data.val() is None:
