@@ -95,6 +95,19 @@ class emoji(commands.Cog):
 
 				await webhook.send(ret, username = message.author.name, avatar_url = message.author.avatar_url)
 				await message.delete()
-
+	@commands.command(name="emojisearch",aliases=["esearch","emoji"])
+	async def _emojisearch(self,ctx,*,query:str):
+		emoji_list =  list(map(str, [r.name for r in self.bot.emojis]))
+		new_query = query.replace(" ","_")
+		em = discord.Embed(title=f"Search Results for: {query}",description="",color=discord.Color.random())
+		for i in emoji_list:
+			if new_query in i:
+				em.description += f"`{i}` "
+		if em.description=="":
+			em = discord.Embed(title="No Results Found",description="Why not add jumbo to more servers?",color=discord.Color.random())
+			await ctx.send(embed=em)
+		else:
+			em.set_footer(text="You can use these as `:name:` to send emojis")
+			await ctx.send(embed=em)
 def setup(bot):
 	bot.add_cog(emoji(bot))

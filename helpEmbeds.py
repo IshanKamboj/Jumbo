@@ -254,3 +254,7 @@ class HelpEmbeds():
         em =  discord.Embed(title=":envelope_with_arrow: Vote Command",description="Vote for the bot on top.gg to show some support",color=discord.Color.random())
         em.add_field(name="Syntax",value="*vote")
         return em
+    def emojisearch_embed():
+        em =  discord.Embed(title=":mag: Emojisearch Command",description="Search for different emoji names for the query and then use them.",color=discord.Color.random())
+        em.add_field(name="Syntax",value="*emoji <query>")
+        return em

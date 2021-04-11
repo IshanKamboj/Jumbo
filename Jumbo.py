@@ -54,7 +54,7 @@ Use *help <command> for extended information on a command
 #------------------------------ Section of help cmds -----------------------------
 @help.command(name="utility")
 async def utility(ctx):
-    em = discord.Embed(title=":tools: | Utility commands",description="`Level`, `Leaderboard`, `AFK`, `Seen`, `Autoreact`, `Google`, `Wikisearch`, `Hex`, `Poll`, `Animesearch`, `Vote`",color=discord.Color.random())
+    em = discord.Embed(title=":tools: | Utility commands",description="`Level`, `Leaderboard`, `AFK`, `Seen`, `Autoreact`, `Google`, `Wikisearch`, `Hex`, `Poll`, `Animesearch`, `Vote`, `Emoji`",color=discord.Color.random())
     await ctx.send(embed=em)
 
 @help.command(name="admin")
@@ -335,6 +335,10 @@ async def factorial(ctx):
 @help.command(name="settings",aliases=["setting"])
 async def settings(ctx):
     await ctx.send(embed=HelpEmbeds.settings_embed())
+
+@help.command(name="emojisearch",aliases=["esearch","emoji"])
+async def emojisearch(ctx):
+    await ctx.send(embed=HelpEmbeds.emojisearch_embed())
 #####################################    LOADING COGS    #########################################################
 for filename in os.listdir('./Cogs'):
     if filename.endswith('.py'):
