@@ -129,7 +129,7 @@ class emoji(commands.Cog):
 			await msg.add_reaction(button)
 		while True:
 			try:
-				reaction, user = await self.bot.wait_for("reaction_add",check=lambda reaction, user: user == ctx.author and reaction.emoji in buttons, timeout=60.0)
+				reaction, user = await self.bot.wait_for("reaction_add",check=lambda reaction, user: user == ctx.author and reaction.emoji in buttons, timeout=20.0)
 			except asyncio.TimeoutError:
 				await msg.clear_reactions()
 			else:
