@@ -109,7 +109,7 @@ class emoji(commands.Cog):
 		temp_dict = {}
 		
 		for i in self.bot.emojis:
-			if new_query in str(i):
+			if new_query.lower() in str(i).lower():
 				x = str(i).split(":")
 				temp_dict[str(i)]=x[1]			
 			
@@ -123,7 +123,7 @@ class emoji(commands.Cog):
 		for i in temp[start:end]:
 			k,v = i
 			em.add_field(name=k,value=f"`{v}`",inline=False)
-		em.set_footer(text="You can use these as `:name:` to send emojis")
+		em.set_footer(text=f"Page : {current_page}/{pages}\nYou can use these as `:name:` to send emojis")
 		msg = await ctx.send(embed=em)
 		for button in buttons:
 			await msg.add_reaction(button)
@@ -150,7 +150,7 @@ class emoji(commands.Cog):
 					for i in temp[start:end]:
 						k,v = i
 						em.add_field(name=k,value=f"`{v}`",inline=False)
-					em.set_footer(text="You can use these as `:name:` to send emojis")
+					em.set_footer(text=f"Page : {current_page}/{pages}\nYou can use these as `:name:` to send emojis")
 					await msg.edit(embed=em)
 def setup(bot):
 	bot.add_cog(emoji(bot))
