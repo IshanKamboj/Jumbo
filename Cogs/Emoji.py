@@ -66,12 +66,10 @@ class emoji(commands.Cog):
 
 	@commands.Cog.listener()
 	async def on_message(self, message):
-		db = firebase.database()
-        isEnabled = db.child('Disabled').child(str(ctx.guild.id)).child("settings").get()
 		if message.author.bot:
 			return
 
-		if ":" in message.content and isEnabled.val() is None:
+		if ":" in message.content:
 			msg = await self.getinstr(message.content)
 			ret = ""
 			em = False
