@@ -9,13 +9,15 @@ class OwnerCommands(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
         self.token = os.getenv('DBL_TOKEN')
-        self.dblpy = dbl.DBLClient(self.bot, self.token, autopost=True,webhook_path='/dblwebhook', webhook_auth='Ishan@1608', webhook_port=5000)
+        self.dblpy = dbl.DBLClient(self.bot, self.token, autopost=True,webhook_path='jumbo1608/dblwebhook', webhook_auth='Ishan@1608', webhook_port=5000)
     @commands.Cog.listener()
     async def on_dbl_vote(self, data):
+        print("voted")
         print("Received an upvote:", "\n", data, sep="")
     
     @commands.Cog.listener()
     async def on_dbl_test(self, data):
+        print("test")
         """An event that is called whenever someone tests the webhook system for your bot on top.gg."""
         print("Received a test upvote:", "\n", data, sep="")
     @commands.command(name="shutdown")
