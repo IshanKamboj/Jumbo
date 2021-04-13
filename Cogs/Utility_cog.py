@@ -320,6 +320,12 @@ class Utility(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _vote(self,ctx):
+        # db = firebase.database()
+        # x = db.child('Items').child("gun").child(str(ctx.author.id)).get()
+        # if x.val() is None:
+        #     db.child('Items').child("gun").child(str(ctx.author.id)).set({'amount':1})
+        # else:
+
         await ctx.send(f"Vote for the bot at : https://top.gg/bot/805430097426513941/vote")
     @commands.command(name="invite")
     @commands.check(AllListeners.check_enabled)

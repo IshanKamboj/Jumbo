@@ -4,18 +4,21 @@ import os
 from .Listeners import AllListeners
 import sys
 import dbl
+import requests
 class OwnerCommands(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
         self.token = os.getenv('DBL_TOKEN')
-        self.dblpy = dbl.DBLClient(self.bot, self.token, autopost=True)
+        self.dblpy = dbl.DBLClient(self.bot, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjgwNTQzMDA5NzQyNjUxMzk0MSIsImJvdCI6dHJ1ZSwiaWF0IjoxNjE4MDUyMDczfQ.VUv0DqPoDLN4W2euZJTu2mYVZLVEKhhNUsyNiNIOnVM', autopost=True)
     @tasks.loop(minutes=30.0)
     async def update_stats(self):
         try:
             await self.dblpy.post_guild_count()
         except Exception as e:
             print(str(e))
-    
+    @commands.Cog.listener()
+    async def on_dbl_vote(self, data):
+        print("Received an upvote:", "\n", data, sep="")
     @commands.command(name="shutdown")
     @commands.is_owner()
     async def _shutdown(self,ctx):
@@ -37,6 +40,14 @@ class OwnerCommands(commands.Cog):
             await ctx.send("Bot started....")
         except Exception as e:
             print(str(e))
-
+    # @commands.command(name="checkvote")
+    # @commands.is_owner()
+    # async def _checkvote(self,ctx,uid:int):
+    #     try:
+    #         url = f"https://top.gg/api//bots/805430097426513941/votes"
+    #         resp = requests.get(url)
+    #         print(resp)
+    #     except Exception as e:
+    #         print(str(e))
 def setup(bot):
     bot.add_cog(OwnerCommands(bot))

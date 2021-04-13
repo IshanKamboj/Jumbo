@@ -20,7 +20,7 @@ class Admin(commands.Cog):
         database = firebase.database()
         x = database.child("Levels").child(str(ctx.guild.id)).child(str(user.id)).get()
         try:
-            if level >= 1:
+            if level >= 1 and level <= 150:
                 exp = self.difficulty+((level-1)*self.difficulty)-self.difficulty
                 database.child("Levels").child(str(ctx.guild.id)).child(str(user.id)).update({'exp':exp,'lvl':level})
                 lvl_embed = (discord.Embed(title="**Level Up**",
@@ -30,8 +30,8 @@ class Admin(commands.Cog):
                                 .set_thumbnail(url=f"{user.avatar_url}")
                                 )
                 await ctx.send(user.mention,embed=lvl_embed)
-            elif level<1:
-                await ctx.send(f"{ctx.author.mention} **Are u a DumbASS??......... U cannot give level below one**")
+            elif level<1 or level > 150:
+                await ctx.send(f"{ctx.author.mention} **Are u a DumbASS??......... U cannot give level below 1 or above 150**")
         except TypeError:
             if level >=1:
                 exp = self.difficulty+(level-1)*self.difficulty-self.difficulty
