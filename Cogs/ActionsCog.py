@@ -216,7 +216,7 @@ class ActionCog(commands.Cog):
                 #print ()
                 link = top_8gifs['results'][random_gif]['media'][0]['mediumgif']['url']
                 em = discord.Embed(color=discord.Color.random())
-                em.set_author(name=f"{ctx.author.name} pats {user.name}. :3 He's now cheered up.",icon_url=f"{ctx.author.avatar_url}")
+                em.set_author(name=f"{ctx.author.name} pats {user.name}. :3 They are now cheered up.",icon_url=f"{ctx.author.avatar_url}")
                 em.set_image(url=f'{str(link)}')
                 await ctx.send(embed=em)
             else:

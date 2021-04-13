@@ -66,10 +66,12 @@ class emoji(commands.Cog):
 
 	@commands.Cog.listener()
 	async def on_message(self, message):
+		db = firebase.database()
+        isEnabled = db.child('Disabled').child(str(ctx.guild.id)).child("settings").get()
 		if message.author.bot:
 			return
 
-		if ":" in message.content:
+		if ":" in message.content and isEnabled.val() is None:
 			msg = await self.getinstr(message.content)
 			ret = ""
 			em = False
@@ -101,7 +103,7 @@ class emoji(commands.Cog):
 	@commands.command(name="emojisearch",aliases=["esearch","emotesearch","emoji"])
 	@commands.check(AllListeners.check_enabled)
 	@commands.check(AllListeners.role_check)
-	@commands.cooldown(1, 7, commands.BucketType.user)
+	@commands.cooldown(1,20, commands.BucketType.user)
 	async def _emojisearch(self,ctx,*,query:str):
 		emoji_list =  list(map(str, [r.name for r in self.bot.emojis]))
 		new_query = query.replace(" ","_")
