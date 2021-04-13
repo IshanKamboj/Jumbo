@@ -9,13 +9,7 @@ class OwnerCommands(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
         self.token = os.getenv('DBL_TOKEN')
-        self.dblpy = dbl.DBLClient(self.bot, self.token, autopost=True,webhook_auth='Ishan@1608',webhook_port=5000)
-    @tasks.loop(minutes=30.0)
-    async def update_stats(self):
-        try:
-            await self.dblpy.post_guild_count()
-        except Exception as e:
-            print(str(e))
+        self.dblpy = dbl.DBLClient(self.bot, self.token, autopost=True,webhook_path='/dblwebhook', webhook_auth='Ishan@1608', webhook_port=5000)
     @commands.Cog.listener()
     async def on_dbl_vote(self, data):
         print("Received an upvote:", "\n", data, sep="")
