@@ -187,6 +187,8 @@ class AllListeners(commands.Cog):
                 em = discord.Embed(title="Take a hold of yourself",description=f"This command is on cooldown. You need to wait **{time} seconds** before using it again.",color=discord.Color.random())
             #print(finalTime)
             await ctx.send(embed=em)
+        elif isinstance(error, commands.BotMissingPermissions):
+            await ctx.send(str(error))
         else:
             pass
             # if 'The check functions for command failed.' in str(error):
