@@ -9,7 +9,7 @@ class OwnerCommands(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
         self.token = os.getenv('DBL_TOKEN')
-        self.dblpy = dbl.DBLClient(self.bot, self.token, autopost=True,webhook_path='https://web.hook/Jumbo/1608/805430097426513941',webhook_auth='Ishan@1608',webhook_port=5000)
+        self.dblpy = dbl.DBLClient(self.bot, self.token, autopost=True,webhook_path='https://discord.com/api/webhooks/830755331042836501/UZwP257h7ooSr4glEj-FSf09PMazWxEEKcx65WmMv11-0sw2IBvEfBCHN1tlTNP4mRCG',webhook_auth='Ishan@1608',webhook_port=5000)
     @tasks.loop(minutes=30.0)
     async def update_stats(self):
         try:
@@ -48,11 +48,8 @@ class OwnerCommands(commands.Cog):
     @commands.command(name="checkvote")
     @commands.is_owner()
     async def _checkvote(self,ctx,uid:int):
-        try:
-            url = f"https://top.gg/api//bots/805430097426513941/check?userId={uid}"
-            resp = requests.get(url)
-            print(resp)
-        except Exception as e:
-            print(str(e))
+        url = f"https://top.gg/api//bots/805430097426513941/check?userId={uid}"
+        resp = requests.get(url)
+        print(resp)
 def setup(bot):
     bot.add_cog(OwnerCommands(bot))
