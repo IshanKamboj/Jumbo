@@ -9,17 +9,7 @@ class OwnerCommands(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
         self.token = os.getenv('DBL_TOKEN')
-        self.dblpy = dbl.DBLClient(self.bot, self.token, autopost=True, webhook_auth='Ishan@1608', webhook_port=5000)
-    @commands.Cog.listener()
-    async def on_dbl_vote(self, data):
-        print("voted")
-        print("Received an upvote:", "\n", data, sep="")
-    
-    @commands.Cog.listener()
-    async def on_dbl_test(self, data):
-        print("test")
-        """An event that is called whenever someone tests the webhook system for your bot on top.gg."""
-        print("Received a test upvote:", "\n", data, sep="")
+        self.dblpy = dbl.DBLClient(self.bot, self.token, autopost=True)
     @commands.command(name="shutdown")
     @commands.is_owner()
     async def _shutdown(self,ctx):
@@ -41,11 +31,6 @@ class OwnerCommands(commands.Cog):
             await ctx.send("Bot started....")
         except Exception as e:
             print(str(e))
-    @commands.command(name="checkvote")
-    @commands.is_owner()
-    async def _checkvote(self,ctx,uid:int):
-        url = f"https://top.gg/api//bots/805430097426513941/check?userId={uid}"
-        resp = requests.get(url)
-        print(resp)
+    
 def setup(bot):
     bot.add_cog(OwnerCommands(bot))
