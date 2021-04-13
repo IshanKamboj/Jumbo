@@ -31,7 +31,7 @@ class fights(commands.Cog):
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _fight(self,ctx:commands.Context,user:discord.Member):
         db = firebase.database()
-        a = random.choice(ctx.author,user)
+        a = random.choice([ctx.author,user])
         mutedRole = discord.utils.get(ctx.guild.roles,name='Muted')
         if not mutedRole:
             mutedRole = await ctx.guild.create_role(name='Muted')
