@@ -162,8 +162,6 @@ class AllListeners(commands.Cog):
         if isinstance(error,commands.CommandNotFound):
             em = discord.Embed(title="Command not found",description=f"{error}..... use `{pre}help` for info on commands.")
             await ctx.send(embed=em)
-        elif isinstance(error,commands.BotMissingPermissions):
-            pass
         elif isinstance(error, CommandDisabled):
             em = discord.Embed(description="This command is disabled in your server. Ask admin to enable it",color=discord.Color.random())
             await ctx.send(embed=em)
@@ -187,8 +185,6 @@ class AllListeners(commands.Cog):
                 em = discord.Embed(title="Take a hold of yourself",description=f"This command is on cooldown. You need to wait **{time} seconds** before using it again.",color=discord.Color.random())
             #print(finalTime)
             await ctx.send(embed=em)
-        elif isinstance(error, commands.BotMissingPermissions):
-            await ctx.send(str(error))
         else:
             pass
             # if 'The check functions for command failed.' in str(error):
