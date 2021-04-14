@@ -11,10 +11,10 @@ class OwnerCommands(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
         self.token = os.getenv('DBL_TOKEN')
-        self.dblpy = dbl.DBLClient(self.bot, self.token, autopost=True, webhook_path="/jumbo7",webhook_port=7777)
+        self.dblpy = dbl.DBLClient(self.bot, self.token, autopost=True)
     @commands.Cog.listener()
     async def on_guild_post(self):
-        print(f'Posted server count ({self.bot.dblpy.guild_count})')
+        print("Server count posted successfully")
     @commands.Cog.listener()
     async def on_dbl_vote(self, data):
         print(socket.gethostbyname(socket.gethostname()))

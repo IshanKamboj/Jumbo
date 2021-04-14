@@ -6,6 +6,7 @@ class HelpEmbeds():
     def level_embed():
         em = discord.Embed(title = ":first_place: | Level", description = "Is used to check level of your and others. Disabling this command will disable the full levelling system",color=discord.Color.random())
         em.add_field(name="**Syntax**", value="*lvl <user(optional)>")
+        em.add_field(name="Cooldown",value="`7 seconds`",inline=False)
         return em
     def leaderboard_embed():
         em = discord.Embed(title = ":medal: | Leaderboard", description = "Shows the leaderboard for this Server.",color=discord.Color.random())
