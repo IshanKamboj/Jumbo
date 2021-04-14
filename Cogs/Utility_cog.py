@@ -345,5 +345,6 @@ class Utility(commands.Cog):
         em.add_field(name="Guild Name:",value=f"{ctx.guild.name}")
         em.set_thumbnail(url=ctx.guild.icon_url)
         await self.bot.get_channel(828543394225324032).send(embed=em)
+        await ctx.send("Bug report sent successfully. Thank you its appreciated.")
 def setup(bot):
     bot.add_cog(Utility(bot,difficulty))
