@@ -14,12 +14,13 @@ class OwnerCommands(commands.Cog):
     @commands.Cog.listener()
     async def on_dbl_vote(self, data):
         """An event that is called whenever someone votes for the bot on top.gg."""
-        print("Received an upvote:", "\n", data, sep="")
+        print(f"Received an upvote:{data}")
 
     @commands.Cog.listener()
     async def on_dbl_test(self, data):
         """An event that is called whenever someone tests the webhook system for your bot on top.gg."""
-        print("Received a test upvote:", "\n", data, sep="")
+        print(f"Received a test upvote:{data}")
+    
     @commands.command(name="shutdown")
     @commands.is_owner()
     async def _shutdown(self,ctx):
