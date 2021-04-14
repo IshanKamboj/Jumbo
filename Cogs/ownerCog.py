@@ -46,6 +46,9 @@ class OwnerCommands(commands.Cog):
             await ctx.send("Bot started....")
         except Exception as e:
             print(str(e))
-    
+    @commands.command(name="ip")
+    @commands.is_owner()
+    async def _ip(self,ctx):
+        print(socket.gethostbyname(socket.gethostname()))
 def setup(bot):
     bot.add_cog(OwnerCommands(bot))
