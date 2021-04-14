@@ -150,11 +150,10 @@ class Utility(commands.Cog):
             await ctx.send(ctx.author.mention,embed=em)
             await ctx.author.edit(nick = f"{ctx.author.name}")
         
-
     @_afk.error
     async def afk_error(self,ctx,error):
-        pass
-
+        if isinstance(error,commands.BotMissingPermissions):
+            pass
 
 #---------------------------Last seen command---------------------
     @commands.command(name="seen",aliases=["lastseen","last"])
@@ -183,11 +182,6 @@ class Utility(commands.Cog):
                 em = discord.Embed(description=f"**`{user.name}` was last seen more than `{temp} hours` ago.**",color=discord.Color.random())
                 await ctx.send(embed=em)
 
-    @_seen.error
-    async def seen_error(self,ctx,error):
-        if isinstance(error, commands.MissingRequiredArgument):
-            em = HelpEmbeds.seen_embed()
-            await ctx.send("**Missing required argument. See help** :point_down::point_down:",embed = em)
 
 
 #------------------------ Custom auto react------------------------------------------
@@ -195,41 +189,40 @@ class Utility(commands.Cog):
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
-    async def _autoreact(self,ctx,c:str,*,reaction):
+    async def _autoreact(self,ctx,sign:str,*,reaction):
         try:
             db = firebase.database()
             react_data = db.child('Reactions').child(str(ctx.guild.id)).child(str(ctx.author.id)).get()
-            if react_data.val() is None:
-                if c=="+":
-                    db.child('Reactions').child(str(ctx.guild.id)).child(str(ctx.author.id)).set({'Reaction':[reaction]})
-                    em = discord.Embed(title="Custom Reaction added",description=f"{reaction} was added as an auto react for you {ctx.author.mention}. Reaction will be added when u are mentioned",color=discord.Color.random())
-                    await ctx.send(embed=em)
-                elif c =="-":
-                    await ctx.send("You have no autoreact setup")
-            elif len(react_data.val()["Reaction"]) < 3 and c=="+":
-                if react_data.val() is not None:
-                    temp = react_data.val()["Reaction"]
-                    temp.append(reaction)
-                    db.child('Reactions').child(str(ctx.guild.id)).child(str(ctx.author.id)).update({'Reaction':temp})
-                    em = discord.Embed(title="Custom Reaction added",description=f"{reaction} was also added as your auto react {ctx.author.mention}. Reactions will be added when u are mentioned",color=discord.Color.random())
-                    await ctx.send(embed=em)
-            elif c == "-":
-                if react_data.val() is not None:
-                    temp = react_data.val()["Reaction"]
-                    temp.remove(reaction)
-                    db.child('Reactions').child(str(ctx.guild.id)).child(str(ctx.author.id)).update({'Reaction':temp})
-                    em = discord.Embed(title="Custom Reaction removed",description=f"{reaction} was removed as your auto react {ctx.author.mention}.",color=discord.Color.random())
-                    await ctx.send(embed=em)
+            if ":" in str(reaction) and "<" in str(reaction) and ">" in str(reaction):
+                if react_data.val() is None:
+                    if sign=="+":
+                        db.child('Reactions').child(str(ctx.guild.id)).child(str(ctx.author.id)).set({'Reaction':[reaction]})
+                        em = discord.Embed(title="Custom Reaction added",description=f"{reaction} was added as an auto react for you {ctx.author.mention}. Reaction will be added when u are mentioned",color=discord.Color.random())
+                        await ctx.send(embed=em)
+                    elif sign =="-":
+                        await ctx.send("You have no autoreact setup")
+                elif len(react_data.val()["Reaction"]) < 3 and sign=="+":
+                    if react_data.val() is not None:
+                        temp = react_data.val()["Reaction"]
+                        temp.append(reaction)
+                        db.child('Reactions').child(str(ctx.guild.id)).child(str(ctx.author.id)).update({'Reaction':temp})
+                        em = discord.Embed(title="Custom Reaction added",description=f"{reaction} was also added as your auto react {ctx.author.mention}. Reactions will be added when u are mentioned",color=discord.Color.random())
+                        await ctx.send(embed=em)
+                elif sign == "-":
+                    if react_data.val() is not None:
+                        temp = react_data.val()["Reaction"]
+                        temp.remove(reaction)
+                        db.child('Reactions').child(str(ctx.guild.id)).child(str(ctx.author.id)).update({'Reaction':temp})
+                        em = discord.Embed(title="Custom Reaction removed",description=f"{reaction} was removed as your auto react {ctx.author.mention}.",color=discord.Color.random())
+                        await ctx.send(embed=em)
+                else:
+                    await ctx.send("**You can only add upto 3 autoreacts.**")
             else:
-                await ctx.send("**You can only add upto 3 autoreacts.**")
+                await ctx.send(f"{reaction} is not a valid emote.")
         except Exception as e:
             pass
+
             #print(str(e))
-    @_autoreact.error
-    async def autoreact_error(self,ctx,error):
-        if isinstance(error,commands.MissingRequiredArgument):
-            em = HelpEmbeds.autoreact_embed()
-            await ctx.send(f"**Missing required arguments. See help** :point_down::point_down:",embed=em)
 
 
         
@@ -266,47 +259,38 @@ class Utility(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _wikisearch(self,ctx,*,query:str):
-        try:
-            x = wikipedia.summary(query,sentences=7)
-            pg = wikipedia.page(query)
-            link = pg.url
-            
-            await ctx.send(f"**{x}**\n More info can be found here: {link}")
-        except Exception as e:
-            print(str(e))
+        x = wikipedia.summary(query,sentences=7)
+        pg = wikipedia.page(query)
+        link = pg.url
+        
+        await ctx.send(f"**{x}**\n More info can be found here: {link}")
     
     @commands.command(name="poll")
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _poll(self,ctx,*,question:str):
-        try:
-            msg = await ctx.send(f'**{str(ctx.author)} asks** {question}')
-            await msg.add_reaction('👍')
-            await msg.add_reaction('👎')
-        except Exception as e:
-            print(str(e))
+        msg = await ctx.send(f'**{str(ctx.author)} asks** {question}')
+        await msg.add_reaction('👍')
+        await msg.add_reaction('👎')
             
     @commands.command(name="animesearch",aliases=['anime'])
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _animesearch(self,ctx,*,query:str):
-        try:
-            search = AnimeSearch(query)
-            x = search.results[0].synopsis
-            title = search.results[0].title
-            episodes = search.results[0].episodes
-            score = search.results[0].score
-            image_url = search.results[0].image_url
-            url = search.results[0].url
-            em = discord.Embed(title=title,description=f"**{x} [Read More]({url})**",color=discord.Color.random())
-            em.add_field(name=":star: Ratings:",value=f"{score}/10")
-            em.add_field(name=":tv: Episodes",value=f"{episodes}")
-            em.set_image(url=image_url)
-            await ctx.send(embed=em)
-        except Exception as ei:
-            print(str(ei))
+        search = AnimeSearch(query)
+        x = search.results[0].synopsis
+        title = search.results[0].title
+        episodes = search.results[0].episodes
+        score = search.results[0].score
+        image_url = search.results[0].image_url
+        url = search.results[0].url
+        em = discord.Embed(title=title,description=f"**{x} [Read More]({url})**",color=discord.Color.random())
+        em.add_field(name=":star: Ratings:",value=f"{score}/10")
+        em.add_field(name=":tv: Episodes",value=f"{episodes}")
+        em.set_image(url=image_url)
+        await ctx.send(embed=em)
     
     @commands.command(name="hex",aliases=["gethex"])
     @commands.check(AllListeners.check_enabled)

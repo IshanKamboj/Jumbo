@@ -65,11 +65,11 @@ class fights(commands.Cog):
                 await a.remove_roles(mutedRole)
                 await ctx.send(f"**{a.name} has been umuted..... Better not fight now**")
                 
-    @_fight.error
-    async def fight_error(self,ctx,error):
-        if isinstance(error,commands.MissingRequiredArgument):
-            em = HelpEmbeds.fight_embed()
-            await ctx.send("**Missing required argument. See help** :point_down::point_down:",embed = em)
+    # @_fight.error
+    # async def fight_error(self,ctx,error):
+    #     if isinstance(error,commands.MissingRequiredArgument):
+    #         em = HelpEmbeds.fight_embed()
+    #         await ctx.send("**Missing required argument. See help** :point_down::point_down:",embed = em)
 
     #---------------------Shoot Command and its errors---------------------------------------           
     @commands.command(name="shoot",aliases=["fire","headshot","kill"])
@@ -124,11 +124,11 @@ class fights(commands.Cog):
                     await a.remove_roles(mutedRole)
                     await ctx.send(f"**{a.name} has been umuted..... Better not use gun now**")
  
-    @_shoot.error
-    async def shoot_error(self,ctx,error):
-        if isinstance(error,commands.MissingRequiredArgument):
-            em = HelpEmbeds.shoot_embed()
-            await ctx.send("**Missing required argument. See help** :point_down::point_down:",embed = em)
+    # @_shoot.error
+    # async def shoot_error(self,ctx,error):
+    #     if isinstance(error,commands.MissingRequiredArgument):
+    #         em = HelpEmbeds.shoot_embed()
+    #         await ctx.send("**Missing required argument. See help** :point_down::point_down:",embed = em)
     @commands.command(name="train",aliases=["learn"])
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)

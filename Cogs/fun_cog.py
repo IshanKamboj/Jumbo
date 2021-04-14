@@ -40,11 +40,11 @@ class Fun(commands.Cog):
         
 
 
-    @_truth.error
-    async def truth_error(self,ctx,error):
-        if isinstance(error,commands.MissingRequiredArgument):
-            em = HelpEmbeds.truth_embed()
-            await ctx.send("**Please mention who to ask the question. See help for more details** :point_down::point_down:",embed=em)
+    # @_truth.error
+    # async def truth_error(self,ctx,error):
+    #     if isinstance(error,commands.MissingRequiredArgument):
+    #         em = HelpEmbeds.truth_embed()
+    #         await ctx.send("**Please mention who to ask the question. See help for more details** :point_down::point_down:",embed=em)
 
     #----------------------- Dare command -----------------------------------------------
     @commands.command(name="dare",aliases=["dares"])
@@ -58,11 +58,11 @@ class Fun(commands.Cog):
         em = discord.Embed(title=f"{ctx.author.name} asks {user.name} to", description=f"{dare}",color=discord.Color.random())
         await ctx.send(embed=em)
         
-    @_dare.error
-    async def dare_error(self,ctx,error):
-        if isinstance(error,commands.MissingRequiredArgument):
-            em = HelpEmbeds.dare_embed()
-            await ctx.send("**Pls mention whom to give the dare. See help for more details** :point_down::point_down:",embed=em)
+    # @_dare.error
+    # async def dare_error(self,ctx,error):
+    #     if isinstance(error,commands.MissingRequiredArgument):
+    #         em = HelpEmbeds.dare_embed()
+    #         await ctx.send("**Pls mention whom to give the dare. See help for more details** :point_down::point_down:",embed=em)
     
 
     #----------------------- 8ball command--------------------------------
@@ -95,10 +95,10 @@ class Fun(commands.Cog):
         answer = random.choice(response)
         em = discord.Embed(title=f"Answer to {ctx.author.name}'s Question",description=f"{answer}",color=discord.Color.random())
         await ctx.send(embed=em)
-    @_8ball.error
-    async def _8ball_error(self,ctx,error):
-        if isinstance(error,commands.MissingRequiredArgument):
-            await ctx.send("**Concentrate and ask again.**")
+    # @_8ball.error
+    # async def _8ball_error(self,ctx,error):
+    #     if isinstance(error,commands.MissingRequiredArgument):
+    #         await ctx.send("**Concentrate and ask again.**")
 
 #---------------------- Opinion command ----------------------------
     @commands.command(name="opinion",aliases=["op"])
@@ -136,10 +136,10 @@ class Fun(commands.Cog):
         await ctx.send(embed=em)
             
 
-    @_opinion.error
-    async def opinion_error(self,ctx,error):
-        if isinstance(error,commands.MissingRequiredArgument):
-            await ctx.send("**Missing required argument. See help** :point_down::point_down:",embed=HelpEmbeds.opinion_embed())
+    # @_opinion.error
+    # async def opinion_error(self,ctx,error):
+    #     if isinstance(error,commands.MissingRequiredArgument):
+    #         await ctx.send("**Missing required argument. See help** :point_down::point_down:",embed=HelpEmbeds.opinion_embed())
 
     
     @commands.command(name="insult",aliases=["roast"])

@@ -40,45 +40,39 @@ class ImageCommands(commands.Cog):
     @commands.check(AllListeners.check_enabled)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _rip(self,ctx,user:discord.Member=None):
-        try:
-            if user == None:
-                user = ctx.author
-            tomb = Image.open('template_imgs/tomb.jpg')
-            width, height = tomb.size
-            d = ImageDraw.Draw(tomb)
-            font = ImageFont.truetype(font='fonts/Roboto-Bold.ttf',size=38)
-            #width, height = wanted.size
-            asset = user.avatar_url
-            date_format = "%a, %d %b %Y "
-            #d.text(())
-            data = BytesIO(await asset.read())
-            pfp = Image.open(data)
-            pfp = pfp.resize((150,150))
-            w,h = d.textsize(user.name,font=font)
-            posX = (width-w)/2
-            d.text((posX,440),f'{user.name}',fill=(204,0,102),font=font)
-            tomb.paste(pfp,(100,290))
-            with io.BytesIO() as image_binary:
-                tomb.save(image_binary,"PNG")
-                image_binary.seek(0)
-                await ctx.send(file=discord.File(fp=image_binary, filename='image.png'))
-        except Exception as e:
-            print(str(e))
+        if user == None:
+            user = ctx.author
+        tomb = Image.open('template_imgs/tomb.jpg')
+        width, height = tomb.size
+        d = ImageDraw.Draw(tomb)
+        font = ImageFont.truetype(font='fonts/Roboto-Bold.ttf',size=38)
+        #width, height = wanted.size
+        asset = user.avatar_url
+        date_format = "%a, %d %b %Y "
+        #d.text(())
+        data = BytesIO(await asset.read())
+        pfp = Image.open(data)
+        pfp = pfp.resize((150,150))
+        w,h = d.textsize(user.name,font=font)
+        posX = (width-w)/2
+        d.text((posX,440),f'{user.name}',fill=(204,0,102),font=font)
+        tomb.paste(pfp,(100,290))
+        with io.BytesIO() as image_binary:
+            tomb.save(image_binary,"PNG")
+            image_binary.seek(0)
+            await ctx.send(file=discord.File(fp=image_binary, filename='image.png'))
     # https://source.unsplash.com/1600x900/?nature,water
     @commands.command(name="wallpaper")
     @commands.check(AllListeners.check_enabled)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _wallpaper(self,ctx):
-        try:
-            url = 'https://source.unsplash.com/random/1920x1080'
-            async with aiohttp.ClientSession() as session:
-                async with session.get(url) as resp:
-                    if resp.status != 200:
-                        return await channel.send('Could not download file...')
-                    data = io.BytesIO(await resp.read())
-                    await ctx.send(file=discord.File(data, 'cool_image.png'))
-        except Exception as e:
-            print(str(e))
+        url = 'https://source.unsplash.com/random/1920x1080'
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url) as resp:
+                if resp.status != 200:
+                    return await channel.send('Could not download file...')
+                data = io.BytesIO(await resp.read())
+                await ctx.send(file=discord.File(data, 'cool_image.png'))
             
 def setup(bot):
     bot.add_cog(ImageCommands(bot))

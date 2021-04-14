@@ -106,7 +106,8 @@ class AllListeners(commands.Cog):
                         for j in reaction_data.val()["Reaction"]:
                             await message.add_reaction(j)
                 except Exception as e:
-                    print(str(e))
+                    pass
+                    #print(str(e))
                 try:
                     reason = afk_data.val()["reason"]
                     em = discord.Embed(title=f"User AFK",description=f"The Mentioned user is AFK....... **Reason: {reason}**",color=discord.Color.from_rgb(255,20,147))
@@ -156,6 +157,8 @@ class AllListeners(commands.Cog):
             await self.bot.process_commands(message)
     @commands.Cog.listener()
     async def on_command_error(self,ctx,error):
+        if hasattr(ctx.command, 'on_error'):
+            return
         db = firebase.database()
         prefix_data = db.child('Prefixes').child(str(ctx.guild.id)).get()
         pre = prefix_data.val()["Prefix"]
@@ -185,12 +188,29 @@ class AllListeners(commands.Cog):
                 em = discord.Embed(title="Take a hold of yourself",description=f"This command is on cooldown. You need to wait **{time} seconds** before using it again.",color=discord.Color.random())
             #print(finalTime)
             await ctx.send(embed=em)
+        elif isinstance(error,commands.BotMissingPermissions):
+            try:
+                em = discord.Embed(title="Bot Missing Perms",description="Bot might be missing the perms required to use this command. Please check and try again.",color=discord.Color.red())
+                msg = await ctx.send(embed=em)
+                await msg.add_reaction('❌')
+            except:
+                pass
+        elif isinstance(error, commands.MissingRequiredArgument):
+            try:
+                em = discord.Embed(title="Command Missing required arguments",description="The command is missing required arguments. See `*help <command_name>` for more details",color=discord.Color.red())
+                msg = await ctx.send(embed=em)
+                await msg.add_reaction('❌')
+            except:
+                pass
+        elif isinstance(error, commands.MissingPermissions):
+            try:
+                #print(str(error))
+                em = discord.Embed(title="Missing Permission",description=f"{str(error)}",color=discord.Color.red())
+                msg = await ctx.send(embed=em)
+                await msg.add_reaction('❌')
+            except:
+                pass
         else:
-            pass
-            # if 'The check functions for command failed.' in str(error):
-            #     #print('yes')
-            #     em = discord.Embed(description="This command is disabled in your server. Ask admin to enable it",color=discord.Color.random())
-            #     await ctx.send(embed=em)
-
+            await ctx.send(str(error))
 def setup(bot):
     bot.add_cog(AllListeners(bot=bot,lvl_add=lvl_add,difficulty=difficulty))

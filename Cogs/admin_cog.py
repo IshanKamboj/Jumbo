@@ -47,14 +47,14 @@ class Admin(commands.Cog):
                 await ctx.send(f"{ctx.author.mention} **Are u a DumbASS??......... U cannot give level below one**")
         except:
             await ctx.send("Pls mention the user or use ID.")
-    @_givelevel.error
-    async def givelevel_error(self,ctx,error):
-        if isinstance(error,commands.MissingRequiredArgument):
-            em = HelpEmbeds.givelevel_embed()
-            await ctx.send("**Missing required arguments. See help** :point_down::point_down:",embed = em)
-        elif isinstance(error,commands.MissingPermissions):
-            em = discord.Embed(title="Missing Required Permission",description="You are missing the following permissions.\n:arrow_forward: manage_guild",color=discord.Color.random())
-            await ctx.send(embed = em)
+    # @_givelevel.error
+    # async def givelevel_error(self,ctx,error):
+    #     if isinstance(error,commands.MissingRequiredArgument):
+    #         em = HelpEmbeds.givelevel_embed()
+    #         await ctx.send("**Missing required arguments. See help** :point_down::point_down:",embed = em)
+    #     elif isinstance(error,commands.MissingPermissions):
+    #         em = discord.Embed(title="Missing Required Permission",description="You are missing the following permissions.\n:arrow_forward: manage_guild",color=discord.Color.random())
+    #         await ctx.send(embed = em)
 
 
 
@@ -71,14 +71,14 @@ class Admin(commands.Cog):
         em = discord.Embed(description=f"Prefix update for this Sever. New Prefix `{newPrefix}`, use `{newPrefix}help` for more info.")
         await ctx.send(embed=em)
 
-    @_prefix.error
-    async def prefix_error(self,ctx,error):
-        if isinstance(error,commands.MissingPermissions):
-            em = discord.Embed(title="Missing Required Permission",description="You are missing the following permissions.\n:arrow_forward: Adminstrator",color=discord.Color.random())
-            await ctx.send(embed = em)
-        elif isinstance(error,commands.MissingRequiredArgument):
-            em = HelpEmbeds.prefix_embed()
-            await ctx.send("**Missing required argument. See help** :point_down::point_down:",embed = em)
+    # @_prefix.error
+    # async def prefix_error(self,ctx,error):
+    #     if isinstance(error,commands.MissingPermissions):
+    #         em = discord.Embed(title="Missing Required Permission",description="You are missing the following permissions.\n:arrow_forward: Adminstrator",color=discord.Color.random())
+    #         await ctx.send(embed = em)
+    #     elif isinstance(error,commands.MissingRequiredArgument):
+    #         em = HelpEmbeds.prefix_embed()
+    #         await ctx.send("**Missing required argument. See help** :point_down::point_down:",embed = em)
 
     #----------------------- Purge command added-----------------------------
     @commands.command(name="purge",aliases=["pu","delete"])
@@ -96,13 +96,13 @@ class Admin(commands.Cog):
             await msg.delete()
         except ValueError:
             await ctx.send("Please enter a valid number")
-    @_purge.error
-    async def purge_error(self,ctx,error):
-        if isinstance(error,commands.MissingPermissions):
-            await ctx.send("**You are missing the required permissions** `manage guild`")
-        elif isinstance(error,commands.MissingRequiredArgument):
-            em = HelpEmbeds.purge_embed()
-            await ctx.send("**Missing required arguments. See help** :point_down::point_down:",embed=em)
+    # @_purge.error
+    # async def purge_error(self,ctx,error):
+    #     if isinstance(error,commands.MissingPermissions):
+    #         await ctx.send("**You are missing the required permissions** `manage guild`")
+    #     elif isinstance(error,commands.MissingRequiredArgument):
+    #         em = HelpEmbeds.purge_embed()
+    #         await ctx.send("**Missing required arguments. See help** :point_down::point_down:",embed=em)
 
 
     
@@ -154,13 +154,13 @@ class Admin(commands.Cog):
                         await ctx.send(f"**`{command_disable}` command is already disabled**")
                 #print(disabledCommands.val())
 
-    @_disable.error
-    async def disable_error(self,ctx,error):
-        if isinstance(error,commands.MissingRequiredArgument):
-            await ctx.send("**Missing required argument. See help** :point_down::point_down:",embed=HelpEmbeds.disable_embed())
+    # @_disable.error
+    # async def disable_error(self,ctx,error):
+    #     if isinstance(error,commands.MissingRequiredArgument):
+    #         await ctx.send("**Missing required argument. See help** :point_down::point_down:",embed=HelpEmbeds.disable_embed())
 
-        elif isinstance(error,commands.MissingPermissions):
-            await ctx.send("**You are missing the required permissions:** `administrator`")
+    #     elif isinstance(error,commands.MissingPermissions):
+    #         await ctx.send("**You are missing the required permissions:** `administrator`")
 
 
 
@@ -190,13 +190,13 @@ class Admin(commands.Cog):
                 elif disabledCommands.val()["isEnabled"] is True:
                     await ctx.send(f"**`{command_disable}` command is already enabled**")
 
-    @_enable.error
-    async def enable_error(self,ctx,error):
-        if isinstance(error,commands.MissingRequiredArgument):
-            await ctx.send("**Missing required argument. See help** :point_down::point_down:",embed=HelpEmbeds.enable_embed())
+    # @_enable.error
+    # async def enable_error(self,ctx,error):
+    #     if isinstance(error,commands.MissingRequiredArgument):
+    #         await ctx.send("**Missing required argument. See help** :point_down::point_down:",embed=HelpEmbeds.enable_embed())
 
-        elif isinstance(error,commands.MissingPermissions):
-            await ctx.send("**You are missing the required permissions:** `administrator`")
+    #     elif isinstance(error,commands.MissingPermissions):
+    #         await ctx.send("**You are missing the required permissions:** `administrator`")
 
     @commands.group(invoke_without_command=True)
     @commands.check(AllListeners.check_enabled)
@@ -207,29 +207,32 @@ class Admin(commands.Cog):
     @role.command(name="add")
     @commands.has_permissions(manage_roles=True)
     async def _addrole(self,ctx,user:discord.Member,role:discord.Role):
-        db = firebase.database()
-        isEnabled = db.child('Disabled').child(str(ctx.guild.id)).child("role").get()
-        if isEnabled.val() is None:
-            Role = discord.utils.get(ctx.guild.roles,name=str(role))
-            if not Role:
-                em = discord.Embed(description=f"No role named : {str(role)} exists",color=discord.Color.random())
-                await ctx.send(embed=em)
-            elif Role in user.roles:
-                em = discord.Embed(description=f"`{user.name}` **already has the role:** `{Role}`",color=discord.Color.random())
-                await ctx.send(embed=em)
-            else:
-                list_roles = ctx.author.roles
-                highest_role = list_roles[-1]
-                if  highest_role >= role:
-                    await user.add_roles(Role)
-                    em = discord.Embed(description=f"**Gave role: `{Role}` to `{user.name}`**",color=role.color)
-                    await ctx.send(embed=em)   
-                else:
-                    em = discord.Embed(description=f"**Error: You cannot give higher roles.**")
+        try:
+            db = firebase.database()
+            isEnabled = db.child('Disabled').child(str(ctx.guild.id)).child("role").get()
+            if isEnabled.val() is None:
+                Role = discord.utils.get(ctx.guild.roles,name=str(role))
+                if not Role:
+                    em = discord.Embed(description=f"No role named : {str(role)} exists",color=discord.Color.random())
                     await ctx.send(embed=em)
-        else:
-            em = discord.Embed(description="This command is disabled in your server. Ask admin to enable it",color=discord.Color.random())
-            await ctx.send(embed=em)
+                elif Role in user.roles:
+                    em = discord.Embed(description=f"`{user.name}` **already has the role:** `{Role}`",color=discord.Color.random())
+                    await ctx.send(embed=em)
+                else:
+                    list_roles = ctx.author.roles
+                    highest_role = list_roles[-1]
+                    if  highest_role > role or ctx.author.guild_permissions.administrator:
+                        await user.add_roles(Role)
+                        em = discord.Embed(description=f"**Gave role: `{Role}` to `{user.name}`**",color=role.color)
+                        await ctx.send(embed=em)   
+                    else:
+                        em = discord.Embed(description=f"**Error: You cannot give higher roles.**")
+                        await ctx.send(embed=em)
+            else:
+                em = discord.Embed(description="This command is disabled in your server. Ask admin to enable it",color=discord.Color.random())
+                await ctx.send(embed=em)
+        except Exception as e:
+            print(str(e))
     @role.command(name="remove")
     @commands.has_permissions(manage_roles=True)
     async def _removerole(self,ctx,user:discord.Member,role:discord.Role):
@@ -243,7 +246,7 @@ class Admin(commands.Cog):
             elif Role in user.roles:
                 list_roles = ctx.author.roles
                 highest_role = list_roles[-1]
-                if  highest_role >= role:
+                if  highest_role > role or ctx.author.guild_permissions.administrator:
                     await user.remove_roles(Role)
                     em = discord.Embed(description=f"**Removed role: `{Role}` from user: `{user.name}`**",color=discord.Color.random())
                     await ctx.send(embed=em)  
