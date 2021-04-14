@@ -258,3 +258,7 @@ class HelpEmbeds():
         em =  discord.Embed(title=":mag: Emojisearch Command",description="Search for different emoji names for the query and then use them. If this command is disabled then bot would not send emotes",color=discord.Color.random())
         em.add_field(name="Syntax",value="*emoji <query>")
         return em
+    def report_embed():
+        em = discord.Embed(title=":bug: Bug Report",description="Report a bug if you find one using this command. Describe it as best as u can.I will try my best to solve it.")
+        em.add_field(name="Syntax",value="*report <bug>")
+        return em

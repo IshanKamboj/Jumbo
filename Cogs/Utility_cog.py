@@ -333,5 +333,17 @@ class Utility(commands.Cog):
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _invite(self,ctx):
         await ctx.send(f"Invite the Bot: https://top.gg/bot/805430097426513941")
+    @commands.command(name="report",aliases=["bug"])
+    @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
+    @commands.cooldown(1, 60, commands.BucketType.user)
+    async def report(self,ctx,*,bug):
+        em = discord.Embed(title="New Bug",description=bug,color=discord.Color.red(),timestamp=datetime.utcnow())
+        em.add_field(name="Reported By:",value=f'{ctx.author.name}#{ctx.author.discriminator}')
+        em.add_field(name="Reporter's ID:",value=f'{ctx.author.id}')
+        em.add_field(name="From Guild:",value=f"{ctx.guild.id}")
+        em.add_field(name="Guild Name:",value=f"{ctx.guild.name}")
+        em.set_thumbnail(url=ctx.guild.icon_url)
+        await self.bot.get_channel(828543394225324032).send(embed=em)
 def setup(bot):
     bot.add_cog(Utility(bot,difficulty))
