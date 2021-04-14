@@ -5,6 +5,8 @@ from .Listeners import AllListeners
 import sys
 import dbl
 import requests
+import socket
+import socket
 class OwnerCommands(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
@@ -13,11 +15,13 @@ class OwnerCommands(commands.Cog):
     
     @commands.Cog.listener()
     async def on_dbl_vote(self, data):
+        print(socket.gethostbyname(socket.gethostname()))
         """An event that is called whenever someone votes for the bot on top.gg."""
         print(f"Received an upvote:{data}")
 
     @commands.Cog.listener()
     async def on_dbl_test(self, data):
+        print(socket.gethostbyname(socket.gethostname()))
         """An event that is called whenever someone tests the webhook system for your bot on top.gg."""
         print(f"Received a test upvote:{data}")
     
