@@ -11,7 +11,7 @@ class OwnerCommands(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
         self.token = os.getenv('DBL_TOKEN')
-        self.dblpy = dbl.DBLClient(self.bot, self.token, autopost=True, webhook_port=5000,webhook_path="/jumbo7")
+        self.dblpy = dbl.DBLClient(self.bot, self.token, autopost=True, webhook_port=5000,webhook_path="https://172.17.89.190:5000/jumbo7",webhook_auth="Ishan@1608")
     
     @commands.Cog.listener()
     async def on_dbl_vote(self, data):
