@@ -9,7 +9,17 @@ class OwnerCommands(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
         self.token = os.getenv('DBL_TOKEN')
-        self.dblpy = dbl.DBLClient(self.bot, self.token, autopost=True)
+        self.dblpy = dbl.DBLClient(self.bot, self.token, autopost=True, webhook_port=5000,webhook_path="/jumbo7")
+    
+    @commands.Cog.listener()
+    async def on_dbl_vote(self, data):
+        """An event that is called whenever someone votes for the bot on top.gg."""
+        print("Received an upvote:", "\n", data, sep="")
+
+    @commands.Cog.listener()
+    async def on_dbl_test(self, data):
+        """An event that is called whenever someone tests the webhook system for your bot on top.gg."""
+        print("Received a test upvote:", "\n", data, sep="")
     @commands.command(name="shutdown")
     @commands.is_owner()
     async def _shutdown(self,ctx):
