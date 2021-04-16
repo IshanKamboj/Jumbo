@@ -158,7 +158,7 @@ class Fun(commands.Cog):
         #     roast_list = f.readlines()
         api_url = "https://api.snowflakedev.xyz/api/roast"
         r = requests.get(api_url,headers={"Authorization":"NTc2NDQyMDI5MzM3NDc3MTMw.MTYxODU0MjEyNTA5Ng==.fc6b183fdd97d9bcc3cddce606e0ad70"}).content.decode()
-        roast = json.load(r)["roast"]
+        roast = json.loads(r)["roast"]
         #roast = roast_list[length_roast].replace("\n"," ")
         em = discord.Embed(title=f"{roast}",color=discord.Color.random())
         await ctx.send(embed=em)
