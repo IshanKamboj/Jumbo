@@ -13,6 +13,7 @@ import wikipedia
 from mal import AnimeSearch
 from datetime import datetime
 from colour import Color
+import json
 class Utility(commands.Cog):
     def __init__(self,bot,difficulty):
         self.bot = bot
@@ -343,5 +344,34 @@ class Utility(commands.Cog):
         em.set_thumbnail(url=ctx.guild.icon_url)
         await self.bot.get_channel(828543394225324032).send(embed=em)
         await ctx.send("Bug report sent successfully. Thank you its appreciated.")
+    @commands.command(name="pokedex",aliases=["pokesearch","pokemon"])
+    @commands.guild_only()
+    @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
+    @commands.cooldown(1, 25, commands.BucketType.user)
+    async def _pokedex(self,ctx,*,query):
+        api_url = f"https://api.snowflakedev.xyz/api/pokemon?name={query}"
+        response = requests.get(api_url,headers={"query":str(query),"Authorization":"NTc2NDQyMDI5MzM3NDc3MTMw.MTYxODU0MjEyNTA5Ng==.fc6b183fdd97d9bcc3cddce606e0ad70"}).content.decode()
+        r = json.loads(response)
+        em = discord.Embed(title=f"{query}'s info",color=discord.Color.random()).set_thumbnail(url=r["image"])
+        em.add_field(name="Name:",value=r["name"])
+        em.add_field(name="ID:",value=r["id"])
+        em.add_field(name='Type:',value=r["type"])
+        em.add_field(name=":triangular_ruler: Height:",value=r["height"],inline=False)
+        em.add_field(name=":scales: Weight:",value=r["weight"],inline=False)
+        moves_list = r["moves"]
+        if len(moves_list)>16:
+            new_moves_list = moves_list[:15]
+        else:
+            new_moves_list = moves_list    
+        moves = ""
+        for i in new_moves_list:
+            if moves == "":
+                moves += f"`{i}`"
+            else:
+                moves += f", `{i}`"
+        em.add_field(name="Moves:",value=moves)
+        await ctx.send(embed=em)
+        #print(r)
 def setup(bot):
     bot.add_cog(Utility(bot,difficulty))

@@ -263,3 +263,7 @@ class HelpEmbeds():
         em = discord.Embed(title=":bug: Bug Report",description="Report a bug if you find one using this command. Describe it as best as u can.I will try my best to solve it.")
         em.add_field(name="Syntax",value="*report <bug>")
         return em
+    def pokedex_embed():
+        em = discord.Embed(title=":closed_book: Pokedex",description="Search for Pokemon in the pokedex.")
+        em.add_field(name="Syntax",value="*pokedex <name/query>")
+        return em
