@@ -207,32 +207,30 @@ class Admin(commands.Cog):
     @role.command(name="add")
     @commands.has_permissions(manage_roles=True)
     async def _addrole(self,ctx,user:discord.Member,role:discord.Role):
-        try:
-            db = firebase.database()
-            isEnabled = db.child('Disabled').child(str(ctx.guild.id)).child("role").get()
-            if isEnabled.val() is None:
-                Role = discord.utils.get(ctx.guild.roles,name=str(role))
-                if not Role:
-                    em = discord.Embed(description=f"No role named : {str(role)} exists",color=discord.Color.random())
-                    await ctx.send(embed=em)
-                elif Role in user.roles:
-                    em = discord.Embed(description=f"`{user.name}` **already has the role:** `{Role}`",color=discord.Color.random())
-                    await ctx.send(embed=em)
-                else:
-                    list_roles = ctx.author.roles
-                    highest_role = list_roles[-1]
-                    if  highest_role > role or ctx.author.guild_permissions.administrator:
-                        await user.add_roles(Role)
-                        em = discord.Embed(description=f"**Gave role: `{Role}` to `{user.name}`**",color=role.color)
-                        await ctx.send(embed=em)   
-                    else:
-                        em = discord.Embed(description=f"**Error: You cannot give higher roles.**")
-                        await ctx.send(embed=em)
-            else:
-                em = discord.Embed(description="This command is disabled in your server. Ask admin to enable it",color=discord.Color.random())
+        db = firebase.database()
+        isEnabled = db.child('Disabled').child(str(ctx.guild.id)).child("role").get()
+        if isEnabled.val() is None:
+            Role = discord.utils.get(ctx.guild.roles,name=str(role))
+            if not Role:
+                em = discord.Embed(description=f"No role named : {str(role)} exists",color=discord.Color.random())
                 await ctx.send(embed=em)
-        except Exception as e:
-            print(str(e))
+            elif Role in user.roles:
+                em = discord.Embed(description=f"`{user.name}` **already has the role:** `{Role}`",color=discord.Color.random())
+                await ctx.send(embed=em)
+            else:
+                list_roles = ctx.author.roles
+                highest_role = list_roles[-1]
+                if  highest_role > role or ctx.author.guild_permissions.administrator:
+                    await user.add_roles(Role)
+                    em = discord.Embed(description=f"**Gave role: `{Role}` to `{user.name}`**",color=role.color)
+                    await ctx.send(embed=em)   
+                else:
+                    em = discord.Embed(description=f"**Error: You cannot give higher roles.**")
+                    await ctx.send(embed=em)
+        else:
+            em = discord.Embed(description="This command is disabled in your server. Ask admin to enable it",color=discord.Color.random())
+            await ctx.send(embed=em)
+        
     @role.command(name="remove")
     @commands.has_permissions(manage_roles=True)
     async def _removerole(self,ctx,user:discord.Member,role:discord.Role):

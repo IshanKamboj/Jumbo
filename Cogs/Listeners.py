@@ -204,7 +204,6 @@ class AllListeners(commands.Cog):
                 pass
         elif isinstance(error, commands.MissingPermissions):
             try:
-                #print(str(error))
                 em = discord.Embed(title="Missing Permission",description=f"{str(error)}",color=discord.Color.red())
                 msg = await ctx.send(embed=em)
                 await msg.add_reaction('❌')
