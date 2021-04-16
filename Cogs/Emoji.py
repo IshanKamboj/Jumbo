@@ -99,6 +99,7 @@ class emoji(commands.Cog):
 				await webhook.send(ret, username = message.author.name, avatar_url = message.author.avatar_url)
 				await message.delete()
 	@commands.command(name="emojisearch",aliases=["esearch","emotesearch","emoji"])
+	@commands.guild_only()
 	@commands.check(AllListeners.check_enabled)
 	@commands.check(AllListeners.role_check)
 	@commands.cooldown(1,20, commands.BucketType.user)

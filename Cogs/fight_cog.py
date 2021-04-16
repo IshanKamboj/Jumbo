@@ -26,6 +26,7 @@ class fights(commands.Cog):
         self.bot=bot
     #---------------------Fight Command and its errors---------------------------------------
     @commands.command(name="fight",aliases=["dumbfight"])
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
@@ -73,6 +74,7 @@ class fights(commands.Cog):
 
     #---------------------Shoot Command and its errors---------------------------------------           
     @commands.command(name="shoot",aliases=["fire","headshot","kill"])
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
@@ -130,6 +132,7 @@ class fights(commands.Cog):
     #         em = HelpEmbeds.shoot_embed()
     #         await ctx.send("**Missing required argument. See help** :point_down::point_down:",embed = em)
     @commands.command(name="train",aliases=["learn"])
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7200, commands.BucketType.user)
@@ -153,6 +156,7 @@ class fights(commands.Cog):
                 await ctx.send(embed=em)
 
     @commands.command(name="profile")
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
@@ -188,6 +192,7 @@ class fights(commands.Cog):
 
     
     @commands.command(name="shop",aliases=["items","item"])
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
@@ -201,6 +206,7 @@ class fights(commands.Cog):
             em.add_field(name=f"{item} ---- `{price} Points.`",value=f"{value}",inline=False)
         await ctx.send(embed=em)
     @commands.command(name="buy",aliases=["acquire","get"])
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)

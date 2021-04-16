@@ -7,7 +7,8 @@ import asyncio
 from helpEmbeds import HelpEmbeds
 from .Listeners import AllListeners
 import pyjokes
-
+import requests
+import json
 with open("truth.txt","r",encoding='utf-8') as f:
     truth_text = f.readlines()
 with open("dare.txt","r") as f:
@@ -20,6 +21,7 @@ class Fun(commands.Cog):
     #----------------------- Facts getting command---------------------------------------
 
     @commands.command(name="facts",aliases=["knowledge","fact"])
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
@@ -28,6 +30,7 @@ class Fun(commands.Cog):
         await ctx.send(f"**{x}**")
     #-------------------------- Truth command ---------------------------------
     @commands.command(name="truth",aliases=["truths"])
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
@@ -48,6 +51,7 @@ class Fun(commands.Cog):
 
     #----------------------- Dare command -----------------------------------------------
     @commands.command(name="dare",aliases=["dares"])
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
@@ -67,6 +71,7 @@ class Fun(commands.Cog):
 
     #----------------------- 8ball command--------------------------------
     @commands.command(name="8ball",aliases=["predict"])
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
@@ -102,6 +107,7 @@ class Fun(commands.Cog):
 
 #---------------------- Opinion command ----------------------------
     @commands.command(name="opinion",aliases=["op"])
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
@@ -143,15 +149,17 @@ class Fun(commands.Cog):
 
     
     @commands.command(name="insult",aliases=["roast"])
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _insult(self,ctx,user:discord.Member):
-        db = firebase.database()
-        with open("insult.txt","r") as f:
-            roast_list = f.readlines()
-        length_roast = random.randint(0,len(roast_list))
-        roast = roast_list[length_roast].replace("\n"," ")
+        # with open("insult.txt","r") as f:
+        #     roast_list = f.readlines()
+        api_url = "https://api.snowflakedev.xyz/api/roast"
+        r = requests.get(api_url,headers={"Authorization":"NTc2NDQyMDI5MzM3NDc3MTMw.MTYxODU0MjEyNTA5Ng==.fc6b183fdd97d9bcc3cddce606e0ad70"}).content.decode()
+        roast = json.load(r)["roast"]
+        #roast = roast_list[length_roast].replace("\n"," ")
         em = discord.Embed(title=f"{roast}",color=discord.Color.random())
         await ctx.send(embed=em)
     
@@ -159,6 +167,7 @@ class Fun(commands.Cog):
     # async def 
 
     @commands.command(name="gayrate",aliases=["gr","gay","gae"])
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
@@ -172,6 +181,7 @@ class Fun(commands.Cog):
         await ctx.send(embed=em)
     
     @commands.command(name="joke",aliases=["jokes"])
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)

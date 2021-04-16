@@ -10,12 +10,14 @@ class Calculations(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
     @commands.group(invoke_without_command=True)
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def area(self,ctx):
         await ctx.send(embed=HelpEmbeds.area_embed())
     
     @area.command(name="triangle")
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     async def _triangle(self,ctx,*,dimensions:str):
         ht,bs = dimensions.split(',')
@@ -25,6 +27,7 @@ class Calculations(commands.Cog):
         await ctx.send(f"The area of the triangle would be: **{area}**")
     
     @area.command(name="rectangle")
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     async def _rectangle(self,ctx,*,dimensions:str):
         length,breadth = dimensions.split(',')
@@ -34,6 +37,7 @@ class Calculations(commands.Cog):
         await ctx.send(f"The area of the rectangle would be: **{area}**")
     
     @area.command(name="square")
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     async def _square(self,ctx,dimensions:str):
         side = int(dimensions)
@@ -41,6 +45,7 @@ class Calculations(commands.Cog):
         await ctx.send(f"The area of the square would be: **{area}**")
     
     @area.command(name="circle")
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     async def _circle(self,ctx,dimensions:str):
         side = int(dimensions)
@@ -48,11 +53,13 @@ class Calculations(commands.Cog):
         await ctx.send(f"The area of the circle would be: **{area}**")
     
     @commands.group(invoke_without_command=True)
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     async def volume(self,ctx):
         await ctx.send(embed=HelpEmbeds.volume_embed())
     
     @volume.command(name='cube')
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     async def _cube(self,ctx,side:float):
         volume = side**3
@@ -69,6 +76,7 @@ class Calculations(commands.Cog):
         await ctx.send(embed=em)
     
     @volume.command(name='cuboid')
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     async def _cuboid(self,ctx,*,dimensions:str):
         try:
@@ -92,6 +100,7 @@ class Calculations(commands.Cog):
             await ctx.send(f'Error! :{str(e)}')
     
     @volume.command(name='sphere')
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     async def _sphere(self,ctx,radius:float):
         try:
@@ -109,6 +118,7 @@ class Calculations(commands.Cog):
             await ctx.send(f'Error! :{str(e)}')
     
     @volume.command(name='hemisphere')
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     async def _hemisphere(self,ctx,radius:float):
         try:
@@ -128,6 +138,7 @@ class Calculations(commands.Cog):
             await ctx.send(f'Error! :{str(e)}')
     
     @volume.command(name='cone')
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     async def _cone(self,ctx,*,dimensions:str):
         try:
@@ -152,6 +163,7 @@ class Calculations(commands.Cog):
             await ctx.send(f'Error! :{str(e)}')
     
     @volume.command(name='cylinder')
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     async def _cylinder(self,ctx,*,dimensions:str):
         try:
@@ -174,6 +186,7 @@ class Calculations(commands.Cog):
             await ctx.send(f'Error! :{str(e)}')
         
     @commands.command(name="factorial")
+    @commands.guild_only()
     @commands.cooldown(1, 7, commands.BucketType.user)
     @commands.check(AllListeners.check_enabled)
     async def _factorial(self,ctx,number:int):

@@ -20,6 +20,7 @@ class Utility(commands.Cog):
 
     #---------------------level Command and its errors---------------------------------------
     @commands.command(name = "level", aliases = ["lvl","rank","rnk"])
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
@@ -95,6 +96,7 @@ class Utility(commands.Cog):
 
 #---------------------leaderboard Command and its errors---------------------------------------
     @commands.command(name="leaderboard",aliases=["lb","leader","top"])
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
@@ -132,6 +134,7 @@ class Utility(commands.Cog):
 
 #---------------------AFK Command and its errors---------------------------------------
     @commands.command(name="afk")
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
@@ -157,6 +160,7 @@ class Utility(commands.Cog):
 
 #---------------------------Last seen command---------------------
     @commands.command(name="seen",aliases=["lastseen","last"])
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
@@ -186,6 +190,7 @@ class Utility(commands.Cog):
 
 #------------------------ Custom auto react------------------------------------------
     @commands.command(name="autoreact",aliases=["ar","react","reaction"])
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
@@ -227,6 +232,7 @@ class Utility(commands.Cog):
 
         
     @commands.command(name="google",aliases=["search","find"])
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
@@ -255,6 +261,7 @@ class Utility(commands.Cog):
         # print(temp)
 
     @commands.command(name="wikisearch",aliases=["wsearch","wikipedia"])
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
@@ -266,6 +273,7 @@ class Utility(commands.Cog):
         await ctx.send(f"**{x}**\n More info can be found here: {link}")
     
     @commands.command(name="poll")
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
@@ -275,6 +283,7 @@ class Utility(commands.Cog):
         await msg.add_reaction('👎')
             
     @commands.command(name="animesearch",aliases=['anime'])
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
@@ -293,6 +302,7 @@ class Utility(commands.Cog):
         await ctx.send(embed=em)
     
     @commands.command(name="hex",aliases=["gethex"])
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
@@ -300,6 +310,7 @@ class Utility(commands.Cog):
         c = Color(color=color)
         await ctx.send(f"The hex value for {color} color is: {c.hex_l}")
     @commands.command(name="vote",aliases=["upvote"])
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
@@ -312,12 +323,14 @@ class Utility(commands.Cog):
 
         await ctx.send(f"Vote for the bot at : https://top.gg/bot/805430097426513941/vote")
     @commands.command(name="invite")
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _invite(self,ctx):
         await ctx.send(f"Invite the Bot: https://top.gg/bot/805430097426513941")
     @commands.command(name="report",aliases=["bug"])
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 60, commands.BucketType.user)

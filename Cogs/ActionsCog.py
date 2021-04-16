@@ -19,6 +19,7 @@ class ActionCog(commands.Cog):
         self.bot = bot
     
     @commands.command(name="slap")
+    @commands.guild_only()
     @commands.cooldown(1,5,commands.BucketType.user)
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
@@ -38,6 +39,7 @@ class ActionCog(commands.Cog):
                 top_8gifs = None
         
     @commands.command(name="punch")
+    @commands.guild_only()
     @commands.cooldown(1,5,commands.BucketType.user)
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
@@ -61,6 +63,7 @@ class ActionCog(commands.Cog):
                 top_8gifs = None
         
     @commands.command(name="lick",aliases=["suck"])
+    @commands.guild_only()
     @commands.cooldown(1,5,commands.BucketType.user)
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
@@ -80,6 +83,7 @@ class ActionCog(commands.Cog):
                 top_8gifs = None
 
     @commands.command(name="bite")
+    @commands.guild_only()
     @commands.cooldown(1,5,commands.BucketType.user)
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
@@ -99,6 +103,7 @@ class ActionCog(commands.Cog):
                 top_8gifs = None
     
     @commands.command(name="bully")
+    @commands.guild_only()
     @commands.cooldown(1,5,commands.BucketType.user)
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
@@ -118,6 +123,7 @@ class ActionCog(commands.Cog):
                 top_8gifs = None
             
     @commands.command(name="hug")
+    @commands.guild_only()
     @commands.cooldown(1,5,commands.BucketType.user)
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
@@ -138,6 +144,7 @@ class ActionCog(commands.Cog):
    
 
     @commands.command(name="kick",aliases=["laat"])
+    @commands.guild_only()
     @commands.cooldown(1,5,commands.BucketType.user)
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
@@ -162,6 +169,7 @@ class ActionCog(commands.Cog):
             
         
     @commands.command(name="hardkick")
+    @commands.guild_only()
     @commands.cooldown(1,5,commands.BucketType.user)
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
@@ -181,6 +189,7 @@ class ActionCog(commands.Cog):
                 top_8gifs = None
     
     @commands.command(name="pat")
+    @commands.guild_only()
     @commands.cooldown(1,5,commands.BucketType.user)
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)

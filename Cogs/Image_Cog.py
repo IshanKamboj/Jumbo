@@ -12,6 +12,7 @@ class ImageCommands(commands.Cog):
         self.bot = bot
 
     @commands.command(name="wanted")
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _wanted(self,ctx, user:discord.Member=None):
@@ -37,6 +38,7 @@ class ImageCommands(commands.Cog):
         # await ctx.send(file=discord.File('wanted_img.jpg'))
     
     @commands.command(name="rip")
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _rip(self,ctx,user:discord.Member=None):
@@ -63,6 +65,7 @@ class ImageCommands(commands.Cog):
             await ctx.send(file=discord.File(fp=image_binary, filename='image.png'))
     # https://source.unsplash.com/1600x900/?nature,water
     @commands.command(name="wallpaper")
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _wallpaper(self,ctx):

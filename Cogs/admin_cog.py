@@ -13,6 +13,7 @@ class Admin(commands.Cog):
     
     #---------------------Give level Command and its errors---------------------------------------
     @commands.command(name="givelevel",aliases=["gl"])
+    @commands.guild_only()
     @commands.has_permissions(manage_guild=True)
     @commands.check(AllListeners.check_enabled)
     @commands.cooldown(1, 7, commands.BucketType.user)
@@ -61,6 +62,7 @@ class Admin(commands.Cog):
 
 #---------------------Change prefix Command and its errors---------------------------------------
     @commands.command(name="prefix",aliases=["cp","changeprefix"])
+    @commands.guild_only()
     @commands.has_permissions(administrator=True)
     @commands.check(AllListeners.check_enabled)
     @commands.cooldown(1, 7, commands.BucketType.user)
@@ -82,6 +84,7 @@ class Admin(commands.Cog):
 
     #----------------------- Purge command added-----------------------------
     @commands.command(name="purge",aliases=["pu","delete"])
+    @commands.guild_only()
     @commands.has_permissions(manage_guild=True)
     @commands.check(AllListeners.check_enabled)
     @commands.cooldown(1, 7, commands.BucketType.user)
@@ -108,6 +111,7 @@ class Admin(commands.Cog):
     
     
     @commands.command(name="disable",aliases=["toggle"])
+    @commands.guild_only()
     @commands.has_permissions(administrator=True)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _disable(self,ctx,*,command):
@@ -166,6 +170,7 @@ class Admin(commands.Cog):
 
 
     @commands.command(name="enable")
+    @commands.guild_only()
     @commands.has_permissions(administrator=True)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _enable(self,ctx,*,command):
@@ -199,12 +204,14 @@ class Admin(commands.Cog):
     #         await ctx.send("**You are missing the required permissions:** `administrator`")
 
     @commands.group(invoke_without_command=True)
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.has_permissions(manage_roles=True)
     async def role(self,ctx):
         db = firebase.database()
         await ctx.send(embed=HelpEmbeds.role_embed())
     @role.command(name="add")
+    @commands.guild_only()
     @commands.has_permissions(manage_roles=True)
     async def _addrole(self,ctx,user:discord.Member,role:discord.Role):
         db = firebase.database()
@@ -232,6 +239,7 @@ class Admin(commands.Cog):
             await ctx.send(embed=em)
         
     @role.command(name="remove")
+    @commands.guild_only()
     @commands.has_permissions(manage_roles=True)
     async def _removerole(self,ctx,user:discord.Member,role:discord.Role):
         db = firebase.database()
@@ -259,6 +267,7 @@ class Admin(commands.Cog):
             em = discord.Embed(description="This command is disabled in your server. Ask admin to enable it",color=discord.Color.random())
             await ctx.send(embed=em)
     @role.command(name="create",aliases=["new"])
+    @commands.guild_only()
     @commands.has_permissions(manage_roles=True)
     async def create(self,ctx,role,hoist=False,mentionable=False):
         db = firebase.database()
@@ -276,6 +285,7 @@ class Admin(commands.Cog):
             em = discord.Embed(description="This command is disabled in your server. Ask admin to enable it",color=discord.Color.random())
             await ctx.send(embed=em)
     @role.command(name="color",aliases=["colour","looks"])
+    @commands.guild_only()
     @commands.has_permissions(manage_roles=True)
     async def color(self,ctx,role:discord.Role,color:discord.Color):
         db = firebase.database()
@@ -290,12 +300,14 @@ class Admin(commands.Cog):
 
     
     @commands.group(name="settings",aliases=["setting"],invoke_without_command=True)
+    @commands.guild_only()
     @commands.has_permissions(administrator=True)
     @commands.check(AllListeners.check_enabled)
     async def settings(self,ctx):
         await  ctx.send(embed=HelpEmbeds.settings_embed())
         
     @settings.command(name="cmdrole")
+    @commands.guild_only()
     @commands.has_permissions(administrator=True)
     async def _cmdrole(self,ctx,command,role:discord.Role):
         db = firebase.database()
@@ -325,6 +337,7 @@ class Admin(commands.Cog):
             em = discord.Embed(description="This command is disabled in your server. Ask admin to enable it",color=discord.Color.random())
             await ctx.send(embed=em)
     @settings.command(name='show')
+    @commands.guild_only()
     async def _show(self,ctx):
         db = firebase.database()
         isEnabled = db.child('Disabled').child(str(ctx.guild.id)).child("settings").get()

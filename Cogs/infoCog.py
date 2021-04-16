@@ -26,6 +26,7 @@ class InfoCogs(commands.Cog):
     
 
     @commands.command(name="userinfo", aliases=["ui"])
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
@@ -56,6 +57,7 @@ class InfoCogs(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(name="roleinfo", aliases=["ri", "rinfo"])
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
@@ -86,6 +88,7 @@ class InfoCogs(commands.Cog):
             # print()
 
     @commands.command(name="onlineinfo", aliases=["online"])
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
@@ -110,6 +113,7 @@ class InfoCogs(commands.Cog):
         
 
     @commands.command(name="ping")
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
@@ -131,6 +135,7 @@ class InfoCogs(commands.Cog):
         em.add_field(name="Response Time:",value=f"`{(end-start)*1000:,.0f} ms.`")
         await message.edit(embed=em)
     @commands.command(name="avatar", aliases=["av", "pfp"])
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
@@ -157,6 +162,7 @@ class InfoCogs(commands.Cog):
             pass
 
     @commands.command(name="snipe", aliases=["sniper"])
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
@@ -178,6 +184,7 @@ class InfoCogs(commands.Cog):
             await ctx.send("**`Found Nothing to Snipe ;)`**")
 
     @commands.command(name="botinfo", aliases=["bi", "binfo", "boti"])
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
@@ -220,6 +227,7 @@ class InfoCogs(commands.Cog):
             pass
     
     @commands.command(name="editsnipe", aliases=["editsniper"])
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
@@ -239,6 +247,7 @@ class InfoCogs(commands.Cog):
             await ctx.send("**`Found Nothing to Snipe ;)`**")
     
     @commands.command(name='whois')
+    @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
