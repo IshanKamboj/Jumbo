@@ -11,13 +11,13 @@ def get_prefix(client,message):
     try:
         db = firebase.database()
         data = db.child('Prefixes').child(str(message.guild.id)).get()
-        return str(data.val()['Prefix']) 
+        return data.val()['Prefix'] 
     except:
         return "j!"
 
 intent = Intents().all()   
 
-bot = commands.AutoShardedBot(command_prefix=commands.when_mentioned_or(get_prefix),intents=intent,case_insensitive=True)
+bot = commands.AutoShardedBot(command_prefix=get_prefix,intents=intent,case_insensitive=True)
 bot.remove_command("help")
 
 
