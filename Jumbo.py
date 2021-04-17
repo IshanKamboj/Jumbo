@@ -17,7 +17,7 @@ def get_prefix(client,message):
 
 intent = Intents().all()   
 
-bot = commands.AutoShardedBot(command_prefix=get_prefix,intents=intent,case_insensitive=True)
+bot = commands.AutoShardedBot(command_prefix=commands.when_mentioned_or(get_prefix),intents=intent,case_insensitive=True)
 bot.remove_command("help")
 
 
