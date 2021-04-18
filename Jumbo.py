@@ -7,11 +7,13 @@ from helpEmbeds import HelpEmbeds
 from discord import Intents
 from Database.db_files import firebase
 #----------------------- Prefix getting and bot setup--------------------------------
+async def prefixes_for(g_id):
+    db = firebase.database()
+    data = db.child('Prefixes').child(str(g_id)).get()
+    return data.val()['Prefix']
 def get_prefix(client,message):
     try:
-        db = firebase.database()
-        data = db.child('Prefixes').child(str(message.guild.id)).get()
-        x = data.val()['Prefix']
+        x = await prefixes_for(message.guild.id)
         return commands.when_mentioned_or(*x)(client,message)
     except:
         return commands.when_mentioned_or("j!")(client,message)
