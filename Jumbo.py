@@ -11,9 +11,10 @@ def get_prefix(client,message):
     try:
         db = firebase.database()
         data = db.child('Prefixes').child(str(message.guild.id)).get()
-        return data.val()['Prefix']
+        x = data.val()['Prefix']
+        return commands.when_mentioned_or(x)(client,message)
     except:
-        return "j!"
+        return commands.when_mentioned_or("j!")(client,message)
 
 intent = Intents().all()   
 
@@ -27,14 +28,16 @@ bot.remove_command("help")
 @bot.group(invoke_without_command=True)
 async def help(ctx):
     color_list = random.randint(0,250),random.randint(0,250),random.randint(0,250) 
-
-    em = discord.Embed(title="Help",description="""
+    db = firebase.database()
+    data = db.child('Prefixes').child(str(ctx.guild.id)).get()
+    x = data.val()['Prefix']
+    em = discord.Embed(title="Help",description=f"""
     **Jumbo is a fun bot... use it to have fun with ur friends in the same server.**
 
 It also has many utility commands such as afk,dm,autreact. There are also fun commands.
 Don't forget levelling.... Jumbo also has a levelling system to check who's active or who's not.
 
-Default Prefix : `j!` (Mention to know the prefix of your server)
+Your Server Prefix : `{x}` (Mention to know the prefix of your server)
     
 Use *help <command> for extended information on a command
     

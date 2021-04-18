@@ -64,9 +64,9 @@ class AllListeners(commands.Cog):
         It also has many utility commands such as afk,dm,autreact. There are also fun commands.
         Don't forget levelling.... Jumbo also has a levelling system to check who's active or who's not.
 
-        Default Prefix : `j!` (Mention to know the prefix of your server)
+        Default Prefix : `j!` 
     
-        Use *help <command> for extended information on a command
+        Use `j!help` to get started.
     
         [** •Invite me**](https://discord.com/api/oauth2/authorize?client_id=805430097426513941&permissions=1008073792&scope=bot "Add the bot to your server")
         
@@ -121,9 +121,9 @@ class AllListeners(commands.Cog):
                         db.child("Last Seen").child(str(message.author.id)).update({"Time":str(datetime.utcnow())})
                 if message.content.startswith(prefix_data.val()['Prefix']):
                     return
-                elif message.content.startswith(self.bot.user.mention):
-                    em = (discord.Embed(description=f"Yo! My prefix here is `{prefix_data.val()['Prefix']}`. You can use `{prefix_data.val()['Prefix']}help` for more information",color=discord.Color.random()))
-                    await message.channel.send(embed = em)
+                # elif message.content.startswith(self.bot.user.mention):
+                #     em = (discord.Embed(description=f"Yo! My prefix here is `{prefix_data.val()['Prefix']}`. You can use `{prefix_data.val()['Prefix']}help` for more information",color=discord.Color.random()))
+                #     await message.channel.send(embed = em)
                 else:
                     isEnabled = db.child('Disabled').child(str(message.guild.id)).child("level").get()
                     if isEnabled.val() is None:
