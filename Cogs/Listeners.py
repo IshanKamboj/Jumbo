@@ -121,7 +121,7 @@ class AllListeners(commands.Cog):
                         db.child("Last Seen").child(str(message.author.id)).update({"Time":str(datetime.utcnow())})
                 if message.content.startswith(prefix_data.val()['Prefix']):
                     return
-                elif self.bot.user.mentioned_in(message):
+                elif message.content.startswith(self.bot.user.mention):
                     em = (discord.Embed(description=f"Yo! My prefix here is `{prefix_data.val()['Prefix']}`. You can use `{prefix_data.val()['Prefix']}help` for more information",color=discord.Color.random()))
                     await message.channel.send(embed = em)
                 else:
