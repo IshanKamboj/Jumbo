@@ -154,7 +154,7 @@ class AllListeners(commands.Cog):
                             await asyncio.sleep(2)
                         else:
                             pass
-            await self.bot.process_commands(message)
+            #await self.bot.process_commands(message)
     @commands.Cog.listener()
     async def on_command_error(self,ctx,error):
         if hasattr(ctx.command, 'on_error'):
