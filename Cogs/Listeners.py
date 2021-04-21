@@ -150,8 +150,8 @@ class AllListeners(commands.Cog):
                                     .set_thumbnail(url=f"{message.author.avatar_url}")
                                     )
                                     await message.channel.send(mention,embed=lvl_embed)
-                                db.child("Levels").child(str(message.guild.id)).child(str(message.author.id)).update({"exp":exp,"lvl":lvl})
-                            await asyncio.sleep(2)
+                                db.child("Levels").child(str(message.guild.id)).child(str(message.author.id)).update({"userName":str(message.author),"exp":exp,"lvl":lvl})
+                            #await asyncio.sleep(2)
                         else:
                             pass
             #await self.bot.process_commands(message)
