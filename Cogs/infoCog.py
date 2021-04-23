@@ -143,7 +143,7 @@ class InfoCogs(commands.Cog):
         if user == None:
             user = ctx.author
         em = discord.Embed(
-            description=f"[PNG](https://cdn.discordapp.com/avatars/{user.id}/{user.avatar}.png?size=1024) | [JPEG](https://cdn.discordapp.com/avatars/{user.id}/{user.avatar}.jpeg?size=1024) | [WEBP](https://cdn.discordapp.com/avatars/{user.id}/{user.avatar}.gif?size=1024)", color=discord.Color.random())
+            description=f"[PNG](https://cdn.discordapp.com/avatars/{user.id}/{user.avatar}.png?size=1024) | [JPEG](https://cdn.discordapp.com/avatars/{user.id}/{user.avatar}.jpeg?size=1024) | [WEBP]({user.avatar_url})", color=discord.Color.random())
         em.set_author(name=f"{user.name}'s avatar",
                         url=f"{user.avatar_url}")
         em.set_image(url=f"{user.avatar_url}")
