@@ -279,6 +279,7 @@ class Utility(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _poll(self,ctx,*,question:str):
+        await ctx.channel.purge(limit=1)
         msg = await ctx.send(f'**{str(ctx.author)} asks** {question}')
         await msg.add_reaction('👍')
         await msg.add_reaction('👎')

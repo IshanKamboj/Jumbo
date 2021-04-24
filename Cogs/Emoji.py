@@ -95,9 +95,8 @@ class emoji(commands.Cog):
 				webhook = utils.get(webhooks, name = "Imposter NQN")
 				if webhook is None:
 					webhook = await message.channel.create_webhook(name = "Imposter NQN")
-
-				await webhook.send(ret, username = message.author.name, avatar_url = message.author.avatar_url)
 				await message.delete()
+				await webhook.send(ret, username = message.author.name, avatar_url = message.author.avatar_url)
 	@commands.command(name="emojisearch",aliases=["esearch","emotesearch","emoji"])
 	@commands.guild_only()
 	@commands.check(AllListeners.check_enabled)

@@ -90,7 +90,7 @@ async def image(ctx):
     em = discord.Embed(title=":camera: | Image Commands",description="`Wanted`, `Rip`, `Wallpaper`",color=discord.Color.random())
     await ctx.send(embed=em)
 
-@help.command(name='calculation')
+@help.command(name='calculation',aliases=["calc"])
 async def calculation(ctx):
     em = discord.Embed(title=':triangular_ruler: | Calculation Commands',description="`Area`, `Volume`, `Factorial`",color=discord.Color.random())
     await ctx.send(embed=em)

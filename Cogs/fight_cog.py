@@ -55,11 +55,17 @@ class fights(commands.Cog):
                 if a == ctx.author:
                     await ctx.send(f"{ctx.author.name} fought with {user.name}. **{a.name} was punched in the face by {user.name} and knocked unconsicious. He is now muted for {mute_time} seconds.\n{user.name} was given 5 points for winning.**")
                     x = db.child('FightPoints').child(str(user.id)).get()
-                    db.child('FightPoints').child(str(user.id)).update({"points":x.val()["points"]+5})
+                    if x.val() is not None:
+                        db.child('FightPoints').child(str(user.id)).update({"points":x.val()["points"]+5})
+                    else:
+                        db.child('FightPoints').child(str(user.id)).set({"points":5})
                 else:
                     await ctx.send(f"{ctx.author.name} fought with {user.name}. **{a.name} was punched in the face by {ctx.author.name} and knocked unconsicious. He is now muted for {mute_time} seconds. \n{ctx.author.name} was given 5 points for winning.**")
                     x = db.child('FightPoints').child(str(ctx.author.id)).get()
-                    db.child('FightPoints').child(str(ctx.author.id)).update({"points":x.val()["points"]+5})
+                    if x.val() is not None:
+                        db.child('FightPoints').child(str(ctx.author.id)).update({"points":x.val()["points"]+5})
+                    else:
+                        db.child('FightPoints').child(str(ctx.author.id)).set({"points":5})
                 await a.add_roles(mutedRole)
                 await asyncio.sleep(mute_time)
                 
