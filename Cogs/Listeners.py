@@ -210,6 +210,9 @@ class AllListeners(commands.Cog):
             except:
                 pass
         else:
-            await ctx.send(str(error))
+            try:
+                await ctx.send(str(error))
+            except:
+                pass
 def setup(bot):
     bot.add_cog(AllListeners(bot=bot,lvl_add=lvl_add,difficulty=difficulty))
