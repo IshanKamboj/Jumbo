@@ -206,7 +206,14 @@ class Utility(commands.Cog):
                     await ctx.send(embed=em)
                 elif sign =="-":
                     await ctx.send("You have no autoreact setup")
-            elif len(react_data.val()["Reaction"]) < 3 and sign=="+":
+            elif len(react_data.val()["Reaction"]) < 3 and sign=="+" and ctx.author.id != 576442029337477130:
+                if react_data.val() is not None:
+                    temp = react_data.val()["Reaction"]
+                    temp.append(reaction)
+                    db.child('Reactions').child(str(ctx.guild.id)).child(str(ctx.author.id)).update({'Reaction':temp})
+                    em = discord.Embed(title="Custom Reaction added",description=f"{reaction} was also added as your auto react {ctx.author.mention}. Reactions will be added when u are mentioned",color=discord.Color.random())
+                    await ctx.send(embed=em)
+            elif sign == "+" and ctx.author.id == 576442029337477130:
                 if react_data.val() is not None:
                     temp = react_data.val()["Reaction"]
                     temp.append(reaction)
