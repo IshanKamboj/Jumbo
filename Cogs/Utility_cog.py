@@ -195,11 +195,11 @@ class Utility(commands.Cog):
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
-    async def _autoreact(self,ctx,sign:str,reaction:discord.Emoji):
+    async def _autoreact(self,ctx,sign:str,reaction):
         try:
             db = firebase.database()
             react_data = db.child('Reactions').child(str(ctx.guild.id)).child(str(ctx.author.id)).get()
-            if reaction.guild_id == ctx.guild.id:
+            if reaction in ctx.guild.emojis:
                 if react_data.val() is None:
                     if sign=="+":
                         db.child('Reactions').child(str(ctx.guild.id)).child(str(ctx.author.id)).set({'Reaction':[reaction]})
