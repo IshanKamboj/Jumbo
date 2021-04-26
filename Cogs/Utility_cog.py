@@ -199,7 +199,7 @@ class Utility(commands.Cog):
         try:
             db = firebase.database()
             react_data = db.child('Reactions').child(str(ctx.guild.id)).child(str(ctx.author.id)).get()
-            
+            print(ctx.guild.emojis)
             if react_data.val() is None:
                 if sign=="+":
                     db.child('Reactions').child(str(ctx.guild.id)).child(str(ctx.author.id)).set({'Reaction':[reaction]})
