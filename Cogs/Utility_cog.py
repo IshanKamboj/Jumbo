@@ -199,39 +199,38 @@ class Utility(commands.Cog):
         try:
             db = firebase.database()
             react_data = db.child('Reactions').child(str(ctx.guild.id)).child(str(ctx.author.id)).get()
-            if reaction in ctx.guild.emojis:
-                if react_data.val() is None:
-                    if sign=="+":
-                        db.child('Reactions').child(str(ctx.guild.id)).child(str(ctx.author.id)).set({'Reaction':[reaction]})
-                        em = discord.Embed(title="Custom Reaction added",description=f"{reaction} was added as an auto react for you {ctx.author.mention}. Reaction will be added when u are mentioned",color=discord.Color.random())
-                        await ctx.send(embed=em)
-                    elif sign =="-":
-                        await ctx.send("You have no autoreact setup")
-                elif len(react_data.val()["Reaction"]) < 3 and sign=="+" and ctx.author.id != 576442029337477130:
-                    if react_data.val() is not None:
-                        temp = react_data.val()["Reaction"]
-                        temp.append(reaction)
-                        db.child('Reactions').child(str(ctx.guild.id)).child(str(ctx.author.id)).update({'Reaction':temp})
-                        em = discord.Embed(title="Custom Reaction added",description=f"{reaction} was also added as your auto react {ctx.author.mention}. Reactions will be added when u are mentioned",color=discord.Color.random())
-                        await ctx.send(embed=em)
-                elif sign == "+" and ctx.author.id == 576442029337477130:
-                    if react_data.val() is not None:
-                        temp = react_data.val()["Reaction"]
-                        temp.append(reaction)
-                        db.child('Reactions').child(str(ctx.guild.id)).child(str(ctx.author.id)).update({'Reaction':temp})
-                        em = discord.Embed(title="Custom Reaction added",description=f"{reaction} was also added as your auto react {ctx.author.mention}. Reactions will be added when u are mentioned",color=discord.Color.random())
-                        await ctx.send(embed=em)
-                elif sign == "-":
-                    if react_data.val() is not None:
-                        temp = react_data.val()["Reaction"]
-                        temp.remove(reaction)
-                        db.child('Reactions').child(str(ctx.guild.id)).child(str(ctx.author.id)).update({'Reaction':temp})
-                        em = discord.Embed(title="Custom Reaction removed",description=f"{reaction} was removed as your auto react {ctx.author.mention}.",color=discord.Color.random())
-                        await ctx.send(embed=em)
-                else:
-                    await ctx.send("**You can only add upto 3 autoreacts.**")
+            
+            if react_data.val() is None:
+                if sign=="+":
+                    db.child('Reactions').child(str(ctx.guild.id)).child(str(ctx.author.id)).set({'Reaction':[reaction]})
+                    em = discord.Embed(title="Custom Reaction added",description=f"{reaction} was added as an auto react for you {ctx.author.mention}. Reaction will be added when u are mentioned",color=discord.Color.random())
+                    await ctx.send(embed=em)
+                elif sign =="-":
+                    await ctx.send("You have no autoreact setup")
+            elif len(react_data.val()["Reaction"]) < 3 and sign=="+" and ctx.author.id != 576442029337477130:
+                if react_data.val() is not None:
+                    temp = react_data.val()["Reaction"]
+                    temp.append(reaction)
+                    db.child('Reactions').child(str(ctx.guild.id)).child(str(ctx.author.id)).update({'Reaction':temp})
+                    em = discord.Embed(title="Custom Reaction added",description=f"{reaction} was also added as your auto react {ctx.author.mention}. Reactions will be added when u are mentioned",color=discord.Color.random())
+                    await ctx.send(embed=em)
+            elif sign == "+" and ctx.author.id == 576442029337477130:
+                if react_data.val() is not None:
+                    temp = react_data.val()["Reaction"]
+                    temp.append(reaction)
+                    db.child('Reactions').child(str(ctx.guild.id)).child(str(ctx.author.id)).update({'Reaction':temp})
+                    em = discord.Embed(title="Custom Reaction added",description=f"{reaction} was also added as your auto react {ctx.author.mention}. Reactions will be added when u are mentioned",color=discord.Color.random())
+                    await ctx.send(embed=em)
+            elif sign == "-":
+                if react_data.val() is not None:
+                    temp = react_data.val()["Reaction"]
+                    temp.remove(reaction)
+                    db.child('Reactions').child(str(ctx.guild.id)).child(str(ctx.author.id)).update({'Reaction':temp})
+                    em = discord.Embed(title="Custom Reaction removed",description=f"{reaction} was removed as your auto react {ctx.author.mention}.",color=discord.Color.random())
+                    await ctx.send(embed=em)
             else:
-                await ctx.send("**You can add only this servers emojis or Discord emojis**")
+                await ctx.send("**You can only add upto 3 autoreacts.**")
+            
         except Exception as e:
             pass
 
