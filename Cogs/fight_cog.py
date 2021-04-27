@@ -109,7 +109,7 @@ class fights(commands.Cog):
                 await ctx.send(f"{ctx.author.mention} **U cannot shoot me......LMAO**")
             else:
                 if ctx.author == user:
-                    await ctx.send(f"{ctx.author.name} takes out a pistol and shoots himself. **He is now muted for 60 minutes**")
+                    await ctx.send(f"{ctx.author.name} takes out a pistol and shoots himself. **He's on the brink of death. Type `hospital` in the next 10 seconds to save him.**")
                 elif ctx.author == a:
                     await ctx.send(f"{ctx.author.name} tried to shoot {user.name} but did not know how to use the gun. **He shot himself and is on the brink of death**\n **Type `hospital` in next 10 seconds to save him.**")
                 else:
