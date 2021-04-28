@@ -47,6 +47,7 @@ Use *help <command> for extended information on a command
     em.add_field(name=":tools: | Utility Commands", value="`*help utility`")
     em.add_field(name=":lock: | Admin Commands",value="`*help admin`")
     em.add_field(name=":joystick: | Fun Commands",value="`*help fun`")
+    em.add_field(name=":headphones: | Music Commands",value="`*help music`")
     em.add_field(name=":karate_uniform: | Fight Commands",value='`*help fights`')
     em.add_field(name=":hugging: | Action Commands",value="`*help action`")
     em.add_field(name=":mag: | Info Commands",value="`*help info`")
@@ -69,7 +70,10 @@ async def admin(ctx):
 async def fun(ctx):
     em = discord.Embed(title=":joystick: | Fun Commands",description="`Fact`, `Truth`, `Dare`, `8ball`, `Opinion`, `Roast`, `Joke`, `Gayrate`",color=discord.Color.random())
     await ctx.send(embed=em)
-
+@help.command(name="music")
+async def music(ctx):
+    em = discord.Embed(title=":headphones: | Music Commands",description="`Play`, `Connect`, `Disconnect`, `Skip`, `Previous`, `Queue`, `Pause`, `Resume`, `Stop`, `Shuffle`, `Loop`, `Song`")
+    await ctx.send(embed=em)
 @help.command(name="fights")
 async def fight_help(ctx):
     em = discord.Embed(title=":karate_uniform: | Fight Commands",description="`Fight`, `Shoot`, `Train`, `Profile`, `Buy`, `Shop`",color=discord.Color.random())
@@ -348,6 +352,57 @@ async def report(ctx):
 @help.command(name="pokedex",aliases=["pokesearch","pokemon"])
 async def pokedex(ctx):
     await ctx.send(embed=HelpEmbeds.pokedex_embed())
+
+#------------- Music Help ------------------
+@help.commmand(name="play",aliases=["p"])
+async def play(ctx):
+    await ctx.send(embed=HelpEmbeds.play_embed())
+
+@help.commmand(name="queue",aliases=["q"])
+async def queue(ctx):
+    await ctx.send(embed=HelpEmbeds.queue_embed())
+
+@help.commmand(name="connect",aliases=["join"])
+async def connect(ctx):
+    await ctx.send(embed=HelpEmbeds.connect_embed())
+    
+@help.commmand(name="disconnect",aliases=["leave","dc"])
+async def disconnect(ctx):
+    await ctx.send(embed=HelpEmbeds.disconnect_embed())
+
+@help.commmand(name="pause")
+async def pause(ctx):
+    await ctx.send(embed=HelpEmbeds.pause_embed())
+
+@help.commmand(name="resume")
+async def resume(ctx):
+    await ctx.send(embed=HelpEmbeds.resume_embed())
+
+@help.commmand(name="stop")
+async def stop(ctx):
+    await ctx.send(embed=HelpEmbeds.stop_embed())
+
+@help.commmand(name="next",aliases=["skip"])
+async def next(ctx):
+    await ctx.send(embed=HelpEmbeds.next_embed())
+
+@help.commmand(name="previous",aliases=["back"])
+async def previous(ctx):
+    await ctx.send(embed=HelpEmbeds.previous_embed())
+
+@help.commmand(name="shuffle")
+async def shuffle(ctx):
+    await ctx.send(embed=HelpEmbeds.shuffle_embed())
+    
+@help.commmand(name="repeat",aliases=["loop"])
+async def repeat(ctx):
+    await ctx.send(embed=HelpEmbeds.loop_embed())
+
+@help.commmand(name="nowplaying",aliases=["now","np","song"])
+async def nowplaying(ctx):
+    await ctx.send(embed=HelpEmbeds.nowplaying_embed())
+
+
 #####################################    LOADING COGS    #########################################################
 for filename in os.listdir('./Cogs'):
     if filename.endswith('.py'):

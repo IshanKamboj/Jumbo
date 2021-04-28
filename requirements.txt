@@ -19,7 +19,6 @@ dataclasses-json==0.5.2
 dblpy==0.4.0
 discord==1.0.1
 discord.py==1.7.1
-Django==3.1.7
 dnspython==2.1.0
 fire==0.3.1
 futures==3.1.1
@@ -57,7 +56,6 @@ pycodestyle==2.7.0
 pycparser==2.20
 pycryptodome==3.10.1
 PyDictionary==2.0.1
-pygame==2.0.1
 pyjokes==0.6.0
 pymongo==3.11.3
 PyNaCl==1.4.0
@@ -87,6 +85,7 @@ typing-inspect==0.6.0
 ujson==4.0.2
 uritemplate==3.0.1
 urllib3==1.26.3
+wavelink==0.9.9
 wget==3.2
 wikipedia==1.4.0
 yarl==1.5.1

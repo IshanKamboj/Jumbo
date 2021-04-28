@@ -267,3 +267,53 @@ class HelpEmbeds():
         em = discord.Embed(title=":closed_book: Pokedex",description="Search for Pokemon in the pokedex.")
         em.add_field(name="Syntax",value="*pokedex <name/query>")
         return em
+    
+    #----------------- Music Commands Help ---------------------------
+    def play_embed():
+        em = discord.Embed(title=":play_pause: Play",description="Plays a music from youtube for the given query or link.")
+        em.add_field(name="Syntax",value="*p <query/link>")
+        return em
+    def pause_embed():
+        em = discord.Embed(title=":play_pause: Pause",description="Pauses the currently playing music.")
+        em.add_field(name="Syntax",value="*pause")
+        return em
+    def resume_embed():
+        em = discord.Embed(title=":play_pause: Resume",description="Resumes the currently paused music.")
+        em.add_field(name="Syntax",value="*resume")
+        return em
+    def stop_embed():
+        em = discord.Embed(title=":stop_button: Stop",description="Stops the currently playing music and clears the queue.")
+        em.add_field(name="Syntax",value="*stop")
+        return em
+    def queue_embed():
+        em = discord.Embed(title=":pencil: Queue",description="Shows the current queue")
+        em.add_field(name="Syntax",value="*q")
+        return em
+    def shuffle_embed():
+        em = discord.Embed(title=":twisted_rightwards_arrows: Shuffle",description="Shuffles the current queue.")
+        em.add_field(name="Syntax",value="*shuffle")
+        return em
+    def loop_embed():
+        em = discord.Embed(title=":repeat: Loop",description="Loops the current song or queue.")
+        em.add_field(name="Syntax",value="*loop <song/queue/none>")
+        return em
+    def skip_embed():
+        em = discord.Embed(title=":track_next: Skip",description="Skips the current song.")
+        em.add_field(name="Syntax",value="*skip")
+        return em
+    def previous_embed():
+        em = discord.Embed(title=":track_previous: Previous",description="Plays the previous the song.")
+        em.add_field(name="Syntax",value="*previous")
+        return em
+    def connect_embed():
+        em = discord.Embed(title=":arrows_counterclockwise: Connect",description="Connects to the specified voice channel.")
+        em.add_field(name="Syntax",value="*join <channel>")
+        return em
+    def disconnect_embed():
+        em = discord.Embed(title=":arrows_counterclockwise: Disconnect",description="Leaves the joined voice channel.")
+        em.add_field(name="Syntax",value="*leave")
+        return em
+    def nowplaying_embed():
+        em = discord.Embed(title=":musical_note: Song",description="Shows the currently playing song.")
+        em.add_field(name="Syntax",value="*song|np|now|nowplaying")
+        return em
