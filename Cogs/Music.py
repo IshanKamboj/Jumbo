@@ -539,24 +539,6 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
             player.queue.set_repeat_mode(mode.lower())
             embed = discord.Embed(description=f"Looping set to: `{mode}`",color=discord.Color.random())
             await ctx.send(embed=embed)
-    @commands.command(name="ping")
-    async def _ping(self, ctx):
-        lat = round((self.bot.latency)*1000)
-        em = discord.Embed(title=":ping_pong: | Pong!")
-        if lat < 150:
-            em.color = 0x008000
-            em.add_field(name="DWSP Latency:",value=f"`{lat}ms.`")
-        elif lat >= 150:
-            em.color = 0xffff00
-            em.add_field(name="DWSP Latency:",value=f"`{lat}ms.`")
-        else:
-            em.color = 0xff0000
-            em.add_field(name="DWSP Latency:",value=f"`{lat}ms.`")
-        start = time()
-        message = await ctx.send(embed=em)
-        end = time()
-        em.add_field(name="Response Time:",value=f"`{(end-start)*1000:,.0f} ms.`")
-        await message.edit(embed=em)
     @commands.command(name="nowplaying",aliases=["now","np","song"])
     async def nowplaying_command(self,ctx):
         player = self.get_player(ctx)
