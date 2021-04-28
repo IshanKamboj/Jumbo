@@ -562,7 +562,7 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
             await ctx.send("You need to specify the index of song to remove.")
         else:
             player = self.get_player(ctx)
-            player.queue._queue.remove(index)
+            player.queue._queue.pop(index)
             await ctx.message.add_reaction("✅")
 
     @commands.command(name="move")
