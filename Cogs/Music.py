@@ -359,6 +359,8 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
         current_page = 1
         entries = player.queue.length-1
         pages = math.ceil(entries / items_per_page)
+        if pages == 0:
+            pages=1
         #print(pages)
         if player.queue.is_empty:
             raise QueueIsEmpty
@@ -548,8 +550,8 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
         timestamp=dt.datetime.utcnow()
         )
         embed.set_thumbnail(url=player.queue.current_track.thumb)
-        hrs = (player.queue.queue_duration//60000)//60
-        embed.add_field(name=":hourglass: Duration",value=f"{hrs}:{(player.queue.queue_duration//60000)-(60*hrs)}:{str(player.queue.queue_duration%60).zfill(2)}")
+        hrs = (player.queue.current_track.duration//60000)//60
+        embed.add_field(name=":hourglass: Duration",value=f"{hrs}:{(player.queue.current_track.duration//60000)-(60*hrs)}:{str(player.queue.current_track.duration%60).zfill(2)}")
         #embed.add_field(name="Duration",value=f"{player.queue.cuurrent_track.length//60000}:{str(track.length%60).zfill(2)}")
         embed.add_field(name=":bust_in_silhouette: Author",value=f"{player.queue.current_track.author}")
         #embed.add_field(name="Requested by:",value=f"{ctx.author.mention}")
