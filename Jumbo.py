@@ -354,51 +354,51 @@ async def pokedex(ctx):
     await ctx.send(embed=HelpEmbeds.pokedex_embed())
 
 #------------- Music Help ------------------
-@help.commmand(name="play",aliases=["p"])
+@help.command(name="play",aliases=["p"])
 async def play(ctx):
     await ctx.send(embed=HelpEmbeds.play_embed())
 
-@help.commmand(name="queue",aliases=["q"])
+@help.command(name="queue",aliases=["q"])
 async def queue(ctx):
     await ctx.send(embed=HelpEmbeds.queue_embed())
 
-@help.commmand(name="connect",aliases=["join"])
+@help.command(name="connect",aliases=["join"])
 async def connect(ctx):
     await ctx.send(embed=HelpEmbeds.connect_embed())
     
-@help.commmand(name="disconnect",aliases=["leave","dc"])
+@help.command(name="disconnect",aliases=["leave","dc"])
 async def disconnect(ctx):
     await ctx.send(embed=HelpEmbeds.disconnect_embed())
 
-@help.commmand(name="pause")
+@help.command(name="pause")
 async def pause(ctx):
     await ctx.send(embed=HelpEmbeds.pause_embed())
 
-@help.commmand(name="resume")
+@help.command(name="resume")
 async def resume(ctx):
     await ctx.send(embed=HelpEmbeds.resume_embed())
 
-@help.commmand(name="stop")
+@help.command(name="stop")
 async def stop(ctx):
     await ctx.send(embed=HelpEmbeds.stop_embed())
 
-@help.commmand(name="next",aliases=["skip"])
+@help.command(name="next",aliases=["skip"])
 async def next(ctx):
     await ctx.send(embed=HelpEmbeds.next_embed())
 
-@help.commmand(name="previous",aliases=["back"])
+@help.command(name="previous",aliases=["back"])
 async def previous(ctx):
     await ctx.send(embed=HelpEmbeds.previous_embed())
 
-@help.commmand(name="shuffle")
+@help.command(name="shuffle")
 async def shuffle(ctx):
     await ctx.send(embed=HelpEmbeds.shuffle_embed())
     
-@help.commmand(name="repeat",aliases=["loop"])
+@help.command(name="repeat",aliases=["loop"])
 async def repeat(ctx):
     await ctx.send(embed=HelpEmbeds.loop_embed())
 
-@help.commmand(name="nowplaying",aliases=["now","np","song"])
+@help.command(name="nowplaying",aliases=["now","np","song"])
 async def nowplaying(ctx):
     await ctx.send(embed=HelpEmbeds.nowplaying_embed())
 
