@@ -317,3 +317,11 @@ class HelpEmbeds():
         em = discord.Embed(title=":musical_note: Song",description="Shows the currently playing song.")
         em.add_field(name="Syntax",value="*song|np|now|nowplaying")
         return em
+    def move_embed():
+        em = discord.Embed(title=":left_right_arrow: Move",description="Moves the song to the specified index.")
+        em.add_field(name="Syntax",value="*move <old_index> <new_index>")
+        return em
+    def removesong_embed():
+        em = discord.Embed(title=":x: Remove",description="Removes the song from the specified index.")
+        em.add_field(name="Syntax",value="*rs <index>")
+        return em

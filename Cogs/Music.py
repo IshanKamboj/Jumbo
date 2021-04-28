@@ -556,6 +556,25 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
         embed.add_field(name=":bust_in_silhouette: Author",value=f"{player.queue.current_track.author}")
         #embed.add_field(name="Requested by:",value=f"{ctx.author.mention}")
         await ctx.send(embed=embed)
+    @commands.command(name="removesong",aliases=["rs"])
+    async def removesong(self,ctx,index:int):
+        if index is None:
+            await ctx.send("You need to specify the index of song to remove.")
+        else:
+            player = self.get_player(ctx)
+            player.queue._queue.remove(index)
+            await ctx.message.add_reaction("✅")
+
+    @commands.command(name="move")
+    async def move_command(self,ctx,index1:int,index2:int):
+        if index1 is None or index2 is None:
+            raise commands.MissingRequiredArgument
+        player = self.get_player(ctx)
+        x = player.queue._queue.pop(index1)
+        y = player.queue._queue.pop(index2)
+        player.queue._queue.insert(index2, x)
+        player.queue._queue.insert(index1, y)
+        await ctx.message.add_reaction("✅")
 def setup(bot):
     bot.add_cog(Music(bot))
 

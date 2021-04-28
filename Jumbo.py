@@ -402,6 +402,13 @@ async def repeat(ctx):
 async def nowplaying(ctx):
     await ctx.send(embed=HelpEmbeds.nowplaying_embed())
 
+@help.command(name="removesong",aliases=["rs"])
+async def removesong(ctx):
+    await ctx.send(embed=HelpEmbeds.removesong_embed())
+
+@help.command(name="move")
+async def move(ctx):
+    await ctx.send(embed=HelpEmbeds.move_embed())
 
 #####################################    LOADING COGS    #########################################################
 for filename in os.listdir('./Cogs'):
