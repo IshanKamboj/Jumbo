@@ -589,14 +589,6 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
         player.queue._queue.insert(index1, y)
         await ctx.message.add_reaction("✅")
     
-    @commands.command(name="volume",aliases=["setvolume","loudness"])
-    async def volume_command(self,ctx,vol:int):
-        player = self.get_player(ctx)
-        if 0 <= vol <=100:
-            player.volume = vol
-            await ctx.send(f"Volume of the player set to: {vol}%")
-        else:
-            await ctx.send("Volume must be between 0 and 100.")
     
     @commands.command(name="bassboost",aliases=["boost","bass"])
     async def bassboost_command(self,ctx):
