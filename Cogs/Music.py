@@ -392,7 +392,7 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
                 embed.add_field(name=":hourglass: Duration",value=f"{hrs}:{(player.queue.queue_duration//60000)-(60*hrs)}:{str(player.queue.queue_duration%60).zfill(2)}")
             else:
                 embed.add_field(name=":hourglass: Duration",value=f"{player.queue.queue_duration//60000}:{str(player.queue.queue_duration%60).zfill(2)}")
-            embed.add_field(name=":pencil: Entries",value=f"{player.queue.length-1}")
+            embed.add_field(name=":pencil: Entries",value=f"{entries}")
             if player.queue.repeat_mode == RepeatMode.ALL:
                 embed.add_field(name="Looping:",value=f"🔁`Queue`")
             elif player.queue.repeat_mode == RepeatMode.SONG:
