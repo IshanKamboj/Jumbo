@@ -70,7 +70,10 @@ class Queue:
             return self._queue[self.position]
     @property
     def current_queue_length(self):
-        return len(self._queue[self.position+1:])
+        if self.repeat_mode == RepeatMode.NONE or self.repeat_mode == RepeatMode.SONG:
+            return len(self._queue[self.position+1:])
+        else:
+            return len(self._queue)-1
     @property
     def queue_duration(self):
         if not self._queue:
@@ -174,39 +177,64 @@ class Player(wavelink.Player):
         
         if isinstance(tracks, wavelink.TrackPlaylist):
             self.queue.add(*tracks.tracks)
-        elif len(tracks) == 1:
+        else:
             self.queue.add(tracks[0])
             
-            await ctx.send(f"Added **{tracks[0].title}** to the queue")
-        else:
-            if (track := await self.choose_track(ctx, tracks)) is not None:
-                self.queue.add(track)
-                if not self.is_playing and not self.queue.is_empty:
+            if not self.is_playing and not self.queue.is_empty:
                     
-                    # print(track.author)
-                    # print(track.duration)
-                    # print(track.info)
-                    # print(track.thumb)
-                    # print(track.length)
-                    # print(track.uri)
-                    # print(track.ytid)
+                # print(track.author)
+                # print(track.duration)
+                # print(track.info)
+                # print(track.thumb)
+                # print(track.length)
+                # print(track.uri)
+                # print(track.ytid)
 
-                    embed = discord.Embed(title="Now Playing",
-                    description=f"[**{track.title}**]({track.uri})",
-                    color=discord.Color.random(),
-                    timestamp=dt.datetime.utcnow()
-                    )
-                    embed.set_thumbnail(url=track.thumb)
-                    embed.add_field(name="Duration",value=f"{track.length//60000}:{str(track.length%60).zfill(2)}")
-                    embed.add_field(name="Author",value=f"{track.author}")
-                    embed.add_field(name="Requested by:",value=f"{ctx.author.mention}")
-                    await ctx.send(embed=embed)
-                else:
-                    embed = discord.Embed(title="Music Queue",
-                    description=f"Added [**{track.title}**]({track.uri}) to queue.",
-                    color=discord.Color.random()
-                    )
-                    await ctx.send(embed=embed)
+                embed = discord.Embed(title="Now Playing",
+                description=f"[**{tracks[0].title}**]({tracks[0].uri})",
+                color=discord.Color.random(),
+                timestamp=dt.datetime.utcnow()
+                )
+                embed.set_thumbnail(url=track.thumb)
+                embed.add_field(name="Duration",value=f"{tracks[0].length//60000}:{str(tracks[0].length%60).zfill(2)}")
+                embed.add_field(name="Author",value=f"{tracks[0].author}")
+                embed.add_field(name="Requested by:",value=f"{ctx.author.mention}")
+                await ctx.send(embed=embed)
+            else:
+                embed = discord.Embed(title="Music Queue",
+                description=f"Added [**{tracks[0].title}**]({tracks[0].uri}) to queue.",
+                color=discord.Color.random()
+                )
+                await ctx.send(embed=embed)
+        # else:
+        #     if (track := await self.choose_track(ctx, tracks)) is not None:
+        #         self.queue.add(track)
+        #         if not self.is_playing and not self.queue.is_empty:
+                    
+        #             # print(track.author)
+        #             # print(track.duration)
+        #             # print(track.info)
+        #             # print(track.thumb)
+        #             # print(track.length)
+        #             # print(track.uri)
+        #             # print(track.ytid)
+
+        #             embed = discord.Embed(title="Now Playing",
+        #             description=f"[**{track.title}**]({track.uri})",
+        #             color=discord.Color.random(),
+        #             timestamp=dt.datetime.utcnow()
+        #             )
+        #             embed.set_thumbnail(url=track.thumb)
+        #             embed.add_field(name="Duration",value=f"{track.length//60000}:{str(track.length%60).zfill(2)}")
+        #             embed.add_field(name="Author",value=f"{track.author}")
+        #             embed.add_field(name="Requested by:",value=f"{ctx.author.mention}")
+        #             await ctx.send(embed=embed)
+        #         else:
+        #             embed = discord.Embed(title="Music Queue",
+        #             description=f"Added [**{track.title}**]({track.uri}) to queue.",
+        #             color=discord.Color.random()
+        #             )
+        #             await ctx.send(embed=embed)
             
         if not self.is_playing and not self.queue.is_empty:
             await self.start_playback()
