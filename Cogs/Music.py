@@ -363,11 +363,10 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
         items_per_page = 5
         current_page = 1
         entries = player.queue.length-1
-        pages = math.ceil(entries / items_per_page)
-        if pages == 0:
-            pages = 1
+        if entries == 0:
+            pages = math.ceil(1 / items_per_page)
         else:
-            pages = math.ceil(entries / items_per_page) 
+            pages = math.ceil(entries / items_per_page)
         #print(pages)
         if player.queue.is_empty:
             raise QueueIsEmpty
