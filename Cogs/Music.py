@@ -69,6 +69,9 @@ class Queue:
         if self.position <= len(self._queue) - 1:
             return self._queue[self.position]
     @property
+    def current_queue_length(self):
+        return len(self._queue[self.position+1:])
+    @property
     def queue_duration(self):
         if not self._queue:
             raise QueueIsEmpty
@@ -362,7 +365,7 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
         show = 5
         items_per_page = 5
         current_page = 1
-        entries = player.queue.length-1
+        entries = player.queue.current_queue_length
         if entries == 0:
             pages = math.ceil(1 / items_per_page)
         else:
