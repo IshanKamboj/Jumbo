@@ -72,7 +72,7 @@ async def fun(ctx):
     await ctx.send(embed=em)
 @help.command(name="music")
 async def music(ctx):
-    em = discord.Embed(title=":headphones: | Music Commands",description="`Play`, `Connect`, `Disconnect`, `Skip`, `Previous`, `Queue`, `Pause`, `Resume`, `Stop`, `Shuffle`, `Loop`, `Song`")
+    em = discord.Embed(title=":headphones: | Music Commands",description="`Play`, `Connect`, `Disconnect`, `Skip`, `Previous`, `Queue`, `Pause`, `Resume`, `Stop`, `Shuffle`, `Loop`, `Song`, `Volume`, `Baseboost`")
     await ctx.send(embed=em)
 @help.command(name="fights")
 async def fight_help(ctx):

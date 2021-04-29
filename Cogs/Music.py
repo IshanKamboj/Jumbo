@@ -152,7 +152,12 @@ class Player(wavelink.Player):
 
         await super().connect(channel.id)
         return channel
-
+    async def set_volume(self, vol:int):
+        if vol > 100:
+            self.volume = 1000
+        else:
+            volume = vol*10
+            self.volume = volume
     async def teardown(self):
         try:
             self.queue.repeat_mode = RepeatMode.NONE
@@ -360,7 +365,9 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
         entries = player.queue.length-1
         pages = math.ceil(entries / items_per_page)
         if pages == 0:
-            pages=1
+            pages = 1
+        else:
+            pages = math.ceil(entries / items_per_page) 
         #print(pages)
         if player.queue.is_empty:
             raise QueueIsEmpty
@@ -390,6 +397,11 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
                 embed.add_field(name="Looping:",value=f"🔂`Song`")
             else:
                 embed.add_field(name="Looping:",value=f"`None`")
+            if player.equalizer.name == "Boost":
+                embed.add_field(name="Bass Booster",value=":white_check_mark:",inline=False)
+            else:
+                embed.add_field(name="Bass Booster",value=":x:", inline=False)
+            
         elif not player.queue.current_track:
             embed.add_field(
             name="Currently playing",
@@ -443,7 +455,7 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
                     pages = math.ceil(entries / items_per_page)
                     start = (current_page - 1) * items_per_page
                     end = start + items_per_page
-                    embed.remove_field(4)
+                    embed.remove_field(5)
                     #em = discord.Embed(title=f"Search Results for: {query}",description="",color=discord.Color.random())
                     embed.add_field(
                     name="Next up",
@@ -541,6 +553,7 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
             player.queue.set_repeat_mode(mode.lower())
             embed = discord.Embed(description=f"Looping set to: `{mode}`",color=discord.Color.random())
             await ctx.send(embed=embed)
+
     @commands.command(name="nowplaying",aliases=["now","np","song"])
     async def nowplaying_command(self,ctx):
         player = self.get_player(ctx)
@@ -556,7 +569,7 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
         embed.add_field(name=":bust_in_silhouette: Author",value=f"{player.queue.current_track.author}")
         #embed.add_field(name="Requested by:",value=f"{ctx.author.mention}")
         await ctx.send(embed=embed)
-    @commands.command(name="removesong",aliases=["rs"])
+    @commands.command(name="removesong",aliases=["rs","remove"])
     async def removesong(self,ctx,index:int):
         if index is None:
             await ctx.send("You need to specify the index of song to remove.")
@@ -575,6 +588,29 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
         player.queue._queue.insert(index2, x)
         player.queue._queue.insert(index1, y)
         await ctx.message.add_reaction("✅")
+    
+    @commands.command(name="volume",aliases=["setvolume","loudness"])
+    async def volume_command(self,ctx,vol:int):
+        player = self.get_player(ctx)
+        if 0 <= vol <=100:
+            player.volume = vol
+            await ctx.send(f"Volume of the player set to: {vol}%")
+        else:
+            await ctx.send("Volume must be between 0 and 100.")
+    
+    @commands.command(name="bassboost",aliases=["boost","bass"])
+    async def bassboost_command(self,ctx):
+        player = self.get_player(ctx)
+        #player.current
+        if player.equalizer.name != "Boost":
+            # equaliser = [(0, -0.075), (1, .125), (2, .125), (3, .1), (4, .1),
+            #       (5, .05), (6, 0.075), (7, .0), (8, .0), (9, .0),
+            #       (10, .0), (11, .0), (12, .125), (13, .15), (14, .05)]
+            await player.set_eq(wavelink.eqs.Equalizer.boost())
+            await ctx.send("Bass boosted mode turned on.")
+        elif player.equalizer.name == "Boost":
+            await player.set_eq(wavelink.eqs.Equalizer.flat())
+            await ctx.send("Bass boosted mode turned off.")
 def setup(bot):
     bot.add_cog(Music(bot))
 
