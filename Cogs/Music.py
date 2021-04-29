@@ -181,7 +181,7 @@ class Player(wavelink.Player):
             self.queue.add(tracks[0])
             
             if not self.is_playing and not self.queue.is_empty:
-                    
+                track = tracks[0]
                 # print(track.author)
                 # print(track.duration)
                 # print(track.info)
@@ -195,7 +195,7 @@ class Player(wavelink.Player):
                 color=discord.Color.random(),
                 timestamp=dt.datetime.utcnow()
                 )
-                embed.set_thumbnail(url=track.thumb)
+                embed.set_thumbnail(url=tracks[0].thumb)
                 embed.add_field(name="Duration",value=f"{tracks[0].length//60000}:{str(tracks[0].length%60).zfill(2)}")
                 embed.add_field(name="Author",value=f"{tracks[0].author}")
                 embed.add_field(name="Requested by:",value=f"{ctx.author.mention}")
