@@ -69,12 +69,6 @@ class Queue:
         if self.position <= len(self._queue) - 1:
             return self._queue[self.position]
     @property
-    def current_queue_length(self):
-        if self.repeat_mode == RepeatMode.NONE or self.repeat_mode == RepeatMode.SONG:
-            return len(self._queue[self.position+1:])
-        else:
-            return len(self._queue)-1
-    @property
     def queue_duration(self):
         if not self._queue:
             raise QueueIsEmpty
@@ -178,64 +172,29 @@ class Player(wavelink.Player):
         if isinstance(tracks, wavelink.TrackPlaylist):
             self.queue.add(*tracks.tracks)
         else:
-            self.queue.add(tracks[0])
-            
+            track = tracks[0]
+            track.info["requester"] = ctx.author.mention
+            requester = track.info["requester"]
+            self.queue.add(track)
             if not self.is_playing and not self.queue.is_empty:
-                track = tracks[0]
-                # print(track.author)
-                # print(track.duration)
-                # print(track.info)
-                # print(track.thumb)
-                # print(track.length)
-                # print(track.uri)
-                # print(track.ytid)
-
+                
                 embed = discord.Embed(title="Now Playing",
-                description=f"[**{tracks[0].title}**]({tracks[0].uri})",
+                description=f"[**{track.title}**]({track.uri})",
                 color=discord.Color.random(),
                 timestamp=dt.datetime.utcnow()
                 )
-                embed.set_thumbnail(url=tracks[0].thumb)
-                embed.add_field(name="Duration",value=f"{tracks[0].length//60000}:{str(tracks[0].length%60).zfill(2)}")
-                embed.add_field(name="Author",value=f"{tracks[0].author}")
-                embed.add_field(name="Requested by:",value=f"{ctx.author.mention}")
+                embed.set_thumbnail(url=track.thumb)
+                embed.add_field(name="Duration",value=f"{track.length//60000}:{str(track.length%60).zfill(2)}")
+                embed.add_field(name="Author",value=f"{track.author}")
+                embed.add_field(name="Requested by:",value=f"{requester}")
                 await ctx.send(embed=embed)
             else:
                 embed = discord.Embed(title="Music Queue",
-                description=f"Added [**{tracks[0].title}**]({tracks[0].uri}) to queue.",
+                description=f"Added [**{track.title}**]({track.uri}) to queue.",
                 color=discord.Color.random()
                 )
                 await ctx.send(embed=embed)
-        # else:
-        #     if (track := await self.choose_track(ctx, tracks)) is not None:
-        #         self.queue.add(track)
-        #         if not self.is_playing and not self.queue.is_empty:
-                    
-        #             # print(track.author)
-        #             # print(track.duration)
-        #             # print(track.info)
-        #             # print(track.thumb)
-        #             # print(track.length)
-        #             # print(track.uri)
-        #             # print(track.ytid)
-
-        #             embed = discord.Embed(title="Now Playing",
-        #             description=f"[**{track.title}**]({track.uri})",
-        #             color=discord.Color.random(),
-        #             timestamp=dt.datetime.utcnow()
-        #             )
-        #             embed.set_thumbnail(url=track.thumb)
-        #             embed.add_field(name="Duration",value=f"{track.length//60000}:{str(track.length%60).zfill(2)}")
-        #             embed.add_field(name="Author",value=f"{track.author}")
-        #             embed.add_field(name="Requested by:",value=f"{ctx.author.mention}")
-        #             await ctx.send(embed=embed)
-        #         else:
-        #             embed = discord.Embed(title="Music Queue",
-        #             description=f"Added [**{track.title}**]({track.uri}) to queue.",
-        #             color=discord.Color.random()
-        #             )
-        #             await ctx.send(embed=embed)
-            
+        await ctx.message.add_reaction("✅")
         if not self.is_playing and not self.queue.is_empty:
             await self.start_playback()
         
@@ -299,13 +258,12 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
         self.bot = bot
         self.wavelink = wavelink.Client(bot=bot)
         self.bot.loop.create_task(self.start_nodes())
-
-    @commands.Cog.listener()
-    async def on_voice_state_update(self,member,before,after):
-        if not member.bot and after.channel is None:
-            if not [m for m in before.channel.members if not m.bot]:
-                await asyncio.sleep(90)
-                await self.get_player(member.guild).teardown()
+    # @commands.Cog.listener()
+    # async def on_voice_state_update(self,member,before,after):
+    #     if not member.bot and after.channel is None:
+    #         if not [m for m in before.channel.members if not m.bot]:
+    #             await asyncio.sleep(90)
+    #             await self.get_player(member.guild).teardown()
     
     @wavelink.WavelinkMixin.listener()
     async def on_node_ready(self, node):
@@ -348,7 +306,7 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
             return self.wavelink.get_player(obj.guild.id,cls=Player, context=obj)
 
         elif isinstance(obj, discord.Guild):
-            return self.wavelink.get_player(obj.id,cls=Player)
+            return self.wavelink.get_player(obj.id,cls=Player,self_deaf=True)
 
     @commands.command(name="connect",aliases=["join"])
     async def _connect(self,ctx,*,channel:t.Optional[discord.VoiceChannel]):
@@ -376,15 +334,16 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
         player = self.get_player(ctx)
 
         if not player.is_connected:
-            await player.connect(ctx)
-        
+            channel = await player.connect(ctx)
+            await ctx.guild.change_voice_state(channel=channel,self_deaf=True)
         if query is None:
             pass
         else:
             query = query.strip("<>")
             if not re.match(URL_REGEX, query):
                 query = f"ytsearch:{query}"
-            await ctx.message.add_reaction("✅")
+            
+            
             await player.add_tracks(ctx, await self.wavelink.get_tracks(query))
             
     @commands.command(name="queue",aliases=["q"])
@@ -393,11 +352,10 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
         show = 5
         items_per_page = 5
         current_page = 1
-        entries = player.queue.current_queue_length
-        if entries == 0:
-            pages = math.ceil(1 / items_per_page)
-        else:
-            pages = math.ceil(entries / items_per_page)
+        entries = player.queue.length-1
+        pages = math.ceil(entries / items_per_page)
+        if pages == 0:
+            pages=1
         #print(pages)
         if player.queue.is_empty:
             raise QueueIsEmpty
@@ -417,10 +375,10 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
             #embed.add_field(name="Length",value=f"({player.queue.current_track.length//60000}:{str(player.queue.current_track.length%60).zfill(2)})",inline=True)
             if player.queue.queue_duration//60000 > 59:
                 hrs = (player.queue.queue_duration//60000)//60
-                embed.add_field(name=":hourglass: Duration",value=f"{hrs}:{(player.queue.queue_duration//60000)-(60*hrs)}:{str(player.queue.queue_duration%60).zfill(2)}")
+                embed.add_field(name=":hourglass: Queue Duration",value=f"{hrs}:{(player.queue.queue_duration//60000)-(60*hrs)}:{str(player.queue.queue_duration%60).zfill(2)}")
             else:
-                embed.add_field(name=":hourglass: Duration",value=f"{player.queue.queue_duration//60000}:{str(player.queue.queue_duration%60).zfill(2)}")
-            embed.add_field(name=":pencil: Entries",value=f"{entries}")
+                embed.add_field(name=":hourglass: Queue Duration",value=f"{player.queue.queue_duration//60000}:{str(player.queue.queue_duration%60).zfill(2)}")
+            embed.add_field(name=":pencil: Entries",value=f"{player.queue.length-1}")
             if player.queue.repeat_mode == RepeatMode.ALL:
                 embed.add_field(name="Looping:",value=f"🔁`Queue`")
             elif player.queue.repeat_mode == RepeatMode.SONG:
@@ -428,10 +386,10 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
             else:
                 embed.add_field(name="Looping:",value=f"`None`")
             if player.equalizer.name == "Boost":
-                embed.add_field(name="Bass Booster",value=":white_check_mark:",inline=False)
+                embed.add_field(name="Bass Booster",value=":white_check_mark:")
             else:
-                embed.add_field(name="Bass Booster",value=":x:", inline=False)
-            
+                embed.add_field(name="Bass Booster",value=":x:")
+            embed.add_field(name="Requested by:",value=player.queue.current_track.info["requester"])
         elif not player.queue.current_track:
             embed.add_field(
             name="Currently playing",
@@ -587,19 +545,23 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
     @commands.command(name="nowplaying",aliases=["now","np","song"])
     async def nowplaying_command(self,ctx):
         player = self.get_player(ctx)
-        embed = discord.Embed(title="Now Playing",
-        description=f"[**{player.queue.current_track.title}**]({player.queue.current_track.uri})",
-        color=discord.Color.random(),
-        timestamp=dt.datetime.utcnow()
-        )
-        embed.set_thumbnail(url=player.queue.current_track.thumb)
-        hrs = (player.queue.current_track.duration//60000)//60
-        embed.add_field(name=":hourglass: Duration",value=f"{hrs}:{(player.queue.current_track.duration//60000)-(60*hrs)}:{str(player.queue.current_track.duration%60).zfill(2)}")
-        #embed.add_field(name="Duration",value=f"{player.queue.cuurrent_track.length//60000}:{str(track.length%60).zfill(2)}")
-        embed.add_field(name=":bust_in_silhouette: Author",value=f"{player.queue.current_track.author}")
-        #embed.add_field(name="Requested by:",value=f"{ctx.author.mention}")
-        await ctx.send(embed=embed)
-    @commands.command(name="removesong",aliases=["rs","remove"])
+        if player.is_playing:
+            embed = discord.Embed(title="Now Playing",
+            description=f"[**{player.queue.current_track.title}**]({player.queue.current_track.uri})",
+            color=discord.Color.random(),
+            timestamp=dt.datetime.utcnow()
+            )
+            requester = player.queue.current_track.info["requester"]
+            embed.set_thumbnail(url=player.queue.current_track.thumb)
+            hrs = (player.queue.current_track.duration//60000)//60
+            embed.add_field(name=":hourglass: Duration",value=f"{hrs}:{(player.queue.current_track.duration//60000)-(60*hrs)}:{str(player.queue.current_track.duration%60).zfill(2)}")
+            #embed.add_field(name="Duration",value=f"{player.queue.cuurrent_track.length//60000}:{str(track.length%60).zfill(2)}")
+            embed.add_field(name=":bust_in_silhouette: Author",value=f"{player.queue.current_track.author}")
+            embed.add_field(name="Requested by:",value=f"{requester}",inline=False)
+            await ctx.send(embed=embed)
+        else:
+            await ctx.send("Nothing playing right now. Use `[p]play <song/url>` to start streaming.")
+    @commands.command(name="removesong",aliases=["rs"])
     async def removesong(self,ctx,index:int):
         if index is None:
             await ctx.send("You need to specify the index of song to remove.")
@@ -619,11 +581,20 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
         player.queue._queue.insert(index1, y)
         await ctx.message.add_reaction("✅")
     
+    # @commands.command(name="volume",aliases=["setvolume","loudness"])
+    # async def volume_command(self,ctx,vol:int):
+    #     player = self.get_player(ctx)
+    #     if 0 <= vol <=100:
+    #         player.volume = vol
+    #         await ctx.send(f"Volume of the player set to: {vol}%")
+    #     else:
+    #         await ctx.send("Volume must be between 0 and 100.")
     
     @commands.command(name="bassboost",aliases=["boost","bass"])
     async def bassboost_command(self,ctx):
         player = self.get_player(ctx)
-        #player.current
+        print(type(player.equalizer.name))
+        print(player.equalizer.name)
         if player.equalizer.name != "Boost":
             # equaliser = [(0, -0.075), (1, .125), (2, .125), (3, .1), (4, .1),
             #       (5, .05), (6, 0.075), (7, .0), (8, .0), (9, .0),
