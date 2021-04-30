@@ -421,40 +421,41 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
         start = (current_page-1)* items_per_page
         end = start + items_per_page
         buttons = ["⬅️","➡️"]
-        
-        for button in buttons:
-            await msg.add_reaction(button)
-        while True:
-            try:
-                reaction, user = await self.bot.wait_for("reaction_add",check=lambda reaction, user: user == ctx.author and reaction.emoji in buttons, timeout=20.0)
-            except asyncio.TimeoutError:
-                await msg.clear_reactions()
-            else:
-                previous_pg = current_page
-                if reaction.emoji == "⬅️":
-                    if current_page > 1:
-                        current_page -= 1
-                elif reaction.emoji == "➡️":
-                    if current_page < pages:
-                        current_page += 1
-                for button in buttons:
-                    await msg.remove_reaction(button,ctx.author)
-                if previous_pg != current_page:
-                    pages = math.ceil(entries / items_per_page)
-                    start = (current_page - 1) * items_per_page
-                    end = start + items_per_page
-                    embed.remove_field(5)
-                    #em = discord.Embed(title=f"Search Results for: {query}",description="",color=discord.Color.random())
-                    embed.add_field(
-                    name="Next up",
-                    value="\n".join(f"**{i+1+start}. [{t.title}]({t.uri}) ({t.length//60000}:{str(t.length%60).zfill(2)})**" 
-                    for i, t in enumerate(player.queue.upcoming_track[start:end])
-                    ),
-                    inline=False
-                    )
-                    #em.set_footer(text=f"Page : {current_page}/{pages}\nYou can use these as `:name:` to send emojis")
-                    embed.set_footer(text=f"Page : {current_page}/{pages}\nInvoked by {ctx.author.name}",icon_url=ctx.author.avatar_url)
-                    await msg.edit(embed=embed)
+        if pages > 1:
+            for button in buttons:
+                await msg.add_reaction(button)
+            while True:
+                try:
+                    reaction, user = await self.bot.wait_for("reaction_add",check=lambda reaction, user: user == ctx.author and reaction.emoji in buttons, timeout=20.0)
+                except asyncio.TimeoutError:
+                    await msg.clear_reactions()
+                else:
+                    previous_pg = current_page
+                    if reaction.emoji == "⬅️":
+                        if current_page > 1:
+                            current_page -= 1
+                    elif reaction.emoji == "➡️":
+                        if current_page < pages:
+                            current_page += 1
+                    for button in buttons:
+                        await msg.remove_reaction(button,ctx.author)
+                    if previous_pg != current_page:
+                        pages = math.ceil(entries / items_per_page)
+                        start = (current_page - 1) * items_per_page
+                        end = start + items_per_page
+                        embed.remove_field(5)
+                        #em = discord.Embed(title=f"Search Results for: {query}",description="",color=discord.Color.random())
+                        embed.add_field(
+                        name="Next up",
+                        value="\n".join(f"**{i+1+start}. [{t.title}]({t.uri}) ({t.length//60000}:{str(t.length%60).zfill(2)})**" 
+                        for i, t in enumerate(player.queue.upcoming_track[start:end])
+                        ),
+                        inline=False
+                        )
+                        #em.set_footer(text=f"Page : {current_page}/{pages}\nYou can use these as `:name:` to send emojis")
+                        embed.set_footer(text=f"Page : {current_page}/{pages}\nInvoked by {ctx.author.name}",icon_url=ctx.author.avatar_url)
+                        embed.add_field(name="Requested by:",value=player.queue.current_track.info["requester"])
+                        await msg.edit(embed=embed)
     @queue_command.error
     async def queue_error(self,ctx,exc):
         if isinstance(exc, QueueIsEmpty):
