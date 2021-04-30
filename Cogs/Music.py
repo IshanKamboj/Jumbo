@@ -567,7 +567,7 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
             await ctx.send("You need to specify the index of song to remove.")
         else:
             player = self.get_player(ctx)
-            player.queue.upcoming_track.pop(index-1)
+            player.queue._queue.pop(index+player.queue.position)
             await ctx.message.add_reaction("✅")
 
     @commands.command(name="move")
@@ -575,10 +575,10 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
         if index1 is None or index2 is None:
             raise commands.MissingRequiredArgument
         player = self.get_player(ctx)
-        x = player.queue.upcoming_track.pop(index1-1)
-        y = player.queue.upcoming_track.pop(index2-1)
-        player.queue.upcoming_track.insert(index2-1, x)
-        player.queue.upcoming_track.insert(index1-1, y)
+        x = player.queue.upcoming_track.pop(index1+player.queue.position)
+        y = player.queue.upcoming_track.pop(index2-+player.queue.position)
+        player.queue.upcoming_track.insert(index2+player.queue.position, x)
+        player.queue.upcoming_track.insert(index1+player.queue.position, y)
         await ctx.message.add_reaction("✅")
     
     # @commands.command(name="volume",aliases=["setvolume","loudness"])
