@@ -452,9 +452,10 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
                         ),
                         inline=False
                         )
+                        embed.add_field(name="Requested by:",value=player.queue.current_track.info["requester"])
                         #em.set_footer(text=f"Page : {current_page}/{pages}\nYou can use these as `:name:` to send emojis")
                         embed.set_footer(text=f"Page : {current_page}/{pages}\nInvoked by {ctx.author.name}",icon_url=ctx.author.avatar_url)
-                        embed.add_field(name="Requested by:",value=player.queue.current_track.info["requester"])
+                        
                         await msg.edit(embed=embed)
     @queue_command.error
     async def queue_error(self,ctx,exc):
