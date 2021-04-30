@@ -575,10 +575,10 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
         if index1 is None or index2 is None:
             raise commands.MissingRequiredArgument
         player = self.get_player(ctx)
-        x = player.queue.upcoming_track.pop(index1+player.queue.position)
-        y = player.queue.upcoming_track.pop(index2+player.queue.position)
-        player.queue.upcoming_track.insert(index2+player.queue.position, x)
-        player.queue.upcoming_track.insert(index1+player.queue.position, y)
+        x = player.queue._queue.pop(index1+player.queue.position)
+        y = player.queue._queue.pop(index2+player.queue.position)
+        player.queue._queue.insert(index2+player.queue.position, x)
+        player.queue._queue.insert(index1+player.queue.position, y)
         await ctx.message.add_reaction("✅")
     
     # @commands.command(name="volume",aliases=["setvolume","loudness"])
