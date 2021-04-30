@@ -292,9 +292,9 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
                 "host":"lava.link",
                 "port":80,
                 "rest_uri":"http://lava.link:80",
-                "password":"youshallnotpass",
+                "password":"anything as a password",
                 "identifier":"MAIN",
-                "region":"europe"
+                "region":"us-central"
             }
         }
 
