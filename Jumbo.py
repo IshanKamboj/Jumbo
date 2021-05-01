@@ -72,7 +72,7 @@ async def fun(ctx):
     await ctx.send(embed=em)
 @help.command(name="music")
 async def music(ctx):
-    em = discord.Embed(title=":headphones: | Music Commands",description="`Play`, `Connect`, `Disconnect`, `Skip`, `Previous`, `Queue`, `Pause`, `Resume`, `Stop`, `Shuffle`, `Loop`, `Song`, `Volume`, `Baseboost`")
+    em = discord.Embed(title=":headphones: | Music Commands",description="`Play`, `Connect`, `Disconnect`, `Skip`, `Previous`, `Queue`, `Pause`, `Resume`, `Stop`, `Shuffle`, `Loop`, `Nowplaying`, `Seek`, `Bassboost`, `Move`, `Remove`, `ytsearch`")
     await ctx.send(embed=em)
 @help.command(name="fights")
 async def fight_help(ctx):
@@ -409,7 +409,19 @@ async def removesong(ctx):
 @help.command(name="move")
 async def move(ctx):
     await ctx.send(embed=HelpEmbeds.move_embed())
-
+@help.command(name="bassboost",aliases=["boost","bass"])
+async def bass(ctx):
+    em = discord.Embed(title=":speaker: | Bassboost",description="This command boosts the bass in your songs.")
+    em.add_field(name="Syntax",value="*boost|bassboost|bass")
+    await ctx.send(embed=em)
+@help.command(name="seek",aliases=["position","fastforward","ff"])
+async def seek(ctx):
+    em = discord.Embed(title=":fast_forward: | Seek",description="This command fast forwards the track to the given position.")
+    em.add_field(name="Syntax",value="*ff|seek <time>")
+    await ctx.send(embed=em)
+@help.command(name="ytsearch",aliases=["searchsong","songsearch"])
+async def ytsearch(ctx):
+    await ctx.send(embed=HelpEmbeds.ytsearch_embed())
 #####################################    LOADING COGS    #########################################################
 for filename in os.listdir('./Cogs'):
     if filename.endswith('.py'):

@@ -325,3 +325,7 @@ class HelpEmbeds():
         em = discord.Embed(title=":x: Remove",description="Removes the song from the specified index.")
         em.add_field(name="Syntax",value="*rs <index>")
         return em
+    def ytsearch_embed():
+        em = discord.Embed(title=":mag: ytsearch",description="Searches youtube for your specified song.")
+        em.add_field(name="Syntax",value="*ytsearch <query>")
+        return em
