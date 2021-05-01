@@ -170,25 +170,25 @@ class Player(wavelink.Player):
             await self.destroy()
         except KeyError:
             pass
-    async def add_spotify_tracks(self,ctx,tracks):
-        track = tracks[0]
-        track.info["requester"] = ctx.author.mention
-        requester = track.info["requester"]
-        self.queue.add(track)
-        if not self.is_playing and not self.queue.is_empty:
-                embed = discord.Embed(title="Now Playing",
-                description=f"[**{track.title}**]({track.uri})",
-                color=discord.Color.random(),
-                timestamp=dt.datetime.utcnow()
-                )
-                embed.set_thumbnail(url=track.thumb)
-                embed.add_field(name="Duration",value=f"{track.length//60000}:{str(track.length%60).zfill(2)}")
-                embed.add_field(name="Author",value=f"{track.author}")
-                embed.add_field(name="Requested by:",value=f"{requester}")
-                await ctx.send(embed=embed)
-        await ctx.message.add_reaction("✅")
-        if not self.is_playing and not self.queue.is_empty:
-            await self.start_playback()
+    # async def add_spotify_tracks(self,ctx,tracks):
+    #     track = tracks[0]
+    #     track.info["requester"] = ctx.author.mention
+    #     requester = track.info["requester"]
+    #     self.queue.add(track)
+    #     if not self.is_playing and not self.queue.is_empty:
+    #             embed = discord.Embed(title="Now Playing",
+    #             description=f"[**{track.title}**]({track.uri})",
+    #             color=discord.Color.random(),
+    #             timestamp=dt.datetime.utcnow()
+    #             )
+    #             embed.set_thumbnail(url=track.thumb)
+    #             embed.add_field(name="Duration",value=f"{track.length//60000}:{str(track.length%60).zfill(2)}")
+    #             embed.add_field(name="Author",value=f"{track.author}")
+    #             embed.add_field(name="Requested by:",value=f"{requester}")
+    #             await ctx.send(embed=embed)
+    #     await ctx.message.add_reaction("✅")
+    #     if not self.is_playing and not self.queue.is_empty:
+    #         await self.start_playback()
     async def add_tracks(self,ctx,tracks):
         if not tracks:
             raise NoTracksFound
@@ -357,16 +357,16 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
         await ctx.message.add_reaction("👋")
         await player.teardown()
         #await ctx.send("Disconnected.")
-    def get_songs_from_spotify(self,url):
-        a = sp.playlist_items(url, fields="items",limit=50)
-        z = len(a["items"])
-        temp = []
-        for i in range(z):
-            x = a["items"][i]["track"]["name"]
-            y = a["items"][i]["track"]["artists"][0]["name"]
-            song_name = "ytsearch:" + x + "-" + y
-            temp.append(song_name)
-        return temp
+    # def get_songs_from_spotify(self,url):
+    #     a = sp.playlist_items(url, fields="items",limit=50)
+    #     z = len(a["items"])
+    #     temp = []
+    #     for i in range(z):
+    #         x = a["items"][i]["track"]["name"]
+    #         y = a["items"][i]["track"]["artists"][0]["name"]
+    #         song_name = "ytsearch:" + x + "-" + y
+    #         temp.append(song_name)
+    #     return temp
     @commands.command(name="play",aliases=["p"])
     async def _play(self,ctx,*,query:t.Optional[str]):
         player = self.get_player(ctx)
@@ -375,23 +375,23 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
             channel = await player.connect(ctx)
             await ctx.guild.change_voice_state(channel=channel,self_deaf=True)
         if query is None:
-            player.start_playback()
+            pass
         else:
-            if "https://open.spotify.com/playlist/" in query or "spotify:playlist:" in query:
-                x = self.get_songs_from_spotify(query)
-                em = discord.Embed(description="`50` songs would be queued. This might take some time.")
-                await ctx.send(embed=em)
-                for i in x:
-                    if player.is_connected:
-                        await player.add_spotify_tracks(ctx, await self.wavelink.get_tracks(i))
+            # if "https://open.spotify.com/playlist/" in query or "spotify:playlist:" in query:
+            #     x = self.get_songs_from_spotify(query)
+            #     em = discord.Embed(description="`50` songs would be queued. This might take some time.")
+            #     await ctx.send(embed=em)
+            #     for i in x:
+            #         if player.is_connected:
+            #             await player.add_spotify_tracks(ctx, await self.wavelink.get_tracks(i))
 
-                em = discord.Embed(description=f"Added `{len(x)}` tracks to queue.")
-                await ctx.send(embed=em)
-            else:
-                query = query.strip("<>")
-                if not re.match(URL_REGEX, query):
-                    query = f"ytsearch:{query}"
-                await player.add_tracks(ctx, await self.wavelink.get_tracks(query))
+            #     em = discord.Embed(description=f"Added `{len(x)}` tracks to queue.")
+            #     await ctx.send(embed=em)
+            
+            query = query.strip("<>")
+            if not re.match(URL_REGEX, query):
+                query = f"ytsearch:{query}"
+            await player.add_tracks(ctx, await self.wavelink.get_tracks(query))
             
     @commands.command(name="queue",aliases=["q"])
     async def queue_command(self,ctx):
