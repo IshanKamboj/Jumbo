@@ -296,15 +296,31 @@ class Utility(commands.Cog):
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _animesearch(self,ctx,*,query:str):
         search = AnimeSearch(query)
-        x = search.results[0].synopsis
-        title = search.results[0].title
-        episodes = search.results[0].episodes
-        score = search.results[0].score
-        image_url = search.results[0].image_url
-        url = search.results[0].url
+        url = f"https://api.jikan.moe/v3/search/anime?q={query}"
+        r = requests.get(url=url).json()
+        print(r["results"][0])
+        x = r["results"][0]["synopsis"]
+        title = r["results"][0]["title"]
+        episodes = r["results"][0]["episodes"]
+        score = r["results"][0]["score"]
+        image_url = r["results"][0]["image_url"]
+        url = r["results"][0]["url"]
+        members = r["results"][0]["members"]
+        start_date = r["results"][0]["start_date"]
+        x = datetime.datetime.strptime(start_date, "%Y-%m-%dT%H:%M:%S%z")
+        end_date = r["results"][0]["end_date"]
+        rated = r["results"][0]["rated"]
         em = discord.Embed(title=title,description=f"**{x} [Read More]({url})**",color=discord.Color.random())
         em.add_field(name=":star: Ratings:",value=f"{score}/10")
-        em.add_field(name=":tv: Episodes",value=f"{episodes}")
+        em.add_field(name=":tv: Episodes:",value=f"{episodes}")
+        em.add_field(name=":clapper: Rated:",value=rated)
+        em.add_field(name=":bust_in_silhouette: Users:",value=members)
+        em.add_field(name=":satellite: Release Date:",value=x.strftime("%d %b %Y"))
+        if end_date is not None:
+            y = datetime.datetime.strptime(end_date, "%Y-%m-%dT%H:%M:%S%z")
+            em.add_field(name="End Date:",value=y.strftime("%d %b %Y"))
+        else:
+            em.add_field(name="End Date:",value="Still Airing")
         em.set_image(url=image_url)
         await ctx.send(embed=em)
     
