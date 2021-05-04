@@ -307,7 +307,7 @@ class Utility(commands.Cog):
         url = r["results"][0]["url"]
         members = r["results"][0]["members"]
         start_date = r["results"][0]["start_date"]
-        x = datetime.datetime.strptime(start_date, "%Y-%m-%dT%H:%M:%S%z")
+        x = datetime.strptime(start_date, "%Y-%m-%dT%H:%M:%S%z")
         end_date = r["results"][0]["end_date"]
         rated = r["results"][0]["rated"]
         em = discord.Embed(title=title,description=f"**{x} [Read More]({url})**",color=discord.Color.random())
@@ -317,7 +317,7 @@ class Utility(commands.Cog):
         em.add_field(name=":bust_in_silhouette: Users:",value=members)
         em.add_field(name=":satellite: Release Date:",value=x.strftime("%d %b %Y"))
         if end_date is not None:
-            y = datetime.datetime.strptime(end_date, "%Y-%m-%dT%H:%M:%S%z")
+            y = datetime.strptime(end_date, "%Y-%m-%dT%H:%M:%S%z")
             em.add_field(name="End Date:",value=y.strftime("%d %b %Y"))
         else:
             em.add_field(name="End Date:",value="Still Airing")
