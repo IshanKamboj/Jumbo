@@ -298,8 +298,8 @@ class Utility(commands.Cog):
         search = AnimeSearch(query)
         url = f"https://api.jikan.moe/v3/search/anime?q={query}"
         r = requests.get(url=url).json()
-        print(r["results"][0])
-        x = r["results"][0]["synopsis"]
+        #print(r["results"][0])
+        synopsis = r["results"][0]["synopsis"]
         title = r["results"][0]["title"]
         episodes = r["results"][0]["episodes"]
         score = r["results"][0]["score"]
@@ -310,7 +310,7 @@ class Utility(commands.Cog):
         x = datetime.strptime(start_date, "%Y-%m-%dT%H:%M:%S%z")
         end_date = r["results"][0]["end_date"]
         rated = r["results"][0]["rated"]
-        em = discord.Embed(title=title,description=f"**{x} [Read More]({url})**",color=discord.Color.random())
+        em = discord.Embed(title=title,description=f"**{synopsis} [Read More]({url})**",color=discord.Color.random())
         em.add_field(name=":star: Ratings:",value=f"{score}/10")
         em.add_field(name=":tv: Episodes:",value=f"{episodes}")
         em.add_field(name=":clapper: Rated:",value=rated)
