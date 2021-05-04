@@ -52,5 +52,13 @@ class OwnerCommands(commands.Cog):
     @commands.is_owner()
     async def _ip(self,ctx):
         print(socket.gethostbyname(socket.gethostname()))
+    @commands.command(name="eval")
+    @commands.is_owner()
+    async def _eval(self,ctx,*,code):
+        try:
+            exe = eval(code)
+            await ctx.send(f"```{exe}```")
+        except Exception as e:
+            await ctx.send(str(e))
 def setup(bot):
     bot.add_cog(OwnerCommands(bot))
