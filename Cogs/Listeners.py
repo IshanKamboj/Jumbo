@@ -87,7 +87,10 @@ class AllListeners(commands.Cog):
                 await channel.send(embed=em)
                 break
         
-        
+    def replace_all(self,text,dic):
+        for i , j in dic.items():
+            text = text.replace(i,j)
+        return text   
     @commands.Cog.listener()
     async def on_message(self,message):
         if not message.guild:
