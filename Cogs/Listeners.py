@@ -13,7 +13,8 @@ calcOPT = {
     "m":"000000",
     "k":"000",
     "K":"000",
-    "M":"000000"
+    "M":"000000",
+    "^":"**"
 }
 number_list = ['1','2','3','4','5','6','7','8','9','0']
 class CommandDisabled(commands.CheckFailure):
@@ -122,7 +123,7 @@ class AllListeners(commands.Cog):
                         except asyncio.TimeoutError:
                             pass
                         else:
-                            em = discord.Embed(description=f"**Calculated:** `{calc:,}`\n**Raw Calculated :** `{calc}.0`",color=discord.Color.random())
+                            em = discord.Embed(description=f"**Calculated:** `{calc:,}`\n**Raw Calculated :** `{calc:.1f}`",color=discord.Color.random())
                             await message.channel.send(embed=em)
                     except:
                         pass
