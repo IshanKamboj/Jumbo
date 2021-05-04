@@ -104,25 +104,28 @@ class AllListeners(commands.Cog):
             seen_data = db.child("Last Seen").child(str(message.author.id)).get()
             if message.author != self.bot.user:
                 if any(i for i in number_list if message.content.startswith(i)):
-                    msg = message.content
-                    y = self.replace_all(msg, calcOPT)
-                    
-                    calc = eval(y)
-                    await message.add_reaction("➕")
-                    def _check(r, u):
-                        return (
-                            r.emoji == "➕"
-                            and u == message.author
-                            and r.message.id == message.id
-                        )
+
                     try:
-                        reaction, _ = await self.bot.wait_for("reaction_add", timeout=60.0, check=_check)
-                    except asyncio.TimeoutError:
+                        msg = message.content
+                        y = self.replace_all(msg, calcOPT)
+                        
+                        calc = eval(y)
+                        await message.add_reaction("➕")
+                        def _check(r, u):
+                            return (
+                                r.emoji == "➕"
+                                and u == message.author
+                                and r.message.id == message.id
+                            )
+                        try:
+                            reaction, _ = await self.bot.wait_for("reaction_add", timeout=60.0, check=_check)
+                        except asyncio.TimeoutError:
+                            pass
+                        else:
+                            em = discord.Embed(description=f"**Calculated:** `{calc:,}`\n**Raw Calculated :** `{calc}.0`",color=discord.Color.random())
+                            await message.channel.send(embed=em)
+                    except:
                         pass
-                    else:
-                        em = discord.Embed(description=f"**Calculated:** `{calc:,}`\n**Raw Calculated :** `{calc}.0`",color=discord.Color.random())
-                        await message.channel.send(embed=em)
-                    
                 if message.raw_mentions:
                     for i in message.raw_mentions:
                         afk_data = db.child("AFK").child(str(message.guild.id)).child(str(i)).get()
