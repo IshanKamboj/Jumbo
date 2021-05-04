@@ -121,7 +121,7 @@ class AllListeners(commands.Cog):
                         try:
                             reaction, _ = await self.bot.wait_for("reaction_add", timeout=60.0, check=_check)
                         except asyncio.TimeoutError:
-                            await message..clear_reactions()
+                            await message.clear_reactions()
                         else:
                             em = discord.Embed(description=f"**Calculated:** `{calc:,.0f}`\n**Raw Calculated :** `{calc:.1f}`",color=discord.Color.random())
                             await message.channel.send(embed=em)
