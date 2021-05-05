@@ -395,5 +395,22 @@ class Utility(commands.Cog):
         em.add_field(name="Moves:",value=moves)
         await ctx.send(embed=em)
         #print(r)
+    @commands.command(name="weather",aliases=["temp","forecast"])
+    async def _weather(self,ctx,*,place:str):
+        if place is None:
+            place = "delhi"
+        url = f"http://api.openweathermap.org/data/2.5/weather?appid=1835f9064d23b2112f17339c8209e24e&q={place}"
+        r = requests.get(url).json()
+        if r["cod"] != 404:
+            y = r["main"]
+            current_temp = round(y["temp"]-273)
+            #current_pressure = y['pressure']
+            current_humidity = y["humidity"]
+            desc = r["weather"][0]["description"]
+            em = discord.Embed(title=f"Weather forecast for: `{place}`",description=f":thermometer: Temprature: `{current_temp}°C`\n:cloud_rain: Humidity: `{current_humidity}%`\nOverall : `{desc}`",color=discord.Color.random())
+            await ctx.send(embed=em)
+        else:
+            em = discord.Embed(description="City not found",color=discord.Color.red())
+            await ctx.send(embed=em)
 def setup(bot):
     bot.add_cog(Utility(bot,difficulty))

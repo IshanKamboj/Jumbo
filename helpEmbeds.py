@@ -39,7 +39,10 @@ class HelpEmbeds():
         em = discord.Embed(title=":negative_squared_cross_mark: | Purge",description="This command deletes a bulk of messages. Just enter a number and that many messages would be deleted.",color=discord.Color.random())
         em.add_field(name="**Syntax**",value="*purge <amount>")
         return em
-    
+    def weather_embed():
+        em = discord.Embed(title=":negative_squared_cross_mark: | Weather Forecast",description="This command tells u the current weather of a place.",color=discord.Color.random())
+        em.add_field(name="Syntax",value="*weather <place(default:delhi)>")
+        return em
 #---------------------------- Fun commands help embeds ----------------------------
     def fight_embed():
         em = discord.Embed(title = ":boxing_glove: | Fight", description = "See who's more powerful. The one deafeted is muted for 20-60 seconds.",color=discord.Color.random())

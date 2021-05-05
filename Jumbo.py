@@ -58,7 +58,7 @@ Use *help <command> for extended information on a command
 #------------------------------ Section of help cmds -----------------------------
 @help.command(name="utility",aliases=["utils"])
 async def utility(ctx):
-    em = discord.Embed(title=":tools: | Utility commands",description="`Level`, `Leaderboard`, `AFK`, `Seen`, `Autoreact`, `Google`, `Wikisearch`, `Hex`, `Poll`, `Animesearch`, `Vote`, `Emoji`, `Report`, `Pokedex`",color=discord.Color.random())
+    em = discord.Embed(title=":tools: | Utility commands",description="`Level`, `Leaderboard`, `AFK`, `Seen`, `Autoreact`, `Google`, `Wikisearch`, `Hex`, `Poll`, `Animesearch`, `Vote`, `Emoji`, `Report`, `Pokedex`, `Weather`",color=discord.Color.random())
     await ctx.send(embed=em)
 
 @help.command(name="admin")
@@ -422,6 +422,10 @@ async def seek(ctx):
 @help.command(name="ytsearch",aliases=["searchsong","songsearch"])
 async def ytsearch(ctx):
     await ctx.send(embed=HelpEmbeds.ytsearch_embed())
+
+@help.command(name="weather",aliases=["temp","forecast"])
+async def weather(ctx):
+    await ctx.send(embed=HelpEmbeds.weather_embed())
 #####################################    LOADING COGS    #########################################################
 for filename in os.listdir('./Cogs'):
     if filename.endswith('.py'):
