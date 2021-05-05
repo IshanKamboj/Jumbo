@@ -111,7 +111,7 @@ class AllListeners(commands.Cog):
                         msg = message.content
                         y = self.replace_all(msg, calcOPT)
                         
-                        calc = eval(y)
+                        calc = eval(str(y))
                         await message.add_reaction("➕")
                         def _check(r, u):
                             return (
