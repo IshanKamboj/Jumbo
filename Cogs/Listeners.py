@@ -15,7 +15,7 @@ calcOPT = {
     "K":"000",
     "M":"000000",
     "^":"**",
-    "e":"10**"
+    "e":"*10**"
 }
 number_list = ['1','2','3','4','5','6','7','8','9','0']
 class CommandDisabled(commands.CheckFailure):
