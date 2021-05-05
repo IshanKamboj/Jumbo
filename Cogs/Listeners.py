@@ -69,11 +69,8 @@ class AllListeners(commands.Cog):
         db = firebase.database()
         db.child('Prefixes').child(str(guild.id)).set({'Prefix':default_prefix})
         em = discord.Embed(title="Hola Nabs, I am Jumbo",description="""
-        **Jumbo is a fun bot... use it to have fun with ur friends in the same server.**
-
-        It also has many utility commands such as afk,dm,autreact. There are also fun commands.
-        Don't forget levelling.... Jumbo also has a levelling system to check who's active or who's not.
-
+        **This is a fun bot and has a variety of different commands, you can set autoreacts, afk, can see weather forecast for your city, calculate, play music, send emojis and much more.**
+        **This bot has basically a mixture of commands and it cannot be called a particular type of bot. It combines features from many bots and also many new and original features are being added.**
         Default Prefix : `j!` 
     
         Use `j!help` to get started.
@@ -146,11 +143,7 @@ class AllListeners(commands.Cog):
                     await message.channel.send(message.author.mention,embed=em)
                 except:
                     pass
-                if not message.author.bot:
-                    if seen_data.val() is None:
-                        db.child("Last Seen").child(str(message.author.id)).set({"Time":str(datetime.utcnow())})
-                    elif seen_data.val() is not None:
-                        db.child("Last Seen").child(str(message.author.id)).update({"Time":str(datetime.utcnow())})
+                    
                 if message.content.startswith(prefix_data.val()['Prefix']):
                     return
                 # elif message.content.startswith(self.bot.user.mention):
@@ -162,27 +155,57 @@ class AllListeners(commands.Cog):
                         if not message.author.bot:
                             
                             
-                            data = db.child("Levels").child(str(message.guild.id)).child(str(message.author.id)).get()   
+                            data = db.child("Levels").child(str(message.guild.id)).child(str(message.author.id)).get()
+                            last_exp = db.child("Last Seen").child(str(message.author.id)).get()   
                             if data.val() is None:
                                 newUser = {"userName":str(message.author),"lvl":1,"exp":1}
                                 db.child("Levels").child(str(message.guild.id)).child(str(message.author.id)).set(newUser)
                             elif data.val() is not None:
-                                exp = data.val()['exp']
-                                lvl = data.val()['lvl']
-                                exp += self.lvl_add
-                                
-                                a = self.difficulty+(lvl-1)*self.difficulty
-                                mention = message.author.mention
-                                if exp >= a:
-                                    lvl += 1
-                                    lvl_embed = (discord.Embed(title="**Level Up**",
-                                    description= f"Congratulations {mention}. You just reached level {lvl}",
-                                    color = discord.Color.from_rgb(0,255,185)
-                                    )
-                                    .set_thumbnail(url=f"{message.author.avatar_url}")
-                                    )
-                                    await message.channel.send(mention,embed=lvl_embed)
-                                db.child("Levels").child(str(message.guild.id)).child(str(message.author.id)).update({"userName":str(message.author),"exp":exp,"lvl":lvl})
+                                if last_exp.val() is None:
+                                    exp = data.val()['exp']
+                                    lvl = data.val()['lvl']
+                                    exp += self.lvl_add
+                                    
+                                    a = self.difficulty+(lvl-1)*self.difficulty
+                                    mention = message.author.mention
+                                    if exp >= a:
+                                        lvl += 1
+                                        lvl_embed = (discord.Embed(title="**Level Up**",
+                                        description= f"Congratulations {mention}. You just reached level {lvl}",
+                                        color = discord.Color.from_rgb(0,255,185)
+                                        )
+                                        .set_thumbnail(url=f"{message.author.avatar_url}")
+                                        )
+                                        await message.channel.send(mention,embed=lvl_embed)
+                                    if seen_data.val() is None:
+                                        db.child("Last Seen").child(str(message.author.id)).set({"Time":str(datetime.utcnow())})
+                                    elif seen_data.val() is not None:
+                                        db.child("Last Seen").child(str(message.author.id)).update({"Time":str(datetime.utcnow())})
+                                    db.child("Levels").child(str(message.guild.id)).child(str(message.author.id)).update({"userName":str(message.author),"exp":exp,"lvl":lvl})
+                                elif last_exp.val() is not None:
+                                    time = last_exp.val()["Time"]
+                                    converted_time = datetime.strptime(time, "%Y-%m-%d %H:%M:%S.%f")
+                                    if (datetime.utcnow() - converted_time) > 4:
+                                        exp = data.val()['exp']
+                                        lvl = data.val()['lvl']
+                                        exp += self.lvl_add
+                                        
+                                        a = self.difficulty+(lvl-1)*self.difficulty
+                                        mention = message.author.mention
+                                        if exp >= a:
+                                            lvl += 1
+                                            lvl_embed = (discord.Embed(title="**Level Up**",
+                                            description= f"Congratulations {mention}. You just reached level {lvl}",
+                                            color = discord.Color.from_rgb(0,255,185)
+                                            )
+                                            .set_thumbnail(url=f"{message.author.avatar_url}")
+                                            )
+                                            await message.channel.send(mention,embed=lvl_embed)
+                                        if seen_data.val() is None:
+                                            db.child("Last Seen").child(str(message.author.id)).set({"Time":str(datetime.utcnow())})
+                                        elif seen_data.val() is not None:
+                                            db.child("Last Seen").child(str(message.author.id)).update({"Time":str(datetime.utcnow())})
+                                        db.child("Levels").child(str(message.guild.id)).child(str(message.author.id)).update({"userName":str(message.author),"exp":exp,"lvl":lvl})
                             #await asyncio.sleep(2)
                         else:
                             pass

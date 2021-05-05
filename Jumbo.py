@@ -32,10 +32,7 @@ async def help(ctx):
     data = db.child('Prefixes').child(str(ctx.guild.id)).get()
     x = data.val()['Prefix']
     em = discord.Embed(title="Help",description=f"""
-    **Jumbo is a fun bot... use it to have fun with ur friends in the same server.**
-
-It also has many utility commands such as afk,dm,autreact. There are also fun commands.
-Don't forget levelling.... Jumbo also has a levelling system to check who's active or who's not.
+    **This is a fun bot it has a variety of different commands, you can set autoreacts, afk, can see weather forecast for your city, calculate, play music, send emojis and much more.**
 
 Your Server Prefix : `{x}` (Mention to know the prefix of your server)
     
