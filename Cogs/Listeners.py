@@ -185,7 +185,7 @@ class AllListeners(commands.Cog):
                                 elif last_exp.val() is not None:
                                     time = last_exp.val()["Time"]
                                     converted_time = datetime.strptime(time, "%Y-%m-%d %H:%M:%S.%f")
-                                    if (datetime.utcnow() - converted_time) > 4:
+                                    if (datetime.utcnow() - converted_time).seconds > 4:
                                         exp = data.val()['exp']
                                         lvl = data.val()['lvl']
                                         exp += self.lvl_add
