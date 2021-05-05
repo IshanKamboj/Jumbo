@@ -13,7 +13,8 @@ calcOPT = {
     "m":"000000",
     "k":"000",
     "K":"000",
-    "M":"000000"
+    "M":"000000",
+    "^":"**"
 }
 number_list = ['1','2','3','4','5','6','7','8','9','0']
 class CommandDisabled(commands.CheckFailure):
@@ -120,9 +121,9 @@ class AllListeners(commands.Cog):
                         try:
                             reaction, _ = await self.bot.wait_for("reaction_add", timeout=60.0, check=_check)
                         except asyncio.TimeoutError:
-                            pass
+                            await message.clear_reactions()
                         else:
-                            em = discord.Embed(description=f"**Calculated:** `{calc:,}`\n**Raw Calculated :** `{calc}.0`",color=discord.Color.random())
+                            em = discord.Embed(description=f"**Calculated:** `{calc:,.0f}`\n**Raw Calculated :** `{calc:.1f}`",color=discord.Color.random())
                             await message.channel.send(embed=em)
                     except:
                         pass
