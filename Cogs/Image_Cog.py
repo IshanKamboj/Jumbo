@@ -7,7 +7,7 @@ from io import BytesIO
 import io
 from datetime import datetime
 import aiohttp
-import maths
+import math
 class ImageCommands(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
