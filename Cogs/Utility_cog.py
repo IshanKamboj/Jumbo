@@ -245,7 +245,7 @@ class Utility(commands.Cog):
     async def _google(self,ctx,*,query):
         db = firebase.database()
         temp = {}
-        for j in search(query,tld="co.in" ,num=6,start=0, stop=7, pause=0.5): 
+        for j in search(query,tld="co.in" ,num=5,start=0, stop=5, pause=0.5): 
             #temp.append(j)
             url = str(j)
             response = requests.get(url)
@@ -276,7 +276,7 @@ class Utility(commands.Cog):
         pg = wikipedia.page(query)
         link = pg.url
         
-        await ctx.send(f"**{x}**\n More info can be found here: {link}")
+        await ctx.send(f"**{x}**\n (**Click here** for more info)[{link}]")
     
     @commands.command(name="poll")
     @commands.guild_only()

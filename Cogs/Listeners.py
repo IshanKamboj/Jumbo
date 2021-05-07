@@ -4,20 +4,59 @@ import asyncio
 from Database.db_files import firebase
 from helpEmbeds import HelpEmbeds
 from datetime import datetime
+import math
 default_prefix = "j!"
 
 lvl_add = 1
 difficulty = 300
 
+def convert_to_radians(angle):
+    return math.radians(angle)
 calcOPT = {
     "m":"000000",
     "k":"000",
     "K":"000",
     "M":"000000",
     "^":"**",
-    "e":"*10**"
+    "e":"*10**",
+
+    "tan45":str(math.tan(convert_to_radians(45))),
+    "tan60":str(math.tan(convert_to_radians(60))),
+    "tan30":str(math.tan(convert_to_radians(30))),
+    "tan0":str(math.tan(convert_to_radians(0))),
+    "tan90":str(math.tan(convert_to_radians(90))),
+
+    "cot0":str(math.pow(math.tan(convert_to_radians(0)),-1)),
+    "cot30":str(math.pow(math.tan(convert_to_radians(30)),-1)),
+    "cot45":str(math.pow(math.tan(convert_to_radians(45)),-1)),
+    "cot60":str(math.pow(math.tan(convert_to_radians(60)),-1)),
+    "cot90":str(math.pow(math.tan(convert_to_radians(90)),-1)),
+
+    "sin45":str(math.sin(convert_to_radians(45))),
+    "sin60":str(math.sin(convert_to_radians(60))),
+    "sin90":str(math.sin(convert_to_radians(90))),
+    "sin0":str(math.sin(convert_to_radians(0))),
+    "sin30":str(math.sin(convert_to_radians(30))),
+
+    "cosec0":str(math.pow(math.sin(convert_to_radians(0)),-1)),
+    "cosec30":str(math.pow(math.cos(convert_to_radians(30)),-1)),
+    "cosec45":str(math.pow(math.cos(convert_to_radians(45)),-1)),
+    "cosec60":str(math.pow(math.cos(convert_to_radians(60)),-1)),
+    "cosec90":str(math.pow(math.cos(convert_to_radians(90)),-1)),
+
+    "cos0":str(math.cos(convert_to_radians(0))),
+    "cos30":str(math.cos(convert_to_radians(30))),
+    "cos45":str(math.cos(convert_to_radians(45))),
+    "cos60":str(math.cos(convert_to_radians(60))),
+    "cos90":str(math.cos(convert_to_radians(90))),
+
+    "sec0":str(math.pow(math.cos(convert_to_radians(0)),-1)),
+    "sec30":str(math.pow(math.cos(convert_to_radians(30)),-1)),
+    "sec45":str(math.pow(math.cos(convert_to_radians(45)),-1)),
+    "sec60":str(math.pow(math.cos(convert_to_radians(60)),-1)),
+    "sec90":str(math.pow(math.cos(convert_to_radians(90)),-1)),
 }
-number_list = ['1','2','3','4','5','6','7','8','9','0']
+number_list = ['1','2','3','4','5','6','7','8','9','0','tan','sec','sin','cosec','cot','cos']
 class CommandDisabled(commands.CheckFailure):
     pass
 class MissingRequiredServerRoles(commands.CheckFailure):
@@ -125,24 +164,24 @@ class AllListeners(commands.Cog):
                             await message.channel.send(embed=em)
                     except:
                         pass
-                if message.raw_mentions:
-                    for i in message.raw_mentions:
+                if message.mentions:
+                    for i in message.mentions:
                         afk_data = db.child("AFK").child(str(message.guild.id)).child(str(i)).get()
-
+                        try:
+                            reason = afk_data.val()["reason"]
+                            em = discord.Embed(title=f"User AFK",description=f"The Mentioned user is AFK....... **Reason: {reason}**",color=discord.Color.from_rgb(255,20,147))
+                            await message.channel.send(message.author.mention,embed=em)
+                        except:
+                            pass
                 try:
-                    for i in message.raw_mentions:
+                    for i in message.mentions:
                         reaction_data =  db.child('Reactions').child(str(message.guild.id)).child(str(i)).get()
                         for j in reaction_data.val()["Reaction"]:
                             await message.add_reaction(j)
                 except Exception as e:
                     pass
                     #print(str(e))
-                try:
-                    reason = afk_data.val()["reason"]
-                    em = discord.Embed(title=f"User AFK",description=f"The Mentioned user is AFK....... **Reason: {reason}**",color=discord.Color.from_rgb(255,20,147))
-                    await message.channel.send(message.author.mention,embed=em)
-                except:
-                    pass
+                
                     
                 if message.content.startswith(prefix_data.val()['Prefix']):
                     return
