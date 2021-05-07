@@ -27,7 +27,6 @@ calcOPT = {
     "tan0":str(math.tan(convert_to_radians(0))),
     "tan90":str(math.tan(convert_to_radians(90))),
 
-    "cot0":str(mpmath.cot(0)),
     "cot30":str(mpmath.cot(30)),
     "cot45":str(mpmath.cot(45)),
     "cot60":str(mpmath.cot(60)),
@@ -39,7 +38,6 @@ calcOPT = {
     "sin0":str(math.sin(convert_to_radians(0))),
     "sin30":str(math.sin(convert_to_radians(30))),
 
-    "cosec0":str(mpmath.csc(0)),
     "cosec30":str(mpmath.csc(30)),
     "cosec45":str(mpmath.csc(45)),
     "cosec60":str(mpmath.csc(60)),
@@ -55,7 +53,6 @@ calcOPT = {
     "sec30":str(mpmath.sec(30)),
     "sec45":str(mpmath.sec(45)),
     "sec60":str(mpmath.sec(60)),
-    "sec90":str(mpmath.sec(90)),
 }
 number_list = ['1','2','3','4','5','6','7','8','9','0','tan','sec','sin','cosec','cot','cos']
 class CommandDisabled(commands.CheckFailure):
@@ -165,8 +162,8 @@ class AllListeners(commands.Cog):
                             await message.channel.send(embed=em)
                     except:
                         pass
-                if message.mentions:
-                    for i in message.mentions:
+                if message.raw_mentions:
+                    for i in message.raw_mentions:
                         afk_data = db.child("AFK").child(str(message.guild.id)).child(str(i)).get()
                         try:
                             reason = afk_data.val()["reason"]
@@ -175,7 +172,7 @@ class AllListeners(commands.Cog):
                         except:
                             pass
                 try:
-                    for i in message.mentions:
+                    for i in message.raw_mentions:
                         reaction_data =  db.child('Reactions').child(str(message.guild.id)).child(str(i)).get()
                         for j in reaction_data.val()["Reaction"]:
                             await message.add_reaction(j)
