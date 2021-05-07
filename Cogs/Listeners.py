@@ -26,11 +26,11 @@ calcOPT = {
     "tan0":str(math.tan(convert_to_radians(0))),
     "tan90":str(math.tan(convert_to_radians(90))),
 
-    "cot0":str(math.pow(math.tan(convert_to_radians(0)),-1)),
-    "cot30":str(math.pow(math.tan(convert_to_radians(30)),-1)),
-    "cot45":str(math.pow(math.tan(convert_to_radians(45)),-1)),
-    "cot60":str(math.pow(math.tan(convert_to_radians(60)),-1)),
-    "cot90":str(math.pow(math.tan(convert_to_radians(90)),-1)),
+    # "cot0":str(math.pow(math.tan(convert_to_radians(0)),-1)),
+    # "cot30":str(math.pow(math.tan(convert_to_radians(30)),-1)),
+    # "cot45":str(math.pow(math.tan(convert_to_radians(45)),-1)),
+    # "cot60":str(math.pow(math.tan(convert_to_radians(60)),-1)),
+    # "cot90":str(math.pow(math.tan(convert_to_radians(90)),-1)),
 
     "sin45":str(math.sin(convert_to_radians(45))),
     "sin60":str(math.sin(convert_to_radians(60))),
@@ -38,11 +38,11 @@ calcOPT = {
     "sin0":str(math.sin(convert_to_radians(0))),
     "sin30":str(math.sin(convert_to_radians(30))),
 
-    "cosec0":str(math.pow(math.sin(convert_to_radians(0)),-1)),
-    "cosec30":str(math.pow(math.cos(convert_to_radians(30)),-1)),
-    "cosec45":str(math.pow(math.cos(convert_to_radians(45)),-1)),
-    "cosec60":str(math.pow(math.cos(convert_to_radians(60)),-1)),
-    "cosec90":str(math.pow(math.cos(convert_to_radians(90)),-1)),
+    # "cosec0":str(math.pow(math.sin(convert_to_radians(0)),-1)),
+    # "cosec30":str(math.pow(math.cos(convert_to_radians(30)),-1)),
+    # "cosec45":str(math.pow(math.cos(convert_to_radians(45)),-1)),
+    # "cosec60":str(math.pow(math.cos(convert_to_radians(60)),-1)),
+    # "cosec90":str(math.pow(math.cos(convert_to_radians(90)),-1)),
 
     "cos0":str(math.cos(convert_to_radians(0))),
     "cos30":str(math.cos(convert_to_radians(30))),
@@ -50,11 +50,11 @@ calcOPT = {
     "cos60":str(math.cos(convert_to_radians(60))),
     "cos90":str(math.cos(convert_to_radians(90))),
 
-    "sec0":str(math.pow(math.cos(convert_to_radians(0)),-1)),
-    "sec30":str(math.pow(math.cos(convert_to_radians(30)),-1)),
-    "sec45":str(math.pow(math.cos(convert_to_radians(45)),-1)),
-    "sec60":str(math.pow(math.cos(convert_to_radians(60)),-1)),
-    "sec90":str(math.pow(math.cos(convert_to_radians(90)),-1)),
+    # "sec0":str(math.pow(math.cos(convert_to_radians(0)),-1)),
+    # "sec30":str(math.pow(math.cos(convert_to_radians(30)),-1)),
+    # "sec45":str(math.pow(math.cos(convert_to_radians(45)),-1)),
+    # "sec60":str(math.pow(math.cos(convert_to_radians(60)),-1)),
+    # "sec90":str(math.pow(math.cos(convert_to_radians(90)),-1)),
 }
 number_list = ['1','2','3','4','5','6','7','8','9','0','tan','sec','sin','cosec','cot','cos']
 class CommandDisabled(commands.CheckFailure):
