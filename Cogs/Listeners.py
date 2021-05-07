@@ -221,7 +221,7 @@ class AllListeners(commands.Cog):
                                     db.child("Levels").child(str(message.guild.id)).child(str(message.author.id)).update({"userName":str(message.author),"exp":exp,"lvl":lvl})
                                 elif last_exp.val() is not None:
                                     time = last_exp.val()["Time"]
-                                    converted_time = datetime.strptime(time, "%Y-%m-%d %H:%M:%S.%f")
+                                    converted_time = datetime.strptime(time, "%Y-%m-%d %H:%M:%S")
                                     if (datetime.utcnow() - converted_time).seconds > 4:
                                         exp = data.val()['exp']
                                         lvl = data.val()['lvl']
