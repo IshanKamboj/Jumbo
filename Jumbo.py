@@ -69,7 +69,7 @@ async def fun(ctx):
     await ctx.send(embed=em)
 @help.command(name="music")
 async def music(ctx):
-    em = discord.Embed(title=":headphones: | Music Commands",description="`Play`, `Connect`, `Disconnect`, `Skip`, `Previous`, `Queue`, `Pause`, `Resume`, `Stop`, `Shuffle`, `Loop`, `Nowplaying`, `Seek`, `Bassboost`, `Move`, `Remove`, `ytsearch`")
+    em = discord.Embed(title=":headphones: | Music Commands",description="`Play`, `Connect`, `Disconnect`, `Skip`, `Previous`, `Queue`, `Pause`, `Resume`, `Stop`, `Shuffle`, `Loop`, `Nowplaying`, `Seek`, `Bassboost`, `Move`, `Remove`, `ytsearch`, `Suggest`")
     await ctx.send(embed=em)
 @help.command(name="fights")
 async def fight_help(ctx):
@@ -423,6 +423,10 @@ async def ytsearch(ctx):
 @help.command(name="weather",aliases=["temp","forecast"])
 async def weather(ctx):
     await ctx.send(embed=HelpEmbeds.weather_embed())
+
+@help.command(name="suggest",aliases=["sgst","trending"])
+async def suggest(ctx):
+    await ctx.send(embed=HelpEmbeds.suggest_embed())
 #####################################    LOADING COGS    #########################################################
 for filename in os.listdir('./Cogs'):
     if filename.endswith('.py'):

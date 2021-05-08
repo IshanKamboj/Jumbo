@@ -332,3 +332,7 @@ class HelpEmbeds():
         em = discord.Embed(title=":mag: ytsearch",description="Searches youtube for your specified song.")
         em.add_field(name="Syntax",value="*ytsearch <query>")
         return em
+    def suggest_embed():
+        em = discord.Embed(title=":mag: suggest",description="Suggests a trending song from a genre.")
+        em.add_field(name="Syntax",value="*suggest <genre>")
+        return em
