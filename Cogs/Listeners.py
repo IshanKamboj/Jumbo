@@ -158,7 +158,7 @@ class AllListeners(commands.Cog):
                         except asyncio.TimeoutError:
                             await message.clear_reactions()
                         else:
-                            em = discord.Embed(description=f"**Calculated:** `{calc:,.0f}`\n**Raw Calculated :** `{calc:.1f}`",color=discord.Color.random())
+                            em = discord.Embed(description=f"**Calculated:** `{calc:,.0f}`\n**Raw Calculated :** `{calc:.2f}`",color=discord.Color.random())
                             await message.channel.send(embed=em)
                     except:
                         pass

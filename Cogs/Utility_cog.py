@@ -396,6 +396,10 @@ class Utility(commands.Cog):
         await ctx.send(embed=em)
         #print(r)
     @commands.command(name="weather",aliases=["temp","forecast"])
+    @commands.guild_only()
+    @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
+    @commands.cooldown(1, 7, commands.BucketType.user)
     async def _weather(self,ctx,*,place:str):
         if place is None:
             place = "delhi"

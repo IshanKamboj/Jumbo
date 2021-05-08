@@ -10,6 +10,9 @@ from enum import Enum
 import math
 import asyncio
 from time import time
+from .Listeners import AllListeners
+
+
 URL_REGEX = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
 
 OPTIONS = {
@@ -352,6 +355,10 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
             return self.wavelink.get_player(obj.id,cls=Player)
 
     @commands.command(name="connect",aliases=["join"])
+    @commands.guild_only()
+    @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
+    @commands.cooldown(1, 7, commands.BucketType.user)
     async def _connect(self,ctx,*,channel:t.Optional[discord.VoiceChannel]):
         player = self.get_player(ctx)
         channel = await player.connect(ctx,channel)
@@ -366,6 +373,10 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
             await ctx.send("You are not connected to any voice channel.")
     
     @commands.command(name="disconnect",aliases=["leave","dc"])
+    @commands.guild_only()
+    @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
+    @commands.cooldown(1, 7, commands.BucketType.user)
     async def _disconnect(self,ctx):
         player = self.get_player(ctx)
         await ctx.message.add_reaction("👋")
@@ -373,6 +384,10 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
         #await ctx.send("Disconnected.")
 
     @commands.command(name="play",aliases=["p"])
+    @commands.guild_only()
+    @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
+    @commands.cooldown(1, 7, commands.BucketType.user)
     async def _play(self,ctx,*,query:t.Optional[str]):
         player = self.get_player(ctx)
 
@@ -391,6 +406,10 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
             await player.add_tracks(ctx, await self.wavelink.get_tracks(query,retry_on_failure=True))
             
     @commands.command(name="queue",aliases=["q"])
+    @commands.guild_only()
+    @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
+    @commands.cooldown(1, 7, commands.BucketType.user)
     async def queue_command(self,ctx):
         player = self.get_player(ctx)
         show = 5
@@ -508,6 +527,10 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
             print(str(exc))
     
     @commands.command(name="pause")
+    @commands.guild_only()
+    @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
+    @commands.cooldown(1, 7, commands.BucketType.user)
     async def pause_command(self,ctx):
         player = self.get_player(ctx)
         if player.is_paused:
@@ -520,6 +543,10 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
             pass
 
     @commands.command(name="resume")
+    @commands.guild_only()
+    @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
+    @commands.cooldown(1, 7, commands.BucketType.user)
     async def resume_command(self,ctx):
         player = self.get_player(ctx)
         if player.is_paused:
@@ -529,6 +556,10 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
             return
 
     @commands.command(name="stop")
+    @commands.guild_only()
+    @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
+    @commands.cooldown(1, 7, commands.BucketType.user)
     async def stop_command(self,ctx):
         player = self.get_player(ctx)
         player.queue.empty_queue()
@@ -537,6 +568,9 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
         await ctx.message.add_reaction("⏹️")
 
     @commands.command(name="next",aliases=["skip"])
+    @commands.guild_only()
+    @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     async def next_command(self,ctx):
         player = self.get_player(ctx)
         if not player.queue.upcoming_track:
@@ -553,6 +587,9 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
             print(str(exc))
     
     @commands.command(name="previous",aliases=["back"])
+    @commands.guild_only()
+    @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     async def previous_command(self,ctx):
         player = self.get_player(ctx)
         if not player.queue.previous_track:
@@ -567,6 +604,10 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
         if isinstance(exc, NoPreviousTracks):
             await ctx.send("`No Previous Track in queue.`")
     @commands.command(name="shuffle")
+    @commands.guild_only()
+    @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
+    @commands.cooldown(1, 7, commands.BucketType.user)
     async def shuffle_command(self,ctx):
         player = self.get_player(ctx)
         await ctx.message.add_reaction("🔀")
@@ -577,6 +618,10 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
             await ctx.send("Queue is Empty. ;-; use `[p]play <song_name>` to start playing songs.")
     
     @commands.command(name="repeat",aliases=["loop"])
+    @commands.guild_only()
+    @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
+    @commands.cooldown(1, 7, commands.BucketType.user)
     async def repeat_command(self,ctx,mode:str="song"):
         if mode not in ("song","queue","none"):
             await ctx.send("Invalid repeat mode specified. These are valid inputs: `Song`, `Queue`, `None`")
@@ -588,6 +633,10 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
             await ctx.send(embed=embed)
 
     @commands.command(name="nowplaying",aliases=["now","np","song"])
+    @commands.guild_only()
+    @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
+    @commands.cooldown(1, 7, commands.BucketType.user)
     async def nowplaying_command(self,ctx):
         player = self.get_player(ctx)
         if player.is_playing:
@@ -617,6 +666,10 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
         else:
             await ctx.send("Nothing playing right now. Use `[p]play <song/url>` to start streaming.")
     @commands.command(name="removesong",aliases=["rs","remove"])
+    @commands.guild_only()
+    @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
+    @commands.cooldown(1, 7, commands.BucketType.user)
     async def removesong(self,ctx,index:int):
         if index is None:
             await ctx.send("You need to specify the index of song to remove.")
@@ -626,6 +679,10 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
             await ctx.message.add_reaction("✅")
 
     @commands.command(name="move",aliases=["mv"])
+    @commands.guild_only()
+    @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
+    @commands.cooldown(1, 7, commands.BucketType.user)
     async def move_command(self,ctx,index1:int,index2:int):
         if index1 is None or index2 is None:
             raise commands.MissingRequiredArgument
@@ -646,6 +703,10 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
     #         await ctx.send("Volume must be between 0 and 100.")
     
     @commands.command(name="bassboost",aliases=["boost","bass"])
+    @commands.guild_only()
+    @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
+    @commands.cooldown(1, 7, commands.BucketType.user)
     async def bassboost_command(self,ctx):
         player = self.get_player(ctx)
         # print(type(player.equalizer.name))
@@ -660,6 +721,10 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
             await player.set_eq(wavelink.eqs.Equalizer.flat())
             await ctx.send("Bass boosted mode turned off.")
     @commands.command(name="seek",aliases=["position","fastforward","ff"])
+    @commands.guild_only()
+    @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
+    @commands.cooldown(1, 7, commands.BucketType.user)
     async def seek_command(self,ctx,time:str):
         try:
             player = self.get_player(ctx)
@@ -684,6 +749,10 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
             await ctx.send(str(e))
     
     @commands.command(name="ytsearch",aliases=["searchsong","songsearch"])
+    @commands.guild_only()
+    @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
+    @commands.cooldown(1, 7, commands.BucketType.user)
     async def ytsearch_(self,ctx,*,query):
         player = self.get_player(ctx)
         if not player.is_connected:
