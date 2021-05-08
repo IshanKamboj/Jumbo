@@ -12,6 +12,11 @@ import asyncio
 from time import time
 from .Listeners import AllListeners
 
+import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
+
+
+sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(client_id="9f76fdf6ec2f4d3fb506297168c618b0",client_secret="f497831f91354e40acaf9538fce95367"))
 
 URL_REGEX = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
 
@@ -767,7 +772,25 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
                 query = f"ytsearch:{query}"
             
             await player.ytsearch_add_tracks(ctx, await self.wavelink.get_tracks(query,retry_on_failure=True))
-    
+    @commands.command(name="suggest",aliases=["sgst","trending"])
+    @commands.guild_only()
+    @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
+    @commands.cooldown(1, 7, commands.BucketType.user)
+    async def _suggest(self,ctx,genre:str):
+        y = sp.recommendation_genre_seeds()
+        #print(y)
+        x = sp.recommendations(seed_genres=[genre],limit=10)
+        embed = discord.Embed(title=f"Song suggestions for: {genre}",description="",color=discord.Color.random())
+        #print(x['tracks'][0].keys())
+        for i in range(len(x['tracks'])):
+            song = x['tracks'][i]['name']
+            ar = x['tracks'][i]['artists'][0]['name']
+            if embed.description == "":
+                embed.description += f"**{i+1}.** `{song} - {ar}`"
+            else:
+                embed.description += f"\n**{i+1}.** `{song} - {ar}`"
+        await ctx.send(embed=embed)
 def setup(bot):
     bot.add_cog(Music(bot))
 

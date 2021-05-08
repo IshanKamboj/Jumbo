@@ -158,11 +158,11 @@ class AllListeners(commands.Cog):
                         except asyncio.TimeoutError:
                             await message.clear_reactions()
                         else:
-                            em = discord.Embed(description=f"**Calculated:** `{calc:,.0f}`\n**Raw Calculated :** `{calc:.2f}`",color=discord.Color.random())
+                            em = discord.Embed(description=f"**Calculated:** `{calc:,.0f}`\n**Raw Calculated :** `{calc:.3f}`",color=discord.Color.random())
                             await message.channel.send(embed=em)
                     except:
                         pass
-                if message.raw_mentions:
+                if message.raw_mentions and not message.author.bot:
                     for i in message.raw_mentions:
                         afk_data = db.child("AFK").child(str(message.guild.id)).child(str(i)).get()
                         try:

@@ -200,7 +200,7 @@ class InfoCogs(commands.Cog):
             mem_usage = mem_total * (mem_of_total / 100)
         usage = psutil.cpu_percent(2)
         fields = [
-            ("Owner","TheMonkeyCoder#9860",True),
+            ("Owner",str(discord.AppInfo.owner),True),
             ("Python version", python_version(), True),
             ("discord.py version", discord_version, True),
             ("Uptime", uptime, True),
@@ -226,7 +226,7 @@ class InfoCogs(commands.Cog):
         except:
             pass
     
-    @commands.command(name="editsnipe", aliases=["editsniper"])
+    @commands.command(name="editsnipe", aliases=["editsniper","esnipe"])
     @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
