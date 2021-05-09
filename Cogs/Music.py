@@ -797,8 +797,8 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
     async def _lyrics(self,ctx):
         player =  self.get_player(ctx)
         song =  player.queue.current_track.title
-        singer =  player.queue.current_track.author
-        embed = discord.Embed(title='Lyrics',description=PyLyrics.PyLyrics.getLyrics(singer, song))
+        singer, x = song.split("-")
+        embed = discord.Embed(title='Lyrics',description=PyLyrics.PyLyrics.getLyrics(singer, x))
         await ctx.send(embed=embed)
 #        print(PyLyrics.getLyrics('Taylor Swift','Blank Space')) #Print the lyrics directlyv
 def setup(bot):
