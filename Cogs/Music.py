@@ -14,6 +14,7 @@ from .Listeners import AllListeners
 
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
+from PyLyrics import *
 
 
 sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(client_id="9f76fdf6ec2f4d3fb506297168c618b0",client_secret="f497831f91354e40acaf9538fce95367"))
@@ -791,6 +792,15 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
             else:
                 embed.description += f"\n**{i+1}.** `{song} - {ar}`"
         await ctx.send(embed=embed)
+
+    @commands.command(name='lyrics')
+    async def _lyrics(self,ctx):
+        player =  self.get_player(ctx)
+        song =  player.queue.current_track.title
+        author =  player.queue.current_track.author
+        embed = discord.Embed(title='Lyrics',description=PyLyrics.getLyrics(author,song))
+        await ctx.send(embed=embed)
+#        print(PyLyrics.getLyrics('Taylor Swift','Blank Space')) #Print the lyrics directlyv
 def setup(bot):
     bot.add_cog(Music(bot))
 
