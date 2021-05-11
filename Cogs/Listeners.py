@@ -172,10 +172,11 @@ class AllListeners(commands.Cog):
                         except:
                             pass
                 try:
-                    for i in message.raw_mentions:
-                        reaction_data =  db.child('Reactions').child(str(message.guild.id)).child(str(i)).get()
-                        for j in reaction_data.val()["Reaction"]:
-                            await message.add_reaction(j)
+                    if not message.author.bot:
+                        for i in message.raw_mentions:
+                            reaction_data =  db.child('Reactions').child(str(message.guild.id)).child(str(i)).get()
+                            for j in reaction_data.val()["Reaction"]:
+                                await message.add_reaction(j)
                 except Exception as e:
                     pass
                     #print(str(e))

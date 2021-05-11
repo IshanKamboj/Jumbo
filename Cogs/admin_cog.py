@@ -147,7 +147,7 @@ class Admin(commands.Cog):
             elif disabledCommands.val() is not None:
                 if command_disable is None:
                     await ctx.send("`No command with that name found`")
-                elif command_disable == ctx.command or command_disable == 'settings':
+                elif command_disable == ctx.command or command_disable == 'settings'  or command_disable == "enable":
                     await ctx.send("`You cannot enable/disable this command`")
                 else:
                     if disabledCommands.val()["isEnabled"] is True:

@@ -7,7 +7,6 @@ from io import BytesIO
 import io
 from datetime import datetime
 import aiohttp
-import math
 class ImageCommands(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
@@ -74,7 +73,7 @@ class ImageCommands(commands.Cog):
         async with aiohttp.ClientSession() as session:
             async with session.get(url) as resp:
                 if resp.status != 200:
-                    return await channel.send('Could not download file...')
+                    return await ctx.send('Could not download file...')
                 data = io.BytesIO(await resp.read())
                 await ctx.send(file=discord.File(data, 'cool_image.png'))
             
