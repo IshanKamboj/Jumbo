@@ -138,7 +138,7 @@ class Admin(commands.Cog):
             if disabledCommands.val() is None:
                 if command_disable is None:
                     await ctx.send("`No command with that name found`")
-                elif command_disable == ctx.command:
+                elif command_disable == ctx.command or command_disable == "enable":
                     await ctx.send("`You cannot disable this command`")
                 else:
                     em = discord.Embed(description=f"**`{command_disable}` command is now disabled**")
@@ -185,8 +185,6 @@ class Admin(commands.Cog):
         elif disabledCommands.val() is not None:
             if command_disable is None:
                 await ctx.send("`No command with that name found`")
-            elif command_disable == ctx.command:
-                await ctx.send("`You cannot disable this command`")
             else:
                 if disabledCommands.val()["isEnabled"] is False:
                     em = discord.Embed(description=f"**`{command_disable}` command is now enabled**",color=discord.Color.random())

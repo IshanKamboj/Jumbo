@@ -200,7 +200,7 @@ class InfoCogs(commands.Cog):
             mem_usage = mem_total * (mem_of_total / 100)
         usage = psutil.cpu_percent(2)
         fields = [
-            ("Owner",f"{discord.AppInfo.owner.name}#{discord.AppInfo.owner.discriminator}",True),
+            ("Owner","TheMonkeyCoder#0001",True),
             ("Python version", python_version(), True),
             ("discord.py version", discord_version, True),
             ("Uptime", uptime, True),
