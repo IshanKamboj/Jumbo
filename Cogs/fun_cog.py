@@ -179,7 +179,19 @@ class Fun(commands.Cog):
         else:
             em = discord.Embed(title=f"{user.name}'s Gayrate",description=f"{user.mention} is {x}% gay.",color=discord.Color.random())
         await ctx.send(embed=em)
-    
+    @commands.command(name="genius",aliases=["intelligence","geniusrate","iq"])
+    @commands.guild_only()
+    @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
+    @commands.cooldown(1, 7, commands.BucketType.user)
+    async def _genius(self,ctx,user:discord.Member=None):
+        x = random.randint(1,100)
+        if user is None:
+            user = ctx.author
+            em = discord.Embed(title=f"{user.name}'s intelligence quotient",description=f"{user.mention} has **{0} IQ** as he didn't mention the user. LMAO",color=discord.Color.random())
+        else:
+            em = discord.Embed(title=f"{user.name}'s intelligence quotient",description=f"{user.mention} has **{x} IQ**.",color=discord.Color.random())
+        await ctx.send(embed=em)
     @commands.command(name="joke",aliases=["jokes"])
     @commands.guild_only()
     @commands.check(AllListeners.check_enabled)

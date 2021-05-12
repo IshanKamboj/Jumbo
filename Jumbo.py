@@ -65,7 +65,7 @@ async def admin(ctx):
 
 @help.command(name="fun")
 async def fun(ctx):
-    em = discord.Embed(title=":joystick: | Fun Commands",description="`Fact`, `Truth`, `Dare`, `8ball`, `Opinion`, `Roast`, `Joke`, `Gayrate`",color=discord.Color.random())
+    em = discord.Embed(title=":joystick: | Fun Commands",description="`Fact`, `Truth`, `Dare`, `8ball`, `Opinion`, `Roast`, `Joke`, `Gayrate`, `IQ`",color=discord.Color.random())
     await ctx.send(embed=em)
 @help.command(name="music")
 async def music(ctx):

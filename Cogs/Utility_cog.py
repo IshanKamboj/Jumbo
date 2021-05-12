@@ -276,7 +276,7 @@ class Utility(commands.Cog):
         pg = wikipedia.page(query)
         link = pg.url
         
-        await ctx.send(f"**{x}**\n [**Click here**]({link}) for more info.")
+        await ctx.send(f"**{x}**\n[ Click here]({link}) for more info.")
     
     @commands.command(name="poll")
     @commands.guild_only()
