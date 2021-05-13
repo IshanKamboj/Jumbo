@@ -193,12 +193,16 @@ class Player(wavelink.Player):
                 timestamp=dt.datetime.utcnow()
                 )
                 embed.set_thumbnail(url=track.thumb)
-                hrs = (track.length//60000)//60
-                hrs = int(hrs)
-                if hrs > 0:
-                    embed.add_field(name="Duration",value=f"`{hrs}:{str((track.length//60000)-(60*hrs)).zfill(2)}:{str(track.length%60).zfill(2)}`")
+                seconds2 = (track.duration/1000)%60
+                seconds2 = int(seconds2)
+                minutes2 = (track.queue.current_track.duration/60000)%60
+                minutes2 = int(minutes2)
+                hours2 = (track.queue.current_track.duration/(1000*60*60))%24
+                hours2 = int(hours2)
+                if hours2 > 0:
+                    embed.add_field(name="Duration",value=f"`{hours2}:{str(minutes2).zfill(2)}:{str(seconds2).zfill(2)}`")
                 else:
-                    embed.add_field(name="Duration",value=f"`{(track.length//60000)-(60*hrs)}:{str(track.length%60).zfill(2)}`")
+                    embed.add_field(name="Duration",value=f"`{minutes2}:{str(seconds2).zfill(2)}`")
                 embed.add_field(name="Author",value=f"{track.author}")
                 embed.add_field(name="Requested by:",value=f"{requester}")
                 await ctx.send(embed=embed)
@@ -232,12 +236,16 @@ class Player(wavelink.Player):
                     timestamp=dt.datetime.utcnow()
                     )
                     embed.set_thumbnail(url=track.thumb)
-                    hrs = (track.length//60000)//60
-                    hrs = int(hrs)
-                    if hrs > 0:
-                        embed.add_field(name="Duration",value=f"`{hrs}:{str((track.length//60000)-(60*hrs)).zfill(2)}:{str(track.length%60).zfill(2)}`")
+                    seconds2 = (track.duration/1000)%60
+                    seconds2 = int(seconds2)
+                    minutes2 = (track.queue.current_track.duration/60000)%60
+                    minutes2 = int(minutes2)
+                    hours2 = (track.queue.current_track.duration/(1000*60*60))%24
+                    hours2 = int(hours2)
+                    if hours2 > 0:
+                        embed.add_field(name="Duration",value=f"`{hours2}:{str(minutes2).zfill(2)}:{str(seconds2).zfill(2)}`")
                     else:
-                        embed.add_field(name="Duration",value=f"`{(track.length//60000)-(60*hrs)}:{str(track.length%60).zfill(2)}`")
+                        embed.add_field(name="Duration",value=f"`{minutes2}:{str(seconds2).zfill(2)}`")
                     embed.add_field(name="Author",value=f"{track.author}")
                     embed.add_field(name="Requested by:",value=f"{requester}")
                     await ctx.send(embed=embed)
@@ -443,11 +451,17 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
             inline=False
             )
             #embed.add_field(name="Length",value=f"({player.queue.current_track.length//60000}:{str(player.queue.current_track.length%60).zfill(2)})",inline=True)
-            if player.queue.queue_duration//60000 > 59:
-                hrs = (player.queue.queue_duration//60000)//60
-                embed.add_field(name=":hourglass: Queue Duration",value=f"{hrs}:{(player.queue.queue_duration//60000)-(60*hrs)}:{str(player.queue.queue_duration%60).zfill(2)}")
+            seconds2 = (player.queue.queue_duration/1000)%60
+            seconds2 = int(seconds2)
+            minutes2 = (player.queue.queue_duration/60000)%60
+            minutes2 = int(minutes2)
+            hours2 = (player.queue.queue_duration/(1000*60*60))%24
+            hours2 = int(hours2)
+            if hours2 > 0:
+                #hrs = (player.queue.queue_duration//60000)//60
+                embed.add_field(name=":hourglass: Queue Duration",value=f"{hours2}:{str(minutes2).zfill(2)}:{str(seconds2).zfill(2)}")
             else:
-                embed.add_field(name=":hourglass: Queue Duration",value=f"{player.queue.queue_duration//60000}:{str(player.queue.queue_duration%60).zfill(2)}")
+                embed.add_field(name=":hourglass: Queue Duration",value=f"{minutes2}:{str(seconds2).zfill(2)}")
             embed.add_field(name=":pencil: Entries",value=f"{len(player.queue.upcoming_track)}")
             if player.queue.repeat_mode == RepeatMode.ALL:
                 embed.add_field(name="Looping:",value=f"🔁`Queue`")
@@ -471,7 +485,7 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
                 
                 embed.add_field(
                     name="Next up",
-                    value="\n".join(f"**{i+1}. [{t.title}]({t.uri}) ({t.length//60000}:{str(t.length%60).zfill(2)})**" 
+                    value="\n".join(f"**{i+1}. [{t.title}]({t.uri}) ({int((t.length/60000)%60)}:{str(int((t.length/1000)%60)).zfill(2)})**" 
                     for i, t in enumerate(player.queue.upcoming_track[:show])
                     ),
                     inline=False
@@ -480,7 +494,7 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
             if upcoming_track := player.queue.upcoming_track:
                 embed.add_field(
                     name="Next up",
-                    value="\n".join(f"**[{t.title}]({t.uri}) ({t.length//60000}:{str(t.length%60).zfill(2)})**" 
+                    value="\n".join(f"**[{t.title}]({t.uri}) ({int((t.length/60000)%60)}:{str(int((t.length/1000)%60)).zfill(2)})**" 
                     for t in player.queue.upcoming_track[:show]
                     ),
                     inline=False
@@ -517,7 +531,7 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
                         #em = discord.Embed(title=f"Search Results for: {query}",description="",color=discord.Color.random())
                         embed.add_field(
                         name="Next up",
-                        value="\n".join(f"**{i+1+start}. [{t.title}]({t.uri}) ({t.length//60000}:{str(t.length%60).zfill(2)})**" 
+                        value="\n".join(f"**{i+1+start}. [{t.title}]({t.uri}) ({int((t.length/60000)%60)}:{str(int((t.length/1000)%60)).zfill(2)})**" 
                         for i, t in enumerate(player.queue.upcoming_track[start:end])
                         ),
                         inline=False
@@ -659,12 +673,18 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
             minutes = int(minutes)
             hours=(player.position/(1000*60*60))%24
             hours = int(hours)
+            seconds2 = (player.queue.current_track.duration/1000)%60
+            seconds2 = int(seconds2)
+            minutes2 = (player.queue.current_track.duration/60000)%60
+            minutes2 = int(minutes2)
+            hours2 = (player.queue.current_track.duration/(1000*60*60))%24
+            hours2 = int(hours2)
             #print(f"{h}")
-            hrs = (player.queue.current_track.duration//60000)//60
-            if hrs > 0:
-                embed.add_field(name=":hourglass: Duration",value=f"`{hours}:{str(minutes).zfill(2)}:{str(seconds).zfill(2)}/{hrs}:{(player.queue.current_track.duration//60000)-(60*hrs)}:{str(player.queue.current_track.duration%60).zfill(2)}`")
+            #hrs = (player.queue.current_track.duration//60000)//60
+            if hours2 > 0:
+                embed.add_field(name=":hourglass: Duration",value=f"`{hours}:{str(minutes).zfill(2)}:{str(seconds).zfill(2)}/{hours2}:{str(minutes2).zfill(2)}:{str(seconds2).zfill(2)}`")
             else:
-                embed.add_field(name=":hourglass: Duration",value=f"`{minutes}:{str(seconds).zfill(2)}/{(player.queue.current_track.duration//60000)}:{str(player.queue.current_track.duration%60).zfill(2)}`")
+                embed.add_field(name=":hourglass: Duration",value=f"`{minutes}:{str(seconds).zfill(2)}/{minutes2}:{str(seconds2).zfill(2)}`")
             #embed.add_field(name="Duration",value=f"{player.queue.cuurrent_track.length//60000}:{str(track.length%60).zfill(2)}")
             embed.add_field(name=":bust_in_silhouette: Author",value=f"{player.queue.current_track.author}")
             embed.add_field(name="Requested by:",value=f"{requester}",inline=False)

@@ -78,7 +78,7 @@ async def fight_help(ctx):
 
 @help.command(name="action",aliases=["actions"])
 async def action(ctx):
-    em = discord.Embed(title=":hugging: | Action Commands",description="`Slap`, `Punch`, `Kick`, `Hardkick`, `Lick`, `Bite`, `Bully`, `Hug`, `Pat`",color=discord.Color.random())
+    em = discord.Embed(title=":hugging: | Action Commands",description="`Slap`, `Punch`, `Kick`, `Hardkick`, `Lick`, `Bite`, `Bully`, `Hug`, `Pat`, `Kiss`, `Spank`",color=discord.Color.random())
     await ctx.send(embed=em)
 
 @help.command(name="info")

@@ -207,6 +207,44 @@ class ActionCog(commands.Cog):
             await ctx.send(embed=em)
         else:
             top_8gifs = None
+    @commands.command(name="kiss")
+    @commands.guild_only()
+    @commands.cooldown(1,5,commands.BucketType.user)
+    @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
+    async def _kiss(self,ctx,user:discord.Member):
+        r = requests.get("https://g.tenor.com/v1/search?q=%s&key=%s&limit=%s" % ('anime-kiss', api_key, lmt))
+        if r.status_code == 200:
+            # load the GIFs using the urls for the smaller GIF sizes
+            top_8gifs = json.loads(r.content)
+            random_gif = random.randint(0,len(top_8gifs['results'])-1)
+            #print ()
+            link = top_8gifs['results'][random_gif]['media'][0]['mediumgif']['url']
+            em = discord.Embed(color=discord.Color.random())
+            em.set_author(name=f"{ctx.author.name} kisses {user.name}. :3",icon_url=f"{ctx.author.avatar_url}")
+            em.set_image(url=f'{str(link)}')
+            await ctx.send(embed=em)
+        else:
+            top_8gifs = None
+    @commands.command(name="spank")
+    @commands.guild_only()
+    @commands.cooldown(1,5,commands.BucketType.user)
+    @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
+    async def _kiss(self,ctx,user:discord.Member):
+        r = requests.get("https://g.tenor.com/v1/search?q=%s&key=%s&limit=%s" % ('anime-spank', api_key, lmt))
+        if r.status_code == 200:
+            # load the GIFs using the urls for the smaller GIF sizes
+            top_8gifs = json.loads(r.content)
+            random_gif = random.randint(0,len(top_8gifs['results'])-1)
+            #print ()
+            link = top_8gifs['results'][random_gif]['media'][0]['mediumgif']['url']
+            em = discord.Embed(color=discord.Color.random())
+            em.set_author(name=f"{ctx.author.name} spanks {user.name}. Ouch!",icon_url=f"{ctx.author.avatar_url}")
+            em.set_image(url=f'{str(link)}')
+            await ctx.send(embed=em)
+        else:
+            top_8gifs = None
     
 def setup(bot):
     bot.add_cog(ActionCog(bot))
