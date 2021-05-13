@@ -195,9 +195,9 @@ class Player(wavelink.Player):
                 embed.set_thumbnail(url=track.thumb)
                 seconds2 = (track.duration/1000)%60
                 seconds2 = int(seconds2)
-                minutes2 = (track.queue.current_track.duration/60000)%60
+                minutes2 = (track.duration/60000)%60
                 minutes2 = int(minutes2)
-                hours2 = (track.queue.current_track.duration/(1000*60*60))%24
+                hours2 = (track.duration/(1000*60*60))%24
                 hours2 = int(hours2)
                 if hours2 > 0:
                     embed.add_field(name="Duration",value=f"`{hours2}:{str(minutes2).zfill(2)}:{str(seconds2).zfill(2)}`")
