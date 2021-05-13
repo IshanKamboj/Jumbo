@@ -231,7 +231,7 @@ class ActionCog(commands.Cog):
     @commands.cooldown(1,5,commands.BucketType.user)
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
-    async def _kiss(self,ctx,user:discord.Member):
+    async def _spank(self,ctx,user:discord.Member):
         r = requests.get("https://g.tenor.com/v1/search?q=%s&key=%s&limit=%s" % ('anime-spank', api_key, lmt))
         if r.status_code == 200:
             # load the GIFs using the urls for the smaller GIF sizes
