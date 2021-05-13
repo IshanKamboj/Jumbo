@@ -11,19 +11,19 @@ class OwnerCommands(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
         self.token = os.getenv('DBL_TOKEN')
-        self.dblpy = dbl.DBLClient(self.bot, self.token, autopost=True)
+        self.dblpy = dbl.DBLClient(self.bot, self.token,webhook_port=5000,autopost=True)
     @commands.Cog.listener()
     async def on_guild_post(self):
         print("Server count posted successfully")
     @commands.Cog.listener()
     async def on_dbl_vote(self, data):
-        print(socket.gethostbyname(socket.gethostname()))
+        #print(socket.gethostbyname(socket.gethostname()))
         """An event that is called whenever someone votes for the bot on top.gg."""
         print(f"Received an upvote:{data}")
 
     @commands.Cog.listener()
     async def on_dbl_test(self, data):
-        print(socket.gethostbyname(socket.gethostname()))
+        #print(socket.gethostbyname(socket.gethostname()))
         """An event that is called whenever someone tests the webhook system for your bot on top.gg."""
         print(f"Received a test upvote:{data}")
     
