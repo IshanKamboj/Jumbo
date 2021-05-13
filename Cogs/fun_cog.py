@@ -156,7 +156,7 @@ class Fun(commands.Cog):
     async def _insult(self,ctx,user:discord.Member):
         # with open("insult.txt","r") as f:
         #     roast_list = f.readlines()
-        api_url = "https://api.snowflakedev.xyz/api/roast"
+        api_url = "https://api2.snowflakedev.xyz/api/roast"
         r = requests.get(api_url,headers={"Authorization":"NTc2NDQyMDI5MzM3NDc3MTMw.MTYxODU0MjEyNTA5Ng==.fc6b183fdd97d9bcc3cddce606e0ad70"}).content.decode()
         roast = json.loads(r)["roast"]
         #roast = roast_list[length_roast].replace("\n"," ")

@@ -372,7 +372,7 @@ class Utility(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 25, commands.BucketType.user)
     async def _pokedex(self,ctx,*,query):
-        api_url = f"https://api.snowflakedev.xyz/api/pokemon?name={query}"
+        api_url = f"https://api2.snowflakedev.xyz/api/pokemon?name={query}"
         response = requests.get(api_url,headers={"query":str(query),"Authorization":"NTc2NDQyMDI5MzM3NDc3MTMw.MTYxODU0MjEyNTA5Ng==.fc6b183fdd97d9bcc3cddce606e0ad70"}).content.decode()
         r = json.loads(response)
         em = discord.Embed(title=f"{query}'s info",color=discord.Color.random()).set_thumbnail(url=r["image"])
