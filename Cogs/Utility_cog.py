@@ -245,7 +245,7 @@ class Utility(commands.Cog):
     async def _google(self,ctx,*,query):
         db = firebase.database()
         temp = {}
-        for j in search(query,tld="co.in" ,num=5,start=0, stop=5, pause=0.5): 
+        for j in search(query,tld="co.in" ,num=5,start=0, stop=5, pause=1): 
             #temp.append(j)
             url = str(j)
             response = requests.get(url)
