@@ -359,11 +359,11 @@ class Admin(commands.Cog):
             multiplier = 25
         if multi.val() is None:
             db.child("Multi").child(str(ctx.guild.id)).child(str(channel.id)).set({"Multiplier":multiplier})
-            embed = discord.Embed(description=f"**Multi set to {multiplier}x in**{channel.mention}",color=discord.Color.random())
+            embed = discord.Embed(description=f"**Multi set to {multiplier}x in  **{channel.mention}",color=discord.Color.random())
             await ctx.send(embed=embed)
         else:
             db.child("Multi").child(str(ctx.guild.id)).child(str(channel.id)).update({"Multiplier":multiplier})
-            embed = discord.Embed(description=f"**Multi updated to {multiplier}x in** {channel.mention}",color=discord.Color.random())
+            embed = discord.Embed(description=f"**Multi updated to {multiplier}x in ** {channel.mention}",color=discord.Color.random())
             await ctx.send(embed=embed)
     @settings.command(name="showmulti")
     @commands.guild_only()
