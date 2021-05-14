@@ -275,8 +275,8 @@ class Utility(commands.Cog):
         x = wikipedia.summary(query,sentences=7)
         pg = wikipedia.page(query)
         link = pg.url
-        
-        await ctx.send(f"**{x}**\n[ Click here]({link}) for more info.")
+        em = discord.Embed(title='Wikipedia Results',description=f"**{x}**\n[**Click here**]({link}) for more info.",color=discord.Color.green())
+        await ctx.send(embed=em)
     
     @commands.command(name="poll")
     @commands.guild_only()

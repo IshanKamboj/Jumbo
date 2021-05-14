@@ -156,7 +156,7 @@ class InfoCogs(commands.Cog):
             message = payload.cached_message
             self.sniped_msgs[message.channel.id] = (
                 message.content, message.author, message.channel, message.created_at)
-            await asyncio.sleep(600)
+            await asyncio.sleep(1200)
             del self.sniped_msgs[message.channel.id]
         except:
             pass
@@ -178,7 +178,7 @@ class InfoCogs(commands.Cog):
                                 color=discord.Color.random(), timestamp=time)
             em.set_author(
                 name=f"{author.name}#{author.discriminator}", icon_url=author.avatar_url)
-            em.set_footer(text=f"Deleted in : #{channel}")
+            em.set_footer(text=f"Deleted in : {channel.mention}")
             await ctx.send(embed=em)
         except KeyError:
             await ctx.send("**`Found Nothing to Snipe ;)`**")
@@ -221,7 +221,7 @@ class InfoCogs(commands.Cog):
         try:
             self.editsnipe_msgs[message_after.channel.id] = (
                 message_before.content, message_after.content, message_after.author,message_after.channel, message_after.created_at)
-            await asyncio.sleep(600)
+            await asyncio.sleep(1200)
             del self.editsnipe_msgs[message_after.channel.id]
         except:
             pass
@@ -241,7 +241,7 @@ class InfoCogs(commands.Cog):
                                 color=discord.Color.random(), timestamp=time)
             em.set_author(
                 name=f"{author.name}#{author.discriminator}", icon_url=author.avatar_url)
-            em.set_footer(text=f"Edited in : #{channel}")
+            em.set_footer(text=f"Edited in : {channel.mention}")
             await ctx.send(embed=em)
         except KeyError:
             await ctx.send("**`Found Nothing to Snipe ;)`**")

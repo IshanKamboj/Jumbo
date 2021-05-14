@@ -12,6 +12,7 @@ class Calculations(commands.Cog):
     @commands.group(invoke_without_command=True)
     @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def area(self,ctx):
         await ctx.send(embed=HelpEmbeds.area_embed())
@@ -19,6 +20,7 @@ class Calculations(commands.Cog):
     @area.command(name="triangle")
     @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     async def _triangle(self,ctx,*,dimensions:str):
         ht,bs = dimensions.split(',')
         ht = int(ht)
@@ -29,6 +31,7 @@ class Calculations(commands.Cog):
     @area.command(name="rectangle")
     @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     async def _rectangle(self,ctx,*,dimensions:str):
         length,breadth = dimensions.split(',')
         length = int(length)
@@ -39,6 +42,7 @@ class Calculations(commands.Cog):
     @area.command(name="square")
     @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     async def _square(self,ctx,dimensions:str):
         side = int(dimensions)
         area = side**2
@@ -47,6 +51,7 @@ class Calculations(commands.Cog):
     @area.command(name="circle")
     @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     async def _circle(self,ctx,dimensions:str):
         side = int(dimensions)
         area = 22/7*side**2
@@ -55,12 +60,14 @@ class Calculations(commands.Cog):
     @commands.group(invoke_without_command=True)
     @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     async def volume(self,ctx):
         await ctx.send(embed=HelpEmbeds.volume_embed())
     
     @volume.command(name='cube')
     @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     async def _cube(self,ctx,side:float):
         volume = side**3
         csa = 4*(side**2)
@@ -78,6 +85,7 @@ class Calculations(commands.Cog):
     @volume.command(name='cuboid')
     @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     async def _cuboid(self,ctx,*,dimensions:str):
         try:
             l,b,h = dimensions.split(',')
@@ -102,6 +110,7 @@ class Calculations(commands.Cog):
     @volume.command(name='sphere')
     @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     async def _sphere(self,ctx,radius:float):
         try:
             volume = (4/3*22/7)*(radius**3)
@@ -120,6 +129,7 @@ class Calculations(commands.Cog):
     @volume.command(name='hemisphere')
     @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     async def _hemisphere(self,ctx,radius:float):
         try:
             volume = (2/3*22/7)*(radius**3)
@@ -140,6 +150,7 @@ class Calculations(commands.Cog):
     @volume.command(name='cone')
     @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     async def _cone(self,ctx,*,dimensions:str):
         try:
             radius,height = dimensions.split(',')
@@ -165,6 +176,7 @@ class Calculations(commands.Cog):
     @volume.command(name='cylinder')
     @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     async def _cylinder(self,ctx,*,dimensions:str):
         try:
             radius,ht = dimensions.split(',')
@@ -189,6 +201,7 @@ class Calculations(commands.Cog):
     @commands.guild_only()
     @commands.cooldown(1, 7, commands.BucketType.user)
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     async def _factorial(self,ctx,number:int):
         factorials = math.factorial(number)
         em = discord.Embed(title="Factorial",description=f"**{number}! == {factorials}**    ",color=discord.Color.random())

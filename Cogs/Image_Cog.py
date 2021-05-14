@@ -14,6 +14,7 @@ class ImageCommands(commands.Cog):
     @commands.command(name="wanted")
     @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _wanted(self,ctx, user:discord.Member=None):
         if user is None:
@@ -40,6 +41,7 @@ class ImageCommands(commands.Cog):
     @commands.command(name="rip")
     @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _rip(self,ctx,user:discord.Member=None):
         if user == None:
@@ -67,6 +69,7 @@ class ImageCommands(commands.Cog):
     @commands.command(name="wallpaper")
     @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _wallpaper(self,ctx):
         url = 'https://source.unsplash.com/random/1920x1080'

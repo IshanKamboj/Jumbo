@@ -202,8 +202,11 @@ class AllListeners(commands.Cog):
                                 if last_exp.val() is None:
                                     exp = data.val()['exp']
                                     lvl = data.val()['lvl']
-                                    exp += self.lvl_add
-                                    
+                                    multi = db.child("Multi").child(str(message.guild.id)).child(str(message.channel.id)).get()
+                                    if multi.val() is None:
+                                        exp += self.lvl_add
+                                    else:
+                                        exp += multi.val()["Multiplier"]
                                     a = self.difficulty+(lvl-1)*self.difficulty
                                     mention = message.author.mention
                                     if exp >= a:
@@ -226,7 +229,11 @@ class AllListeners(commands.Cog):
                                     if (datetime.utcnow() - converted_time).seconds > 4:
                                         exp = data.val()['exp']
                                         lvl = data.val()['lvl']
-                                        exp += self.lvl_add
+                                        multi = db.child("Multi").child(str(message.guild.id)).child(str(message.channel.id)).get()
+                                        if multi.val() is None:
+                                            exp += self.lvl_add
+                                        else:
+                                            exp += multi.val()["Multiplier"]
                                         
                                         a = self.difficulty+(lvl-1)*self.difficulty
                                         mention = message.author.mention
