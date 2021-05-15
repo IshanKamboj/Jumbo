@@ -12,7 +12,7 @@ def get_prefix(client,message):
         db = firebase.database()
         data = db.child('Prefixes').child(str(message.guild.id)).get()
         x = data.val()['Prefix']
-        return commands.when_mentioned_or(x)(client,message)
+        return commands.when_mentioned_or(x,"j!")(client,message)
     except:
         return commands.when_mentioned_or("j!")(client,message)
 
