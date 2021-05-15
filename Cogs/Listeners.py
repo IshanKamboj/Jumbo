@@ -316,5 +316,14 @@ class AllListeners(commands.Cog):
                 await ctx.send(str(error))
             except:
                 pass
+    @commands.Cog.listener()
+    async def on_command_completion(self,ctx):
+        db = firebase.database()
+        x = db.child("Commands").child(str(ctx.command.name)).get()
+        if x.val() is None:
+            db.child("Commands").child(str(ctx.command.name)).set({"TimesUsed":1})
+        else:
+            t = x.val()["TimesUsed"]
+            db.child("Commands").child(str(ctx.command.name)).update({"TimesUsed":t+1})
 def setup(bot):
     bot.add_cog(AllListeners(bot=bot,lvl_add=lvl_add,difficulty=difficulty))
