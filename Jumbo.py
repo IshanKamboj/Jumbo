@@ -32,12 +32,12 @@ async def help(ctx):
     data = db.child('Prefixes').child(str(ctx.guild.id)).get()
     x = data.val()['Prefix']
     em = discord.Embed(title="Help",description=f"""
-    Your Server Prefix : `{x}` (Mention to know the prefix of your server)
+    Your Server Prefix : `{x}`
+
     **This is a fun bot it has a variety of different commands, you can set autoreacts, afk, set perks for your server,can see weather forecast for your city, calculate, play music, send emojis and much more.**
 
 * refers to your server prefix above.
 Use `*help <command>` for extended information on a command.
-
 
 **Quick Links:**    
 [** •Invite me**](https://discord.com/api/oauth2/authorize?client_id=805430097426513941&permissions=1008073792&scope=bot "Add the bot to your server")[** •Vote for me**](https://top.gg/bot/805430097426513941/vote "Vote for the bot")[** •Support Server**](https://discord.gg/P3BmUsgv5y "Join the support server")

@@ -107,6 +107,7 @@ class AllListeners(commands.Cog):
         db.child('Prefixes').child(str(guild.id)).set({'Prefix':default_prefix})
         em = discord.Embed(title="Hola Nabs, I am Jumbo",description="""
         Default Prefix : `j!`
+        
         **This is a fun bot and has a variety of different commands, you can set autoreacts, afk, can see weather forecast for your city, calculate, play music, send emojis and much more.**
         **This bot has basically a mixture of commands and it cannot be called a particular type of bot. It combines features from many bots and also many new and original features are being added.**
     
