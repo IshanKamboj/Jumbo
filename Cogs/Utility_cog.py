@@ -127,7 +127,7 @@ class Utility(commands.Cog):
             if i == 2:
                 leaderboard_embed.add_field(name=f":third_place: ----> {temp[i]}",value=f"EXP: `{temp2[i]}`\n LVL: `{temp3[i]}` ",inline=False)
             elif i < 10 and i > 2:
-                leaderboard_embed.add_field(name=f"{i}. {temp[i]}",value=f"EXP: `{temp2[i]}`\n LVL: `{temp3[i]}` ",inline=False)
+                leaderboard_embed.add_field(name=f"{i+1}. {temp[i]}",value=f"EXP: `{temp2[i]}`\n LVL: `{temp3[i]}` ",inline=False)
         await ctx.send(embed=leaderboard_embed)
         
 
