@@ -348,10 +348,25 @@ class Admin(commands.Cog):
     @settings.command(name="multi")
     @commands.guild_only()
     @commands.has_permissions(administrator=True)
-    async def _multi(self,ctx, multiplier:int, channel:discord.TextChannel = None):
+    async def _multi(self,ctx, multiplier:int=None, channel:discord.TextChannel = None):
         db = firebase.database()
         if channel == None:
             channel = ctx.channel
+        if multiplier == None:
+            multi = db.child("Multi").child(str(ctx.guild.id)).get()
+            if not multi.val() is None:
+                embed = discord.Embed(title=f"Multi Settings for : {ctx.guild.name}",description="",color=discord.Color.random()).set_thumbnail(url=f"{str(ctx.guild.icon_url)}")
+                for i in multi.val():
+                    channel =  self.bot.get_channel(int(i))
+                    x = db.child("Multi").child(str(ctx.guild.id)).child(i).get()
+                    m = x.val()["Multiplier"]
+                    if  embed.description == "":
+                        embed.description += f"{channel.mention}    :arrow_right:   **{m}x**"
+                    else:
+                        embed.description += f"\n{channel.mention}  :arrow_right:   **{m}x**"
+                await ctx.send(embed=embed)
+            else:
+                await ctx.send("No server settings for this guild")
         multi = db.child("Multi").child(str(ctx.guild.id)).child(str(channel.id)).get()
         if multiplier <=0:
             multiplier = 1
@@ -365,24 +380,24 @@ class Admin(commands.Cog):
             db.child("Multi").child(str(ctx.guild.id)).child(str(channel.id)).update({"Multiplier":multiplier})
             embed = discord.Embed(description=f"**Multi updated to {multiplier}x in ** {channel.mention}",color=discord.Color.random())
             await ctx.send(embed=embed)
-    @settings.command(name="showmulti")
-    @commands.guild_only()
-    async def _showmulti(self,ctx):
-        db = firebase.database()
-        multi = db.child("Multi").child(str(ctx.guild.id)).get()
-        if not multi.val() is None:
-            embed = discord.Embed(title=f"Multi Settings for : {ctx.guild.name}",description="",color=discord.Color.random()).set_thumbnail(url=f"{str(ctx.guild.icon_url)}")
-            for i in multi.val():
-                channel =  self.bot.get_channel(int(i))
-                x = db.child("Multi").child(str(ctx.guild.id)).child(i).get()
-                m = x.val()["Multiplier"]
-                if  embed.description == "":
-                    embed.description += f"{channel.mention}    :arrow_right:   **{m}x**"
-                else:
-                    embed.description += f"\n{channel.mention}  :arrow_right:   **{m}x**"
-            await ctx.send(embed=embed)
-        else:
-            await ctx.send("No server settings for this guild")
+    # @settings.command(name="showmulti")
+    # @commands.guild_only()
+    # async def _showmulti(self,ctx):
+    #     db = firebase.database()
+    #     multi = db.child("Multi").child(str(ctx.guild.id)).get()
+    #     if not multi.val() is None:
+    #         embed = discord.Embed(title=f"Multi Settings for : {ctx.guild.name}",description="",color=discord.Color.random()).set_thumbnail(url=f"{str(ctx.guild.icon_url)}")
+    #         for i in multi.val():
+    #             channel =  self.bot.get_channel(int(i))
+    #             x = db.child("Multi").child(str(ctx.guild.id)).child(i).get()
+    #             m = x.val()["Multiplier"]
+    #             if  embed.description == "":
+    #                 embed.description += f"{channel.mention}    :arrow_right:   **{m}x**"
+    #             else:
+    #                 embed.description += f"\n{channel.mention}  :arrow_right:   **{m}x**"
+    #         await ctx.send(embed=embed)
+    #     else:
+    #         await ctx.send("No server settings for this guild")
         #print(embed.description)
     @settings.command(name='show')
     @commands.guild_only()
