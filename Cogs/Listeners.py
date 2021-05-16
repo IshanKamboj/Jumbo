@@ -80,7 +80,7 @@ class AllListeners(commands.Cog):
         user_role = list(map(int, [r.id for r in ctx.author.roles]))
         if req_role.val() is not None:
             for i in user_role:
-                if i in req_role.val()["roles_id"]:
+                if i in req_role.val()["roles_id"] or ctx.author.guild_permissions.administrator:
                     return True
                     break
             raise MissingRequiredServerRoles

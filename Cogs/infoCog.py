@@ -178,7 +178,7 @@ class InfoCogs(commands.Cog):
                                 color=discord.Color.random(), timestamp=time)
             em.set_author(
                 name=f"{author.name}#{author.discriminator}", icon_url=author.avatar_url)
-            em.set_footer(text=f"Deleted in : {channel.mention}")
+            em.set_footer(text=f"Deleted in : #{channel}")
             await ctx.send(embed=em)
         except KeyError:
             await ctx.send("**`Found Nothing to Snipe ;)`**")
@@ -241,7 +241,7 @@ class InfoCogs(commands.Cog):
                                 color=discord.Color.random(), timestamp=time)
             em.set_author(
                 name=f"{author.name}#{author.discriminator}", icon_url=author.avatar_url)
-            em.set_footer(text=f"Edited in : {channel.mention}")
+            em.set_footer(text=f"Edited in : #{channel}")
             await ctx.send(embed=em)
         except KeyError:
             await ctx.send("**`Found Nothing to Snipe ;)`**")
