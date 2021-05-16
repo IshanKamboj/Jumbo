@@ -386,7 +386,7 @@ class Admin(commands.Cog):
                 db.child("Multi").child(str(ctx.guild.id)).child(str(channel.id)).update({"Multiplier":multiplier})
                 embed = discord.Embed(description=f"**Multi updated to {multiplier}x in ** {channel.mention}",color=discord.Color.random())
                 await ctx.send(embed=embed)
-    @settings.command(name='announcments',aliases=["announcement","ancments","levelmsg","ac"])
+    @settings.command(name='announcements',aliases=["announcement","ancments","levelmsg","anc","announce"])
     @commands.guild_only()
     @commands.has_permissions(administrator=True)
     async def _announcement(self,ctx,channel:discord.TextChannel = None):
@@ -396,10 +396,12 @@ class Admin(commands.Cog):
         announcement_channel = db.child("Announcement").child(str(ctx.guild.id)).get()
         if announcement_channel.val() == None:
             db.child("Announcement").child(str(ctx.guild.id)).set({"channel":channel.id})
-            await ctx.send(f"{channel.mention} was set as your announcments channel.")
+            em = discord.Embed(title="Announcements channel set",description=f"{channel.mention} was set as your announcements channel. Now all the level up messages would be sent their.",color=discord.Color.green())
+            await ctx.send(embed=em)
         else:
             db.child("Announcement").child(str(ctx.guild.id)).update({"channel":channel.id})
-            await ctx.send(f"{channel.mention} was updated as your announcments channel.")
+            em = discord.Embed(title="Announcements channel updated",description=f"{channel.mention} was updated as your announcements channel. Now all the level up messages would be sent their.",color=discord.Color.green())
+            await ctx.send(embed=em)
 
 
     @settings.command(name='show')
