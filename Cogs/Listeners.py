@@ -193,10 +193,9 @@ class AllListeners(commands.Cog):
                     isEnabled = db.child('Disabled').child(str(message.guild.id)).child("level").get()
                     if isEnabled.val() is None:
                         if not message.author.bot:
-                            
-                            
                             data = db.child("Levels").child(str(message.guild.id)).child(str(message.author.id)).get()
-                            last_exp = db.child("Last Seen").child(str(message.author.id)).get()   
+                            last_exp = db.child("Last Seen").child(str(message.author.id)).get()
+                            announcement_channel = db.child("Announcement").child(str(message.guild.id)).get()   
                             if data.val() is None:
                                 newUser = {"userName":str(message.author),"lvl":1,"exp":1}
                                 db.child("Levels").child(str(message.guild.id)).child(str(message.author.id)).set(newUser)
@@ -219,7 +218,11 @@ class AllListeners(commands.Cog):
                                         )
                                         .set_thumbnail(url=f"{message.author.avatar_url}")
                                         )
-                                        await message.channel.send(mention,embed=lvl_embed)
+                                        if announcement_channel.val() is None:
+                                            await message.channel.send(mention,embed=lvl_embed)
+                                        else:
+                                            ch = announcement_channel.val()["channel"]
+                                            await self.bot.get_channel(ch).send(mention,embed=lvl_embed)
                                     if seen_data.val() is None:
                                         db.child("Last Seen").child(str(message.author.id)).set({"Time":str(datetime.utcnow())})
                                     elif seen_data.val() is not None:
@@ -247,7 +250,11 @@ class AllListeners(commands.Cog):
                                             )
                                             .set_thumbnail(url=f"{message.author.avatar_url}")
                                             )
-                                            await message.channel.send(mention,embed=lvl_embed)
+                                            if announcement_channel.val() is None:
+                                                await message.channel.send(mention,embed=lvl_embed)
+                                            else:
+                                                ch = announcement_channel.val()["channel"]
+                                                await self.bot.get_channel(ch).send(mention,embed=lvl_embed)
                                         if seen_data.val() is None:
                                             db.child("Last Seen").child(str(message.author.id)).set({"Time":str(datetime.utcnow())})
                                         elif seen_data.val() is not None:

@@ -354,8 +354,12 @@ class Admin(commands.Cog):
             channel = ctx.channel
         if multiplier == None:
             multi = db.child("Multi").child(str(ctx.guild.id)).get()
+            announcement_channel = db.child("Announcement").child(str(ctx.guild.id)).get()
+            embed = discord.Embed(title=f"Level Settings for : {ctx.guild.name}",description="",color=discord.Color.random()).set_thumbnail(url=f"{str(ctx.guild.icon_url)}")
+            if announcement_channel.val() != None:
+                ch = self.bot.get_channel(announcement_channel.val()["channel"])
+                embed.add_field(name="Announcements Channel:",value=f"{ch.mention}")
             if not multi.val() is None:
-                embed = discord.Embed(title=f"Multi Settings for : {ctx.guild.name}",description="",color=discord.Color.random()).set_thumbnail(url=f"{str(ctx.guild.icon_url)}")
                 for i in multi.val():
                     channel =  self.bot.get_channel(int(i))
                     x = db.child("Multi").child(str(ctx.guild.id)).child(i).get()
@@ -382,6 +386,22 @@ class Admin(commands.Cog):
                 db.child("Multi").child(str(ctx.guild.id)).child(str(channel.id)).update({"Multiplier":multiplier})
                 embed = discord.Embed(description=f"**Multi updated to {multiplier}x in ** {channel.mention}",color=discord.Color.random())
                 await ctx.send(embed=embed)
+    @settings.command(name='announcments',aliases=["announcement","ancments","levelmsg","ac"])
+    @commands.guild_only()
+    @commands.has_permissions(administrator=True)
+    async def _announcement(self,ctx,channel:discord.TextChannel = None):
+        if channel == None:
+            channel = ctx.channel
+        db = firebase.database()
+        announcement_channel = db.child("Announcement").child(str(ctx.guild.id)).get()
+        if announcement_channel.val() == None:
+            db.child("Announcement").child(str(ctx.guild.id)).set({"channel":channel.id})
+            await ctx.send(f"{channel.mention} was set as your announcments channel.")
+        else:
+            db.child("Announcement").child(str(ctx.guild.id)).update({"channel":channel.id})
+            await ctx.send(f"{channel.mention} was updated as your announcments channel.")
+
+
     @settings.command(name='show')
     @commands.guild_only()
     async def _show(self,ctx):
