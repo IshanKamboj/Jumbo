@@ -150,7 +150,7 @@ class Admin(commands.Cog):
                 elif disabledCommands.val() is not None:
                     if command_disable is None:
                         await ctx.send("`No command with that name found`")
-                    elif command_disable == ctx.command or command_disable == 'settings'  or command_disable == "enable":
+                    elif command_disable == ctx.command or command_disable == 'settings'  or command_disable == "enable" or command_disable == "help" or command_disable == "prefix":
                         await ctx.send("`You cannot enable/disable this command`")
                     else:
                         if disabledCommands.val()["isEnabled"] is True:
@@ -386,7 +386,7 @@ class Admin(commands.Cog):
                 db.child("Multi").child(str(ctx.guild.id)).child(str(channel.id)).update({"Multiplier":multiplier})
                 embed = discord.Embed(description=f"**Multi updated to {multiplier}x in ** {channel.mention}",color=discord.Color.random())
                 await ctx.send(embed=embed)
-    @settings.command(name='announcements',aliases=["announcement","ancments","levelmsg","anc","announce"])
+    @settings.command(name='announcements',aliases=["announcement","ancments","levelmsg","ann","announce"])
     @commands.guild_only()
     @commands.has_permissions(administrator=True)
     async def _announcement(self,ctx,channel:discord.TextChannel = None):
