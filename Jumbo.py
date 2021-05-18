@@ -89,7 +89,7 @@ async def action(ctx):
 
 @help.command(name='image')
 async def image(ctx):
-    em = discord.Embed(title=":camera: | Image Commands",description="`Wanted`, `Rip`, `Wallpaper`",color=discord.Color.random())
+    em = discord.Embed(title=":camera: | Image Commands",description="`Wanted`, `Rip`, `Wallpaper`, `Trash`",color=discord.Color.random())
     await ctx.send(embed=em)
 
 @help.command(name='calculation',aliases=["calc"])
@@ -305,6 +305,9 @@ async def wanted(ctx):
 @help.command(name="rip")
 async def rip(ctx):
     await ctx.send(embed=HelpEmbeds.rip_embed())
+@help.command(name="trash",aliases=['garbage'])
+async def rip(ctx):
+    await ctx.send(embed=HelpEmbeds.trash_embed())
 
 @help.command(name="hex")
 async def hex(ctx):

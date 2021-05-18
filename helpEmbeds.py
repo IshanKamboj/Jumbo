@@ -337,3 +337,7 @@ class HelpEmbeds():
         em = discord.Embed(title=":mag: suggest",description="Suggests a trending song from a genre.")
         em.add_field(name="Syntax",value="*suggest <genre>")
         return em
+    def trash_embed():
+        em = discord.Embed(title="Trash",description="Generates a trash image of user.")
+        em.add_field(name="Syntax",value="*trash <user>")
+        return em

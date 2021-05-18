@@ -64,19 +64,41 @@ class ImageCommands(commands.Cog):
             image_binary.seek(0)
             await ctx.send(file=discord.File(fp=image_binary, filename='image.png'))
     # https://source.unsplash.com/1600x900/?nature,water
-    @commands.command(name="wallpaper")
+    @commands.command(name="wallpaper",aliases=["wall"])
     @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
-    async def _wallpaper(self,ctx):
-        url = 'https://source.unsplash.com/random/1920x1080'
+    async def _wallpaper(self,ctx,query:str=None):
+        if query == None:
+            url = 'https://source.unsplash.com/random/1920x1080'
+        else:
+            url = f'https://source.unsplash.com/featured/?{query}'
         async with aiohttp.ClientSession() as session:
             async with session.get(url) as resp:
                 if resp.status != 200:
                     return await ctx.send('Could not download file...')
                 data = io.BytesIO(await resp.read())
                 await ctx.send(file=discord.File(data, 'cool_image.png'))
-            
+    @commands.command(name="trash",aliases=['garbage'])
+    @commands.guild_only()
+    @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
+    @commands.cooldown(1, 7, commands.BucketType.user)
+    async def _trash(self,ctx,user:discord.Member=None):
+        if user == None:
+            user = ctx.author
+        trash = Image.open("template_imgs/trash.jpg")
+        d = ImageDraw.Draw(trash)
+        asset = user.avatar_url
+        data = BytesIO(await asset.read())
+        pfp = Image.open(data)
+        pfp = pfp.resize((190,190))
+        trash.paste(pfp,(265,580))
+        with io.BytesIO() as image_binary:
+            trash.save(image_binary,"PNG")
+            image_binary.seek(0)
+            await ctx.send(file=discord.File(fp=image_binary, filename='image.png'))
+    
 def setup(bot):
     bot.add_cog(ImageCommands(bot))
