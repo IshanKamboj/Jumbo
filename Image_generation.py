@@ -1,8 +1,7 @@
 from PIL import Image, ImageDraw, ImageFont
 import requests
 import discord
-from discord.ext import commands
-
+import io
 class LevelIMG:
     def __init__(self, ProfileIMG,Username,exp,lvl,difficulty,rank):
         self.ProfileIMG = ProfileIMG
@@ -11,6 +10,7 @@ class LevelIMG:
         self.lvl = lvl
         self.difficulty = difficulty
         self.rank = rank
+    @property
     def drawIMG(self):
         # creating canvas
         img = Image.new('RGB', (934, 282), color = (21,23,26))
@@ -84,5 +84,8 @@ class LevelIMG:
             percent = (percentVal1/di)*100
             bar_to_be_filled = (percent/100)*934
             d.rectangle([0,272,bar_to_be_filled,282],fill=(0,255,185))
-        img.paste(avatarImg,(avatarX,avatarY),circle_image)
-        img.save("LVL.png")
+        img.paste(avatarImg, (avatarX,avatarY),circle_image)
+        with io.BytesIO() as image_binary:
+            img.save(image_binary,"PNG")
+            image_binary.seek(0)
+            return discord.File(fp=image_binary, filename='image.png')

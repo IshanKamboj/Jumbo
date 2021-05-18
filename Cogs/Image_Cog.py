@@ -1,11 +1,9 @@
 import discord 
 from discord.ext import commands
-import PIL
 from PIL import Image, ImageDraw, ImageFont
 from .Listeners import AllListeners
 from io import BytesIO
 import io
-from datetime import datetime
 import aiohttp
 class ImageCommands(commands.Cog):
     def __init__(self,bot):

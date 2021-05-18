@@ -1,10 +1,7 @@
 import discord
 from discord.ext import commands
-import random
-from helpEmbeds import HelpEmbeds
 from Database.db_files import firebase
 from Image_generation import LevelIMG
-import asyncio
 from bs4 import BeautifulSoup
 import requests
 from googlesearch import search
@@ -25,73 +22,36 @@ class Utility(commands.Cog):
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
-    async def _level(self,ctx:commands.Context,*,user=""):
+    async def _level(self,ctx:commands.Context,user:discord.Member=None):
         """Check ur Level with this.        
         Mention ur friend or use his ID to see their level.
         """
+        if user == None:
+            user = ctx.author
+    
         database = firebase.database()
-        if user == "":
-            try:
-                data = database.child('Levels').child(str(ctx.guild.id)).child(str(ctx.author.id)).get()
-                x = data.val()["exp"]
-                y = data.val()["lvl"]
-                temp = []
-                rnk_data = database.child('Levels').child(str(ctx.guild.id)).get()
-                ti = []
-                for i in rnk_data.each():
-                    ti.append(i.val())
-                ordered_list = sorted(ti, key=lambda k: k['exp'],reverse=True)
-                for i in ordered_list:
-                    temp.append(i["userName"]) 
-                
-                
-                rank = (temp.index(str(ctx.author)))+1
-                    
-                image = LevelIMG(ctx.message.author.avatar_url,str(ctx.author),x,y,self.difficulty,rank)
-                instance = image.drawIMG()
-                with open('LVL.png', 'rb') as fp:
-                    await ctx.send(file=discord.File(fp, 'LVL.png'))
-
-            except TypeError:
-                image = LevelIMG(ctx.message.author.avatar_url,str(ctx.author),0,1,self.difficulty,0)
-                instance = image.drawIMG()
-                with open('LVL.png', 'rb') as fp:
-                    await ctx.send(file=discord.File(fp, 'LVL.png'))
-
+        try:
+            data = database.child('Levels').child(str(user.guild.id)).child(str(user.id)).get()
+            x = data.val()["exp"]
+            y = data.val()["lvl"]
+            temp = []
+            rnk_data = database.child('Levels').child(str(user.guild.id)).get()
+            ti = []
+            for i in rnk_data.each():
+                ti.append(i.val())
+            ordered_list = sorted(ti, key=lambda k: k['exp'],reverse=True)
+            for i in ordered_list:
+                temp.append(i["userName"]) 
             
-        elif user != "":
-            user = user.replace("<","")
-            user = user.replace(">","")
-            user = user.replace("@","")
-            user = user.replace("!","")
-            a = await self.bot.fetch_user(user)
-            try:
-                data = database.child('Levels').child(str(ctx.guild.id)).child(str(user)).get()
-                x = data.val()["exp"]
-                y = data.val()["lvl"]
-                temp = []
-                rnk_data = database.child('Levels').child(str(ctx.guild.id)).get()
-                ti = []
-                for i in rnk_data.each():
-                    ti.append(i.val())
-                ordered_list = sorted(ti, key=lambda k: k['exp'],reverse=True)
-                for i in ordered_list:
-                    temp.append(i["userName"])    
+            
+            rank = (temp.index(str(user)))+1
                 
-                
-                rank = (temp.index(str(a)))+1
-                image = LevelIMG(a.avatar_url,str(a),x,y,self.difficulty,rank)
-                instance = image.drawIMG()
-                with open('LVL.png', 'rb') as fp:
-                    await ctx.send(file=discord.File(fp, 'LVL.png'))
-            except TypeError:
-                (x,y) = (0,1)
-                image = LevelIMG(a.avatar_url,str(a),x,y,self.difficulty,0)
-                instance = image.drawIMG()
-                with open('LVL.png', 'rb') as fp:
-                    await ctx.send(file=discord.File(fp, 'LVL.png'))
-            except:
-                await ctx.send("Pls mention the user or use his id.")
+            image = LevelIMG(user.avatar_url,str(user),x,y,self.difficulty,rank)
+            await ctx.send(file=image.drawIMG)
+
+        except TypeError:
+            image = LevelIMG(user.avatar_url,str(user),0,1,self.difficulty,0)
+            await ctx.send(file=image.drawIMG)
 
 
 

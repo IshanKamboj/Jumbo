@@ -1,8 +1,7 @@
 import discord
-from discord.ext import commands, tasks
+from discord.ext import commands
 import asyncio
 from Database.db_files import firebase
-from helpEmbeds import HelpEmbeds
 from datetime import datetime
 import math
 import mpmath

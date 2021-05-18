@@ -9,9 +9,7 @@ import random
 from enum import Enum
 import math
 import asyncio
-from time import time
 from .Listeners import AllListeners
-
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 from PyLyrics import *

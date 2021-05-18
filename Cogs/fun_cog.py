@@ -3,16 +3,11 @@ from discord.ext import commands
 import randfacts
 import random
 from Database.db_files import firebase
-import asyncio
-from helpEmbeds import HelpEmbeds
 from .Listeners import AllListeners
 import pyjokes
 import requests
 import json
-with open("truth.txt","r",encoding='utf-8') as f:
-    truth_text = f.readlines()
-with open("dare.txt","r") as f:
-    dare_text = f.readlines()
+
 
 class Fun(commands.Cog):
     def __init__(self,bot):
@@ -36,6 +31,8 @@ class Fun(commands.Cog):
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _truth(self,ctx,user:discord.Member):
         db = firebase.database()
+        with open("truth.txt","r",encoding='utf-8') as f:
+            truth_text = f.readlines()
         length_truth = random.randint(0,len(truth_text))
         truth = truth_text[length_truth].replace("\n"," ")
         em = discord.Embed(title=f"{ctx.author.name} asks {user.name}", description=f"{truth}",color=discord.Color.random())
@@ -56,8 +53,10 @@ class Fun(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _dare(self,ctx,user:discord.Member):
-        db = firebase.database()
+        with open("dare.txt","r",encoding='utf-8') as f:
+            dare_text = f.readlines()
         length_dare = random.randint(0,len(dare_text))
+
         dare = dare_text[length_dare].replace("\n"," ")
         em = discord.Embed(title=f"{ctx.author.name} asks {user.name} to", description=f"{dare}",color=discord.Color.random())
         await ctx.send(embed=em)
@@ -76,8 +75,6 @@ class Fun(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _8ball(self,ctx,*,question):
-        db = firebase.database()
-
         response = [
             "It is certain.",
             "It is decidedly so.",
@@ -112,8 +109,6 @@ class Fun(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _opinion(self,ctx,user:discord.Member):
-        db = firebase.database()
-            
         opinion_list = ["I think they are a dumbass",
         "My opinion is that they are kind of smart",
         "I guess they are stupid.",

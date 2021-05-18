@@ -1,10 +1,7 @@
-import discord
-from discord.ext import commands, tasks
+from discord.ext import commands
 import os
-from .Listeners import AllListeners
 import sys
 import dbl
-import requests
 import socket
 import socket
 class OwnerCommands(commands.Cog):
@@ -45,7 +42,6 @@ class OwnerCommands(commands.Cog):
         try:
             await ctx.send("Restarting the bot....")
             self.restart_program()
-            await ctx.send("Bot started....")
         except Exception as e:
             print(str(e))
     @commands.command(name="ip")

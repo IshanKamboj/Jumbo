@@ -1,8 +1,6 @@
 import discord
 from discord.ext import commands
-import json
 from .Listeners import AllListeners
-import requests,json
 from helpEmbeds import HelpEmbeds
 import math
 

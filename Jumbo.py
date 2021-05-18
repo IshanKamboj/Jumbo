@@ -2,7 +2,6 @@ import discord
 from discord.ext import commands
 import os
 import random
-import asyncio
 from helpEmbeds import HelpEmbeds
 from discord import Intents
 from Database.db_files import firebase

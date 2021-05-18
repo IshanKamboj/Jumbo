@@ -1,11 +1,6 @@
 import discord
 from discord.ext import commands
-import giphy_client
-from giphy_client.rest import ApiException
 import random
-from Database.db_files import firebase
-import asyncio
-from helpEmbeds import HelpEmbeds
 import requests
 import json
 from .Listeners import AllListeners

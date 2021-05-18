@@ -1,5 +1,4 @@
 import discord
-from discord.ext import commands
 
 class HelpEmbeds():
 #-------------------- Utility commands help embed-----------------------------
