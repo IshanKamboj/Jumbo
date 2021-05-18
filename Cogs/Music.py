@@ -354,6 +354,7 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
                 "rest_uri":"http://lava.link:80",
                 "password":"anything as a password",
                 "identifier":"MAIN",
+                "region":"europe"
             }
         }
 
