@@ -356,14 +356,15 @@ class Admin(commands.Cog):
                 ch = self.bot.get_channel(announcement_channel.val()["channel"])
                 embed.add_field(name="Announcements Channel:",value=f"{ch.mention}")
             if not multi.val() is None:
+                emoji = discord.utils.get(self.bot.emojis, name = "parrow")
                 for i in multi.val():
                     channel =  self.bot.get_channel(int(i))
                     x = db.child("Multi").child(str(ctx.guild.id)).child(i).get()
                     m = x.val()["Multiplier"]
                     if  embed.description == "":
-                        embed.description += f"{channel.mention}    :parrow:   **{m}x**"
+                        embed.description += f"{channel.mention}    {emoji}    **{m}x**"
                     else:
-                        embed.description += f"\n{channel.mention}  :parrow:   **{m}x**"
+                        embed.description += f"\n{channel.mention}  {emoji}   **{m}x**"
                 await ctx.send(embed=embed)
             else:
                 await ctx.send("No server settings for this guild")
