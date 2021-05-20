@@ -319,7 +319,15 @@ class AllListeners(commands.Cog):
                 pass
         else:
             try:
-                await ctx.send(str(error))
+                typ = type(error).__name__
+                em = discord.Embed(title="Uh oh!",description=f"""
+                An unkown error occured : `{typ}`
+                
+                Pls try again and if this persists please report in the support server.
+                
+                [**Support Server**](https://discord.gg/P3BmUsgv5y)""",color=discord.Color.red())
+
+                await ctx.send()
             except:
                 pass
     @commands.Cog.listener()

@@ -307,7 +307,6 @@ class Admin(commands.Cog):
     
     @commands.group(name="settings",aliases=["setting"],invoke_without_command=True)
     @commands.guild_only()
-    @commands.has_permissions(administrator=True)
     @commands.check(AllListeners.check_enabled)
     async def settings(self,ctx):
         await  ctx.send(embed=HelpEmbeds.settings_embed())
@@ -362,9 +361,9 @@ class Admin(commands.Cog):
                     x = db.child("Multi").child(str(ctx.guild.id)).child(i).get()
                     m = x.val()["Multiplier"]
                     if  embed.description == "":
-                        embed.description += f"{channel.mention}    :arrow_right:   **{m}x**"
+                        embed.description += f"{channel.mention}    :parrow:   **{m}x**"
                     else:
-                        embed.description += f"\n{channel.mention}  :arrow_right:   **{m}x**"
+                        embed.description += f"\n{channel.mention}  :parrow:   **{m}x**"
                 await ctx.send(embed=embed)
             else:
                 await ctx.send("No server settings for this guild")
