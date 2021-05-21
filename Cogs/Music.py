@@ -322,9 +322,8 @@ class Music(commands.Cog):
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _resume(self,ctx):
         player = self.bot.lavalink.player_manager.get(ctx.guild.id)
-        if not player.is_playing:
-            await player.set_pause(False)
-            await ctx.message.add_reaction("⏯️")
+        await player.set_pause(False)
+        await ctx.message.add_reaction("⏯️")
     @commands.command(name="stop")
     @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
