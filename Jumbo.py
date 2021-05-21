@@ -439,6 +439,5 @@ for filename in os.listdir('./Cogs'):
         print(f"Could not load: Cogs.{filename[:-3]}")
 
 
-# TOKEN = os.getenv('TOKEN')
-# bot.run(TOKEN)
-bot.run("NzIxMjkwNzY3NTI3NTc1NTUz.XuSYXw.l3AS-iEsIJALEoyPxcLZYjTwpfM")
+TOKEN = os.getenv('TOKEN')
+bot.run(TOKEN)
