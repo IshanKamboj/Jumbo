@@ -352,7 +352,15 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
                 "rest_uri":"http://lava.link:80",
                 "password":"anything as a password",
                 "identifier":"MAIN",
-                "region":"us"
+                "region":"eu"
+            },
+            "SECONDARY": {
+                "host":"lava.link",
+                "port":80,
+                "rest_uri":"http://lava.link:80",
+                "password":"anything as a password",
+                "identifier":"SECONDARY",
+                "region":"us-central"
             }
         }
 
@@ -375,7 +383,7 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
         player = self.get_player(ctx)
         channel = await player.connect(ctx,channel)
 
-        await ctx.send(f"Connected to {channel.name}.")
+        await ctx.send(f"Connected to {channel.mention}.")
 
     @_connect.error
     async def connect_error(self,ctx,exc):
@@ -405,6 +413,8 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
 
         if not player.is_connected:
             channel = await player.connect(ctx)
+            em = discord.Embed(description=f"Connected to {channel.mention}",color=discord.Color.blurple())
+            await ctx.send(embed=em)
             await ctx.guild.change_voice_state(channel=channel,self_deaf=True)
         await player.set_volume(65)
         if query is None:
@@ -415,7 +425,7 @@ class Music(commands.Cog, wavelink.WavelinkMixin):
                 query = f"ytsearch:{query}"
             
             
-            await player.add_tracks(ctx, await self.wavelink.get_tracks(query,retry_on_failure=True))
+            await player.add_tracks(ctx, await self.wavelink.get_tracks(query))
             
     @commands.command(name="queue",aliases=["q"])
     @commands.guild_only()

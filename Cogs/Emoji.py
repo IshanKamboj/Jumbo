@@ -115,7 +115,7 @@ class emoji(commands.Cog):
 				temp_dict[str(i)]=x[1]			
 			
 		temp = list(temp_dict.items())	
-		items_per_page = 5
+		items_per_page = 7
 		current_page = 1
 		pages = math.ceil(len(temp) / items_per_page)
 		if pages == 0:
