@@ -70,7 +70,7 @@ async def fun(ctx):
     await ctx.send(embed=em)
 @help.command(name="music")
 async def music(ctx):
-    em = discord.Embed(title=":headphones: | Music Commands",description="`Play`, `Connect`, `Disconnect`, `Skip`, `Previous`, `Queue`, `Pause`, `Resume`, `Stop`, `Shuffle`, `Loop`, `Nowplaying`, `Seek`, `Bassboost`, `Move`, `Remove`, `ytsearch`, `Suggest`, `Lyrics`")
+    em = discord.Embed(title=":headphones: | Music Commands",description="`Play`, `Connect`, `Disconnect`, `Skip`, `Queue`, `Pause`, `Resume`, `Stop`, `Shuffle`, `Loop`, `Nowplaying`, `Seek`, `Bassboost`, `Move`, `Remove`, `ytsearch`, `Suggest`, `Lyrics`")
     await ctx.send(embed=em)
 @help.command(name="fights")
 async def fight_help(ctx):
@@ -439,5 +439,6 @@ for filename in os.listdir('./Cogs'):
         print(f"Could not load: Cogs.{filename[:-3]}")
 
 
-TOKEN = os.getenv('TOKEN')
-bot.run(TOKEN)
+# TOKEN = os.getenv('TOKEN')
+# bot.run(TOKEN)
+bot.run("NzIxMjkwNzY3NTI3NTc1NTUz.XuSYXw.l3AS-iEsIJALEoyPxcLZYjTwpfM")

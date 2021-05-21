@@ -1,4 +1,5 @@
 import discord
+from discord.ext.commands.errors import CommandInvokeError
 import lavalink
 from discord.ext import commands
 import asyncio
@@ -30,7 +31,7 @@ class RepeatMode(Enum):
 class Music(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
-        bot.lavalink = lavalink.Client(836226306978873345)
+        bot.lavalink = lavalink.Client(805430097426513941)
         bot.lavalink.add_node('lava.link', 80, 'anything as a password', 'eu', 'MAIN')  # Host, Port, Password, Region, Name
         bot.add_listener(bot.lavalink.voice_update_handler, 'on_socket_response')
         self.repeat_mode = RepeatMode.NONE
@@ -532,6 +533,9 @@ class Music(commands.Cog):
             else:
                 embed.description += f"\n**{i+1}.** `{song} - {ar}`"
         await ctx.send(embed=embed)
+    @commands.command(name="lyrics")
+    async def ly(self,ctx):
+        raise CommandInvokeError
 def setup(bot):
     bot.add_cog(Music(bot))
 
