@@ -35,6 +35,7 @@ class Music(commands.Cog):
         bot.lavalink = lavalink.Client(805430097426513941)
         bot.lavalink.add_node('lava.link', 80, 'anything as a password', 'eu', 'MAIN')  # Host, Port, Password, Region, Name
         bot.add_listener(bot.lavalink.voice_update_handler, 'on_socket_response')
+        lavalink.add_event_hook(self.track_hook)
         self.repeat_mode = RepeatMode.NONE
     async def cog_before_invoke(self, ctx):
         """ Command before-invoke handler. """
@@ -48,10 +49,10 @@ class Music(commands.Cog):
 
         return guild_check
 
-    async def cog_command_error(self, ctx, error):
-        if isinstance(error, commands.CommandInvokeError):
-            em = discord.Embed(description=f"{error.original}",color=discord.Color.red())
-            await ctx.send(embed=em)
+    # async def cog_command_error(self, ctx, error):
+    #     if isinstance(error, commands.CommandInvokeError):
+    #         em = discord.Embed(description=f"{error.original}",color=discord.Color.red())
+    #         await ctx.send(embed=em)
             # The above handles errors thrown in this cog and shows them to the user.
             # This shouldn't be a problem as the only errors thrown in this cog are from `ensure_voice`
             # which contain a reason string, such as "Join a voicechannel" etc. You can modify the above
@@ -75,7 +76,7 @@ class Music(commands.Cog):
                 raise commands.CommandInvokeError('I need the `CONNECT` and `SPEAK` permissions.')
 
             player.store('channel', ctx.channel.id)
-            await ctx.guild.change_voice_state(channel=ctx.author.voice.channel)
+            await ctx.guild.change_voice_state(channel=ctx.author.voice.channel,self_deaf=True)
         else:
             if int(player.channel_id) != ctx.author.voice.channel.id:
                 raise commands.CommandInvokeError('You are not in the same voice channel.')
@@ -84,76 +85,96 @@ class Music(commands.Cog):
     async def play(self, ctx, *, query: str):
         """ Searches and plays a song from a given query. """
         player = self.bot.lavalink.player_manager.get(ctx.guild.id)
-       
-        query = query.strip('<>')
-
-        if not url_rx.match(query):
-            query = f'ytsearch:{query}'
-
-        results = await player.node.get_tracks(query)
-
-        if not results or not results['tracks']:
-            return await ctx.send('Nothing found!')
-
         embed = discord.Embed(color=discord.Color.blurple())
-
-        # Valid loadTypes are:
-        #   TRACK_LOADED    - single video/direct URL)
-        #   PLAYLIST_LOADED - direct URL to playlist)
-        #   SEARCH_RESULT   - query prefixed with either ytsearch: or scsearch:.
-        #   NO_MATCHES      - query yielded no results
-        #   LOAD_FAILED     - most likely, the video encountered an exception during loading.
-        if results['loadType'] == 'PLAYLIST_LOADED':
-            tracks = results['tracks']
-
+        query = query.strip('<>')
+        if "https://open.spotify.com/playlist/" in query or "spotify:playlist:" in query:
+            tracks, length = self.get_tracks_spotify(query)
             for track in tracks:
-                
-                player.add(requester=ctx.author.id, track=track)
-
+                results = await player.node.get_tracks(track)
+                # if not player.is_playing:
+                #     await player.play()
+                player.add(requester=ctx.author.id, track=results['tracks'][0])
             embed.title = 'Playlist Enqueued!'
-            #print(results["playlistInfo"])
-            embed.description = f'{results["playlistInfo"]["name"]} - {len(tracks)} tracks'
+            embed.description = f"Queued `{length}` tracks"
         else:
-            track = results['tracks'][0]
-            #print(track)
-            embed.title = 'Track Enqueued'
-            embed.description = f'[{track["info"]["title"]}]({track["info"]["uri"]})'
+            if not url_rx.match(query):
+                query = f'ytsearch:{query}'
 
-            # You can attach additional information to audiotracks through kwargs, however this involves
-            # constructing the AudioTrack class yourself.
-            track = lavalink.models.AudioTrack(track, ctx.author.id, recommended=True)
-            player.add(requester=ctx.author.id, track=track)
+            results = await player.node.get_tracks(query)
+
+            if not results or not results['tracks']:
+                return await ctx.send('Nothing found!')
+
+            
+            # Valid loadTypes are:
+            #   TRACK_LOADED    - single video/direct URL)
+            #   PLAYLIST_LOADED - direct URL to playlist)
+            #   SEARCH_RESULT   - query prefixed with either ytsearch: or scsearch:.
+            #   NO_MATCHES      - query yielded no results
+            #   LOAD_FAILED     - most likely, the video encountered an exception during loading.
+            if results['loadType'] == 'PLAYLIST_LOADED':
+                tracks = results['tracks']
+
+                for track in tracks:
+                    
+                    player.add(requester=ctx.author.id, track=track)
+
+                embed.title = 'Playlist Enqueued!'
+                #print(results["playlistInfo"])
+                embed.description = f'{results["playlistInfo"]["name"]} - {len(tracks)} tracks'
+            else:
+                track = results['tracks'][0]
+                #print(track)
+                embed.title = 'Track Enqueued'
+                embed.description = f'[{track["info"]["title"]}]({track["info"]["uri"]})'
+
+                # You can attach additional information to audiotracks through kwargs, however this involves
+                # constructing the AudioTrack class yourself.
+                track = lavalink.models.AudioTrack(track, ctx.author.id, recommended=True)
+                player.add(requester=ctx.author.id, track=track)
 
         await ctx.send(embed=embed)
 
         # We don't want to call .play() if the player is playing as that will effectively skip
         # the current track.
         if not player.is_playing:
-            
             await player.play()
             
    
-    
+    def get_tracks_spotify(self,url):
+        x = sp.playlist_items(url,limit=30)
+        temp = []
+        for i in range(len(x['items'])):
+            song = x['items'][i]['track']['artists'][0]['name']
+            ar = x['items'][i]['track']['name']
+            name_song = f"ytsearch:{song} - {ar}"
+            temp.append(name_song)
+        return temp, len(x['items'])
+
     async def track_hook(self, event):
-        if isinstance(event, lavalink.events.QueueEndEvent):
-            # When this track_hook receives a "QueueEndEvent" from lavalink.py
-            # it indicates that there are no tracks left in the player's queue.
-            # To save on resources, we can tell the bot to disconnect from the voicechannel.
-            if self.repeat_mode ==  RepeatMode.ALL:
-                # guild_id = int(event.player.guild_id)
-                # player = self.bot.lavalink.player_manager.get(guild_id)
-                ...
+        # if isinstance(event, lavalink.events.QueueEndEvent):
+        #     # When this track_hook receives a "QueueEndEvent" from lavalink.py
+        #     # it indicates that there are no tracks left in the player's queue.
+        #     # To save on resources, we can tell the bot to disconnect from the voicechannel.
+        #     if self.repeat_mode ==  RepeatMode.ALL:
+        #         # guild_id = int(event.player.guild_id)
+        #         # player = self.bot.lavalink.player_manager.get(guild_id)
+        #         ...
             
-            # guild_id = int(event.player.guild_id)
-            # guild = self.bot.get_guild(guild_id)
-            # await guild.change_voice_state(channel=None)
-        if isinstance(event, lavalink.events.TrackStartEvent):
+        #     # guild_id = int(event.player.guild_id)
+        #     # guild = self.bot.get_guild(guild_id)
+        #     # await guild.change_voice_state(channel=None)
+        if isinstance(event, lavalink.TrackStartEvent):
             guild_id = int(event.player.guild_id)
             player = self.bot.lavalink.player_manager.get(guild_id)
             channel = player.fetch('channel')
             requester = await self.bot.fetch_user(player.current.requester)
             embed = discord.Embed(title='Now Playing',description=f'[{player.current.title}]({player.current.uri}) [{requester.mention}]',color=discord.Color.blurple())
             await self.bot.get_channel(channel).send(embed=embed)
+        if isinstance(event, lavalink.TrackStuckEvent):
+            guild_id = int(event.player.guild_id)
+            player = self.bot.lavalink.player_manager.get(guild_id)
+            await player.skip()
     @commands.command(name="connect",aliases=["join"])
     @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
@@ -524,7 +545,7 @@ class Music(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _suggest(self,ctx,genre:str):
-        y = sp.recommendation_genre_seeds()
+        #y = sp.recommendation_genre_seeds()
         #print(y)
         x = sp.recommendations(seed_genres=[genre],limit=10)
         embed = discord.Embed(title=f"Song suggestions for: {genre}",description="",color=discord.Color.random())
