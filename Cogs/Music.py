@@ -88,14 +88,14 @@ class Music(commands.Cog):
         embed = discord.Embed(color=discord.Color.blurple())
         query = query.strip('<>')
         if "https://open.spotify.com/playlist/" in query or "spotify:playlist:" in query:
-            tracks, length = self.get_tracks_spotify(query)
+            tracks = self.get_tracks_spotify(query)
             for track in tracks:
                 results = await player.node.get_tracks(track)
                 # if not player.is_playing:
                 #     await player.play()
                 player.add(requester=ctx.author.id, track=results['tracks'][0])
             embed.title = 'Playlist Enqueued!'
-            embed.description = f"Queued `{length}` tracks"
+            embed.description = f"Queued `{len(tracks)}` tracks"
         else:
             if not url_rx.match(query):
                 query = f'ytsearch:{query}'
@@ -149,7 +149,7 @@ class Music(commands.Cog):
             ar = x['items'][i]['track']['name']
             name_song = f"ytsearch:{song} - {ar}"
             temp.append(name_song)
-        return temp, len(x['items'])
+        return temp
 
     async def track_hook(self, event):
         # if isinstance(event, lavalink.events.QueueEndEvent):
