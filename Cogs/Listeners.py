@@ -317,6 +317,9 @@ class AllListeners(commands.Cog):
                 await msg.add_reaction('❌')
             except:
                 pass
+        elif isinstance(error,commands.CommandInvokeError):
+            em = discord.Embed(description=f"{error.original}",color=discord.Color.red())
+            await ctx.send(embed=em)
         else:
             try:
                 typ = type(error).__name__

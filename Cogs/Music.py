@@ -1,4 +1,5 @@
 import discord
+from discord import channel
 from discord.ext.commands.errors import CommandInvokeError
 import lavalink
 from discord.ext import commands
@@ -128,11 +129,9 @@ class Music(commands.Cog):
         # We don't want to call .play() if the player is playing as that will effectively skip
         # the current track.
         if not player.is_playing:
-            embed = discord.Embed(color=discord.Color.blurple())
-            embed.title = 'Now Playing'
+            
             await player.play()
-            embed.description = f'[{player.current.title}]({player.current.uri})'
-            await ctx.send(embed=embed)
+            
    
     
     async def track_hook(self, event):
@@ -148,6 +147,13 @@ class Music(commands.Cog):
             # guild_id = int(event.player.guild_id)
             # guild = self.bot.get_guild(guild_id)
             # await guild.change_voice_state(channel=None)
+        if isinstance(event, lavalink.events.TrackStartEvent):
+            guild_id = int(event.player.guild_id)
+            player = self.bot.lavalink.player_manager.get(guild_id)
+            channel = player.fetch('channel')
+            requester = await self.bot.fetch_user(player.current.requester)
+            embed = discord.Embed(title='Now Playing',description=f'[{player.current.title}]({player.current.uri}) [{requester.mention}]',color=discord.Color.blurple())
+            await self.bot.get_channel(channel).send(embed=embed)
     @commands.command(name="connect",aliases=["join"])
     @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
@@ -252,7 +258,8 @@ class Music(commands.Cog):
             else:
                 em.add_field(
                     name="Up Next",
-                    value="No more songs add some using `[p]play <name>`"
+                    value="No more songs add some using `[p]play <name>`",
+                    inline=False
                 )
             
             em.set_thumbnail(url="https://cdn.discordapp.com/emojis/830772596538343506.gif?v=1")
@@ -442,8 +449,6 @@ class Music(commands.Cog):
                 embed.description = f'[{track["info"]["title"]}]({track["info"]["uri"]})'
                 if not player.is_playing:
                     await player.play()
-                    embed.title = 'Now Playing'
-                    embed.description = f'[{player.current.title}]({player.current.uri})'
                 
                 await ctx.send(embed=embed)
 
