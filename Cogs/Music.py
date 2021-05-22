@@ -165,13 +165,19 @@ class Music(commands.Cog):
             player = self.bot.lavalink.player_manager.get(guild_id)
             channel = player.fetch('channel')
             #requester = await self.bot.fetch_user(player.current.requester)
-            embed = discord.Embed(title='Left Voice Channel',description="I left the voice channel as the queue ended to save on resources. Use `*play <query>` to start the playback again",color=discord.Color.blurple())
-            await self.bot.get_channel(channel).send(embed=embed)
-            player.queue.clear()
-            # Stop the current track so Lavalink consumes less resources.
-            await player.stop()
-            # Disconnect from the voice channel.
-            await guild.change_voice_state(channel=None)
+            embed = discord.Embed(title='I Left Voice Channel',description="I left the voice channel due to ideling. Use `*play <query>` connect and start the playback",color=discord.Color.blurple())
+            def check(msg):
+                return "p" in msg.content.lower() or "play" in msg.content.lower()
+            try:
+                msg = await self.bot.wait_for("message",check=check,timeout=60)
+            except asyncio.TimeoutError:
+                await self.bot.get_channel(channel).send(embed=embed)
+                player.queue.clear()
+                # Stop the current track so Lavalink consumes less resources.
+                await player.stop()
+                # Disconnect from the voice channel.
+                await guild.change_voice_state(channel=None)
+        
         if isinstance(event, lavalink.TrackStartEvent):
             guild_id = int(event.player.guild_id)
             player = self.bot.lavalink.player_manager.get(guild_id)
@@ -254,17 +260,8 @@ class Music(commands.Cog):
             temp = 0
             for i in player.queue:
                 temp += i.duration
-            hours = int((temp/(1000*60*60))%24)
-            seconds = (temp/1000)%60
-            seconds = int(seconds)
-            minutes = (temp/60000)%60
-            minutes = int(minutes)
-            
-            if hours > 0:
-                em.add_field(name=":hourglass: Queue Duration",value=f"{hours}:{str(minutes).zfill(2)}:{str(seconds).zfill(2)}")
-            else:
-                em.add_field(name=":hourglass: Queue Duration",value=f"{minutes}:{str(seconds).zfill(2)}")
-            em.add_field(name=":pencil: Entries",value=len(player.queue))
+            em.add_field(name=":hourglass: Queue Duration",value=f"`{lavalink.format_time(temp)}`")
+            em.add_field(name=":pencil: Entries",value=f"`{len(player.queue)}`")
             if player.is_playing:
                 requester = await self.bot.fetch_user(player.current.requester)
                 em.add_field(name="Requested by:",value=f"{requester.mention}")
@@ -299,7 +296,7 @@ class Music(commands.Cog):
             msg = await ctx.send(embed=em)
             start = (current_page-1)* items_per_page
             end = start + items_per_page
-            buttons = ["⬅️","➡️"]
+            buttons = ["⏪","⬅️","⏹️","➡️","⏩"]
             if pages > 1:
                 for button in buttons:
                     await msg.add_reaction(button)
@@ -316,6 +313,15 @@ class Music(commands.Cog):
                         elif reaction.emoji == "➡️":
                             if current_page < pages:
                                 current_page += 1
+                        elif reaction.emoji == "⏩":
+                            if current_page < pages:
+                                current_page = pages
+                        elif reaction.emoji == "⏪":
+                            if current_page > 1:
+                                current_page = 1
+                        elif reaction.emoji == "⏹️":
+                            await msg.clear_reactions()
+                            break
                         for button in buttons:
                             await msg.remove_reaction(button,ctx.author)
                         if previous_pg != current_page:
@@ -337,42 +343,50 @@ class Music(commands.Cog):
     @commands.command(name="skip",aliases=["next","n"])
     @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
-    @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _skip(self,ctx):
         player = self.bot.lavalink.player_manager.get(ctx.guild.id)
         if player.is_playing:
-            await player.skip()
-            await ctx.message.add_reaction("⏭️")
+            if AllListeners.role_check(ctx) or ctx.author.guild_permissions.manage_guild or ctx.author.id == player.current.requester or ctx.author.guild_permissions.administrator:
+                await ctx.message.add_reaction("⏭️")
+                await player.skip()
+            else:
+                await ctx.send("You are missing the role or perms for this command or u are not the requester.")
     @commands.command(name="pause")
     @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
-    @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _pause(self,ctx):
         player = self.bot.lavalink.player_manager.get(ctx.guild.id)
         if player.is_playing:
-            await player.set_pause(True)
-            await ctx.message.add_reaction("⏸️")
+            if AllListeners.role_check(ctx) or ctx.author.guild_permissions.manage_guild or ctx.author.id == player.current.requester or ctx.author.guild_permissions.administrator:
+                await player.set_pause(True)
+                await ctx.message.add_reaction("⏸️")
+            else:
+                await ctx.send("You are missing the role or perms for this command or u are not the requester.")
     @commands.command(name="resume")
     @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
-    @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _resume(self,ctx):
         player = self.bot.lavalink.player_manager.get(ctx.guild.id)
-        await player.set_pause(False)
-        await ctx.message.add_reaction("⏯️")
+        if AllListeners.role_check(ctx) or ctx.author.guild_permissions.manage_guild or ctx.author.id == player.current.requester or ctx.author.guild_permissions.administrator:
+            await player.set_pause(False)
+            await ctx.message.add_reaction("⏯️")
+        else:
+            await ctx.send("You are missing the required role or perms for this command or u are not the requester.")
     @commands.command(name="stop")
     @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
-    @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _stop(self,ctx):
         player = self.bot.lavalink.player_manager.get(ctx.guild.id)
         if player.is_playing:
-            await player.stop()
-            await ctx.message.add_reaction("⏹️")
+            if AllListeners.role_check(ctx) or ctx.author.guild_permissions.manage_guild or ctx.author.id == player.current.requester or ctx.author.guild_permissions.administrator:
+                await player.stop()
+                await ctx.message.add_reaction("⏹️")
+            else:
+                await ctx.send("You are missing the required role or perms for this command or u are not the requester.")
     @commands.command(name="shuffle",aliases=['mix'])
     @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
@@ -510,7 +524,7 @@ class Music(commands.Cog):
             #print(f"{h}")
             hrs = (player.current.duration//60000)//60
             if hrs > 0:
-                embed.add_field(name=":hourglass: Duration",value=f"`{hours}:{str(minutes).zfill(2)}:{str(seconds).zfill(2)}/{hrs}:{(player.current.duration//60000)-(60*hrs)}:{str(player.current.duration%60).zfill(2)}`")
+                embed.add_field(name=":hourglass: Duration",value=f"`{hours}:{str(minutes).zfill(2)}:{str(seconds).zfill(2)}/{lavalink.format_time(player.current.duration)}`")
             else:
                 embed.add_field(name=":hourglass: Duration",value=f"`{minutes}:{str(seconds).zfill(2)}/{(player.current.duration//60000)}:{str(player.current.duration%60).zfill(2)}`")
             #embed.add_field(name="Duration",value=f"{player.queue.cuurrent_track.length//60000}:{str(track.length%60).zfill(2)}")
