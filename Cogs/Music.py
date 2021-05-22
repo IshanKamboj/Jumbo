@@ -161,11 +161,17 @@ class Music(commands.Cog):
             #     # player = self.bot.lavalink.player_manager.get(guild_id)
             #     ...
             guild_id = int(event.player.guild_id)
+            guild = self.bot.get_guild(guild_id)
             player = self.bot.lavalink.player_manager.get(guild_id)
             channel = player.fetch('channel')
             #requester = await self.bot.fetch_user(player.current.requester)
             embed = discord.Embed(title='Left Voice Channel',description="I left the voice channel as the queue ended to save on resources. Use `*play <query>` to start the playback again",color=discord.Color.blurple())
             await self.bot.get_channel(channel).send(embed=embed)
+            player.queue.clear()
+            # Stop the current track so Lavalink consumes less resources.
+            await player.stop()
+            # Disconnect from the voice channel.
+            await guild.change_voice_state(channel=None)
         if isinstance(event, lavalink.TrackStartEvent):
             guild_id = int(event.player.guild_id)
             player = self.bot.lavalink.player_manager.get(guild_id)
@@ -259,8 +265,8 @@ class Music(commands.Cog):
             else:
                 em.add_field(name=":hourglass: Queue Duration",value=f"{minutes}:{str(seconds).zfill(2)}")
             em.add_field(name=":pencil: Entries",value=len(player.queue))
-            requester = await self.bot.fetch_user(player.current.requester)
             if player.is_playing:
+                requester = await self.bot.fetch_user(player.current.requester)
                 em.add_field(name="Requested by:",value=f"{requester.mention}")
             else:
                 em.add_field(name="Requested by:",value=f"--------")
