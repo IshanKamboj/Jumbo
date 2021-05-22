@@ -144,7 +144,7 @@ class Music(commands.Cog):
     def get_tracks_spotify(self,url):
         x = sp.playlist_items(url,limit=30)
         temp = []
-        for i in range(len(x['items'])):
+        for i in range(len(x['items'])-1):
             song = x['items'][i]['track']['artists'][0]['name']
             ar = x['items'][i]['track']['name']
             name_song = f"ytsearch:{song} - {ar}"
