@@ -198,6 +198,7 @@ class InfoCogs(commands.Cog):
             mem_of_total = proc.memory_percent()
             mem_usage = mem_total * (mem_of_total / 100)
         usage = psutil.cpu_percent(2)
+        player = self.bot.lavalink.player_manager.get(ctx.guild.id)
         fields = [
             ("Owner","TheMonkeyCoder#0001",True),
             ("Python version", python_version(), True),
@@ -208,7 +209,9 @@ class InfoCogs(commands.Cog):
             ("Number of Guilds", len(self.bot.guilds),True),
             ("Users", f"{len(self.bot.users)}", True),
             ("Registered", user.created_at.strftime(date_format), True),
-            ("Number of Commands", len(self.bot.commands)+12,True)
+            ("Number of Commands", len(self.bot.commands)+12,True),
+            ("Lavalink Players",player.node.stats.players,True),
+            ("Node region",player.node.region,True),
             ]
         for name, value, inline in fields:
             em.add_field(name=name, value=value, inline=inline)

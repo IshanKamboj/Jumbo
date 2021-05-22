@@ -88,7 +88,7 @@ class AllListeners(commands.Cog):
             return True
     @commands.Cog.listener()
     async def on_ready(self):
-        await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Everyone Fight"))
+        await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="j!help"))
         print('Logged in as {0.user}'.format(self.bot))
         await self.bot.get_channel(826719835630338058).send('Logged in as {0.user}'.format(self.bot))
         
@@ -326,9 +326,9 @@ class AllListeners(commands.Cog):
                 em = discord.Embed(title="Uh oh!",description=f"""
                 An unkown error occured : `{typ}`
 
-                Pls try again and if this persists please report in the support server.
+            Pls try again and if this persists please report in the support server.
                 
-                [**Support Server**](https://discord.gg/P3BmUsgv5y)""",color=discord.Color.red())
+            [**Support Server**](https://discord.gg/P3BmUsgv5y)""",color=discord.Color.red())
 
                 await ctx.send(embed=em)
             except:

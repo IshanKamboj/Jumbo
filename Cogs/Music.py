@@ -152,18 +152,20 @@ class Music(commands.Cog):
         return temp
 
     async def track_hook(self, event):
-        # if isinstance(event, lavalink.events.QueueEndEvent):
-        #     # When this track_hook receives a "QueueEndEvent" from lavalink.py
-        #     # it indicates that there are no tracks left in the player's queue.
-        #     # To save on resources, we can tell the bot to disconnect from the voicechannel.
-        #     if self.repeat_mode ==  RepeatMode.ALL:
-        #         # guild_id = int(event.player.guild_id)
-        #         # player = self.bot.lavalink.player_manager.get(guild_id)
-        #         ...
-            
-        #     # guild_id = int(event.player.guild_id)
-        #     # guild = self.bot.get_guild(guild_id)
-        #     # await guild.change_voice_state(channel=None)
+        if isinstance(event, lavalink.events.QueueEndEvent):
+            # When this track_hook receives a "QueueEndEvent" from lavalink.py
+            # it indicates that there are no tracks left in the player's queue.
+            # To save on resources, we can tell the bot to disconnect from the voicechannel.
+            # if self.repeat_mode ==  RepeatMode.ALL:
+            #     # guild_id = int(event.player.guild_id)
+            #     # player = self.bot.lavalink.player_manager.get(guild_id)
+            #     ...
+            guild_id = int(event.player.guild_id)
+            player = self.bot.lavalink.player_manager.get(guild_id)
+            channel = player.fetch('channel')
+            #requester = await self.bot.fetch_user(player.current.requester)
+            embed = discord.Embed(title='Left Voice Channel',description="I left the voice channel as the queue ended to save on resources. Use `*play <query>` to start the playback again",color=discord.Color.blurple())
+            await self.bot.get_channel(channel).send(embed=embed)
         if isinstance(event, lavalink.TrackStartEvent):
             guild_id = int(event.player.guild_id)
             player = self.bot.lavalink.player_manager.get(guild_id)
@@ -258,7 +260,10 @@ class Music(commands.Cog):
                 em.add_field(name=":hourglass: Queue Duration",value=f"{minutes}:{str(seconds).zfill(2)}")
             em.add_field(name=":pencil: Entries",value=len(player.queue))
             requester = await self.bot.fetch_user(player.current.requester)
-            em.add_field(name="Requested by:",value=f"{requester.mention}")
+            if player.is_playing:
+                em.add_field(name="Requested by:",value=f"{requester.mention}")
+            else:
+                em.add_field(name="Requested by:",value=f"--------")
             if player.repeat:
                 em.add_field(name="Loop",value=":white_check_mark:")
             else:
