@@ -276,6 +276,13 @@ class Music(commands.Cog):
                 em.add_field(name="BassBoost",value=":white_check_mark:")
             else:
                 em.add_field(name="BassBoost",value=":x:")
+            if player.is_playing:
+                if player.volume >= 100:
+                    em.add_field(name=":loud_sound: Volume",value=f"`{player.volume}`")
+                elif player.volume < 100:
+                    em.add_field(name=":sound: Volume",value=f"`{player.volume}`")
+            else:
+                em.add_field(name=":mute: Volume",value="-------")
             if len(player.queue) != 0:
                 em.add_field(
                     name="Up Next",
@@ -328,7 +335,7 @@ class Music(commands.Cog):
                             pages = math.ceil(entries / items_per_page)
                             start = (current_page - 1) * items_per_page
                             end = start + items_per_page
-                            em.remove_field(6)
+                            em.remove_field(7)
                             #em = discord.Embed(title=f"Search Results for: {query}",description="",color=discord.Color.random())
                             em.add_field(
                             name="Next up",
@@ -592,6 +599,22 @@ class Music(commands.Cog):
     @commands.command(name="lyrics")
     async def ly(self,ctx):
         raise CommandInvokeError('This command does not work currently')
+    @commands.command(name="volume",aliases=["v","vol"])
+    @commands.guild_only()
+    @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
+    @commands.cooldown(1, 7, commands.BucketType.user)
+    async def _volume(self,ctx,amount:int):
+        if 0 <= amount <= 200:
+            player = self.bot.lavalink.player_manager.get(ctx.guild.id)
+            await player.set_volume(amount)
+            if amount > player.volume:
+                await ctx.message.add_reaction("🔊")
+            elif amount <= player.volume:
+                await ctx.message.add_reaction("🔉")
+        else:
+            await ctx.send("The amount should be in between 0 and 200")
+
 def setup(bot):
     bot.add_cog(Music(bot))
 
