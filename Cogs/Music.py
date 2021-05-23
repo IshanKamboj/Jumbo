@@ -32,7 +32,7 @@ class RepeatMode(Enum):
 class Music(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
-        bot.lavalink = lavalink.Client(805430097426513941)
+        bot.lavalink = lavalink.Client(721290767527575553)
         bot.lavalink.add_node('lava.link', 80, 'anything as a password', 'eu', 'MAIN')  # Host, Port, Password, Region, Name
         bot.add_listener(bot.lavalink.voice_update_handler, 'on_socket_response')
         lavalink.add_event_hook(self.track_hook)
@@ -450,7 +450,7 @@ class Music(commands.Cog):
             await ctx.send("You need to specify the index of song to remove.")
         else:
             player = self.bot.lavalink.player_manager.get(ctx.guild.id)
-            player.queue.pop(index)
+            player.queue.pop(index-1)
             await ctx.message.add_reaction("✅")
 
     @commands.command(name="ytsearch",aliases=['songsearch'])
@@ -508,7 +508,7 @@ class Music(commands.Cog):
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _nowplaying(self,ctx):
         player = self.bot.lavalink.player_manager.get(ctx.guild.id)
-        if player.is_playing or len(player.queue) != 0:
+        if player.is_playing:
             embed = discord.Embed(title="Now Playing",
             description=f"[**{player.current.title}**]({player.current.uri})",
             color=discord.Color.random(),
@@ -523,14 +523,20 @@ class Music(commands.Cog):
             hours = int(hours)
             #print(f"{h}")
             hrs = (player.current.duration//60000)//60
-            if hrs > 0:
-                embed.add_field(name=":hourglass: Duration",value=f"`{hours}:{str(minutes).zfill(2)}:{str(seconds).zfill(2)}/{lavalink.format_time(player.current.duration)}`")
-            else:
-                embed.add_field(name=":hourglass: Duration",value=f"`{minutes}:{str(seconds).zfill(2)}/{(player.current.duration//60000)}:{str(player.current.duration%60).zfill(2)}`")
-            #embed.add_field(name="Duration",value=f"{player.queue.cuurrent_track.length//60000}:{str(track.length%60).zfill(2)}")
-            embed.add_field(name=":bust_in_silhouette: Author",value=f"{player.current.author}")
+            x = (player.position/player.current.duration)*100
+            string = "▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"
+            y = int((x/100)*len(string))
+            #print(len(string))
+            final = string[:y]+":blue_circle:"+string[y:]+f" `[{round(x,1)}%]`"
+            embed.add_field(name=":bust_in_silhouette: Author",value=f"{player.current.author}",inline=True)
             requester = await self.bot.fetch_user(player.current.requester)
-            embed.add_field(name="Requested by:",value=f"{requester.mention}")
+            embed.add_field(name="Requested by:",value=f"{requester.mention}",inline=False)
+            if hrs > 0:
+                embed.add_field(name=":hourglass: Duration",value=f"`{hours}:{str(minutes).zfill(2)}:{str(seconds).zfill(2)}/{lavalink.format_time(player.current.duration)}`\n{final}")
+            else:
+                embed.add_field(name=":hourglass: Duration",value=f"`{minutes}:{str(seconds).zfill(2)}/{int((player.current.duration/(1000*60))%60)}:{str(int((player.current.duration/1000)%60)).zfill(2)}`\n{final}")
+            #embed.add_field(name="Duration",value=f"{player.queue.cuurrent_track.length//60000}:{str(track.length%60).zfill(2)}")
+            
             await ctx.send(embed=embed)
 
     @commands.command(name='loop',aliases=["repeat"])
@@ -585,7 +591,7 @@ class Music(commands.Cog):
         await ctx.send(embed=embed)
     @commands.command(name="lyrics")
     async def ly(self,ctx):
-        raise CommandInvokeError
+        raise CommandInvokeError('This command does not work currently')
 def setup(bot):
     bot.add_cog(Music(bot))
 
