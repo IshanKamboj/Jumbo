@@ -599,7 +599,7 @@ class Music(commands.Cog):
     @commands.command(name="lyrics")
     async def ly(self,ctx):
         raise CommandInvokeError('This command does not work currently')
-    @commands.command(name="volume",aliases=["v","vol"])
+    @commands.command(name="playervolume",aliases=["v","vol","loudness"])
     @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
