@@ -189,6 +189,12 @@ class Music(commands.Cog):
             guild_id = int(event.player.guild_id)
             player = self.bot.lavalink.player_manager.get(guild_id)
             await player.skip()
+        if isinstance(event,lavalink.TrackExceptionEvent):
+            guild_id = int(event.player.guild_id)
+            player = self.bot.lavalink.player_manager.get(guild_id)
+            channel = player.fetch('channel')
+            em = discord.Embed(description=f"{event.exception}",color=discord.Color.random())
+            await self.bot.get_channel(channel).send(embed=em)
     @commands.command(name="connect",aliases=["join"])
     @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
