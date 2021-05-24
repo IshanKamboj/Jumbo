@@ -19,10 +19,10 @@ sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(client_
 url_rx = re.compile(r'https?://(?:www\.)?.+')
 OPTIONS = {
     "1️⃣": 0,
-    "2⃣": 1,
-    "3⃣": 2,
-    "4⃣": 3,
-    "5⃣": 4,
+    "2️⃣": 1,
+    "3️⃣": 2,
+    "4️⃣": 3,
+    "5️⃣": 4,
 }
 class RepeatMode(Enum):
     NONE=0
@@ -384,8 +384,9 @@ class Music(commands.Cog):
     async def _resume(self,ctx):
         player = self.bot.lavalink.player_manager.get(ctx.guild.id)
         if AllListeners.role_check(ctx) or ctx.author.guild_permissions.manage_guild or ctx.author.id == player.current.requester or ctx.author.guild_permissions.administrator:
-            await player.set_pause(False)
-            await ctx.message.add_reaction("⏯️")
+            if player.paused:
+                await player.set_pause(False)
+                await ctx.message.add_reaction("⏯️")
         else:
             await ctx.send("You are missing the required role or perms for this command or u are not the requester.")
     @commands.command(name="stop")
