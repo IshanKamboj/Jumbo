@@ -480,7 +480,7 @@ class Music(commands.Cog):
             player = self.bot.lavalink.player_manager.get(ctx.guild.id)
             query = f'ytsearch:{query}'
             results = await player.node.get_tracks(query)
-            tracks = results['tracks'][0:5]
+            tracks = results['tracks'][0:len(OPTIONS)]
             i = 0
             query_result = ''
             for track in tracks:
