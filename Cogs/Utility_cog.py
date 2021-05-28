@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from discord.ext.commands.errors import MissingRequiredArgument
 from Database.db_files import firebase
 from Image_generation import LevelIMG
 from bs4 import BeautifulSoup
@@ -378,5 +379,6 @@ class Utility(commands.Cog):
         else:
             em = discord.Embed(description="City not found",color=discord.Color.red())
             await ctx.send(embed=em)
+                    
 def setup(bot):
     bot.add_cog(Utility(bot,difficulty))

@@ -1,6 +1,6 @@
 import discord
 from discord import channel
-from discord.ext.commands.errors import CommandInvokeError
+from discord.ext.commands.errors import CommandInvokeError, MissingRequiredArgument
 import lavalink
 from discord.ext import commands
 import asyncio
@@ -13,6 +13,7 @@ from .Listeners import AllListeners
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 from enum import Enum
+from Database.db_files import firebase
 sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(client_id="9f76fdf6ec2f4d3fb506297168c618b0",client_secret="f497831f91354e40acaf9538fce95367"))
 
 
@@ -33,7 +34,7 @@ class Music(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
         bot.lavalink = lavalink.Client(805430097426513941)
-        bot.lavalink.add_node('lava.link', 80, 'anything as a password', 'eu', 'MAIN')  # Host, Port, Password, Region, Name
+        bot.lavalink.add_node('lava.link', 80, 'anything as a password', 'us', 'MAIN')  # Host, Port, Password, Region, Name
         bot.add_listener(bot.lavalink.voice_update_handler, 'on_socket_response')
         lavalink.add_event_hook(self.track_hook)
         self.repeat_mode = RepeatMode.NONE
@@ -195,6 +196,8 @@ class Music(commands.Cog):
             channel = player.fetch('channel')
             em = discord.Embed(description=f"{event.exception}",color=discord.Color.random())
             await self.bot.get_channel(channel).send(embed=em)
+        if isinstance(event, lavalink.NodeConnectedEvent):
+            print(f"lavalink node: {event.node} ready")
     @commands.command(name="connect",aliases=["join"])
     @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
@@ -621,6 +624,8 @@ class Music(commands.Cog):
                 await ctx.message.add_reaction("🔉")
         else:
             await ctx.send("The amount should be in between 0 and 200")
+    
+    
 
 def setup(bot):
     bot.add_cog(Music(bot))
