@@ -172,7 +172,7 @@ class Fun(commands.Cog):
             user = ctx.author
             em = discord.Embed(title=f"{user.name}'s Gayrate",description=f"{user.mention} is {100}% gay as he didn't mention the user. LMAO",color=discord.Color.random())
         else:
-            if ctx.author.id == 576442029337477130:
+            if user.id == 576442029337477130:
                 em = discord.Embed(title=f"{user.name}'s Gayrate",description=f"{user.mention} is 0% gay.",color=discord.Color.random())
             else:
                 em = discord.Embed(title=f"{user.name}'s Gayrate",description=f"{user.mention} is {x}% gay.",color=discord.Color.random())
@@ -188,7 +188,7 @@ class Fun(commands.Cog):
             user = ctx.author
             em = discord.Embed(title=f"{user.name}'s intelligence quotient",description=f"{user.mention} has **{0} IQ** as he didn't mention the user. LMAO",color=discord.Color.random())
         else:
-            if ctx.author.id == 576442029337477130:
+            if user.id == 576442029337477130:
                 em = discord.Embed(title=f"{user.name}'s intelligence quotient",description=f"{user.mention} has **200 IQ**.",color=discord.Color.random())
             else:
                 em = discord.Embed(title=f"{user.name}'s intelligence quotient",description=f"{user.mention} has **{x} IQ**.",color=discord.Color.random())
