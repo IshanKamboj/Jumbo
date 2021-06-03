@@ -200,7 +200,7 @@ class InfoCogs(commands.Cog):
         usage = psutil.cpu_percent(2)
         player = self.bot.lavalink.player_manager.get(ctx.guild.id)
         fields = [
-            ("Owner","TheMonkeyCoder#0001",True),
+            ("Owner","TheMonkeyCoder#5413",True),
             ("Python version", python_version(), True),
             ("discord.py version", discord_version, True),
             ("Uptime", uptime, True),

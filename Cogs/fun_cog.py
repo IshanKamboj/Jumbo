@@ -7,7 +7,7 @@ from .Listeners import AllListeners
 import pyjokes
 import requests
 import json
-
+import asyncio
 
 class Fun(commands.Cog):
     def __init__(self,bot):
@@ -202,5 +202,90 @@ class Fun(commands.Cog):
         jk = pyjokes.get_joke()
         await ctx.send(jk)
 
+    
+    @commands.command(name="fight",aliases=["dumbfight"])
+    @commands.guild_only()
+    @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
+    @commands.cooldown(1, 7, commands.BucketType.user)
+    async def _fight(self,ctx:commands.Context,user:discord.Member):
+        a = random.choice([ctx.author,user])
+        mutedRole = discord.utils.get(ctx.guild.roles,name='Muted')
+        if not mutedRole:
+            mutedRole = await ctx.guild.create_role(name='Muted')
+            for channel in ctx.guild.channels:
+                await channel.set_permissions(mutedRole, speak=False, send_messages=False)
+        if mutedRole in user.roles:
+            await ctx.send(f"**{user.name} is already unconsicious.... Pick someone else to fight.... YOU COWARD**")
+        elif mutedRole in ctx.author.roles:
+            await ctx.send(f"**{ctx.author.name} u cannot fight....... U were already beaten up LMAO**")
+        else:
+            if ctx.author == user:
+                await ctx.send(f"**{ctx.author.mention}.... Was So stupid he punched himself and couldn't take it.... he has been muted for 60 seconds**")
+                await user.add_roles(mutedRole)
+                await asyncio.sleep(60)
+                await user.remove_roles(mutedRole)
+            elif user == self.bot.user:
+                await ctx.send(f"{ctx.author.mention} **U cannot fight me......LMAO**")
+            else:
+                mute_time = random.randint(20,60)
+                if a == ctx.author:
+                    await ctx.send(f"{ctx.author.name} fought with {user.name}. **{a.name} was punched in the face by {user.name} and knocked unconsicious. He is now muted for {mute_time} seconds.**")
+                else:
+                    await ctx.send(f"{ctx.author.name} fought with {user.name}. **{a.name} was punched in the face by {ctx.author.name} and knocked unconsicious. He is now muted for {mute_time} seconds.**")
+                await a.add_roles(mutedRole)
+                await asyncio.sleep(mute_time)
+                
+                await a.remove_roles(mutedRole)
+                await ctx.send(f"**{a.name} has been umuted..... Better not fight now**")
+                
+    # @_fight.error
+    # async def fight_error(self,ctx,error):
+    #     if isinstance(error,commands.MissingRequiredArgument):
+    #         em = HelpEmbeds.fight_embed()
+    #         await ctx.send("**Missing required argument. See help** :point_down::point_down:",embed = em)
+
+    #---------------------Shoot Command and its errors---------------------------------------           
+    @commands.command(name="shoot",aliases=["fire","headshot","kill"])
+    @commands.guild_only()
+    @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
+    @commands.cooldown(1, 7, commands.BucketType.user)
+    async def _shoot(self,ctx:commands.Context,user:discord.Member):
+        a = random.choice([ctx.author,user])
+        mutedRole = discord.utils.get(ctx.guild.roles,name='Muted')
+        b = random.randint(0,1)
+        def check(msg):
+            return msg.content.lower() in ["hospital","ambulance"] and msg.author != a
+        if not mutedRole:
+            mutedRole = await ctx.guild.create_role(name='Muted')
+            for channel in ctx.guild.channels:
+                await channel.set_permissions(mutedRole, speak=False, send_messages=False)
+        if mutedRole in user.roles:
+            await ctx.send(f"**{user.name} is already dead or fainted.... Try to shoot someone else.... YOU BITCH**")
+        elif mutedRole in ctx.author.roles:
+            await ctx.send(f"**{ctx.author.name} u cannot shoot....... U are in hospital LMAO**")
+        elif user == self.bot.user:
+            await ctx.send(f"{ctx.author.mention} **U cannot shoot me......LMAO**")
+        else:
+            if ctx.author == user:
+                await ctx.send(f"{ctx.author.name} takes out a pistol and shoots himself. **He's on the brink of death. Type `hospital` in the next 10 seconds to save him.**")
+            elif ctx.author == a:
+                await ctx.send(f"{ctx.author.name} tried to shoot {user.name} but did not know how to use the gun. **He shot himself and is on the brink of death**\n **Type `hospital` in next 10 seconds to save him.**")
+            else:
+                await ctx.send(f"{ctx.author.name} takes out a pistol and shoots {user.name} in head.**{user.name} is on the brink of death**\n **Type `hospital` in next 10 seconds to save him.**")
+            await a.add_roles(mutedRole)
+            try:
+                msg = await self.bot.wait_for("message", check=check, timeout=10) # 10 seconds to reply
+                if b != 1:
+                    raise asyncio.TimeoutError
+                await ctx.send(f"**Hush! It was a close call. {a.name} was saved**")
+                await a.remove_roles(mutedRole)
+            except asyncio.TimeoutError:
+                await ctx.send(f"Sorry, either it was too late or doctors were not able to save {a.name}. **he is now muted for 5 minutes**")
+                await asyncio.sleep(300)
+                
+                await a.remove_roles(mutedRole)
+                await ctx.send(f"**{a.name} has been umuted..... Better not use gun now**")
 def setup(bot):
     bot.add_cog(Fun(bot))

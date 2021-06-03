@@ -427,5 +427,18 @@ class Admin(commands.Cog):
         else:
             em = discord.Embed(description="This command is disabled in your server. Ask admin to enable it",color=discord.Color.random())
             await ctx.send(embed=em)
+    @commands.command(name="resetexp",aliases=["reset","remxp","rexp","resetxp"])
+    @commands.guild_only()
+    @commands.has_permissions(administrator=True)
+    @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
+    @commands.cooldown(1, 7, commands.BucketType.user)
+    async def _resetexp(self,ctx,user:discord.Member=None):
+        if user == None:
+            user = ctx.author
+        db = firebase.database()
+        db.child("Levels").child(str(ctx.guild.id)).child(str(user.id)).remove()
+        em = discord.Embed(title="Exp reset",description=f"{user.mention} exp was reset.",color=discord.Color.blurple())
+        await ctx.send(embed=em)
 def setup(bot):
     bot.add_cog(Admin(bot,difficulty))

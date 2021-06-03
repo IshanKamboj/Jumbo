@@ -24,6 +24,8 @@ OPTIONS = {
     "3️⃣": 2,
     "4️⃣": 3,
     "5️⃣": 4,
+    "6️⃣": 5,
+    "7️⃣": 6,
 }
 class RepeatMode(Enum):
     NONE=0
@@ -541,7 +543,7 @@ class Music(commands.Cog):
             #print(f"{h}")
             hrs = (player.current.duration//60000)//60
             x = (player.position/player.current.duration)*100
-            string = "▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"
+            string = "▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"
             y = int((x/100)*len(string))
             #print(len(string))
             final = string[:y]+":blue_circle:"+string[y:]+f" `[{round(x,1)}%]`"

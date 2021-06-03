@@ -46,7 +46,6 @@ Use `*help <command>` for extended information on a command.
     em.add_field(name=":lock: | Admin Commands",value="`*help admin`")
     em.add_field(name=":joystick: | Fun Commands",value="`*help fun`")
     em.add_field(name=":headphones: | Music Commands",value="`*help music`")
-    em.add_field(name=":karate_uniform: | Fight Commands",value='`*help fights`')
     em.add_field(name=":hugging: | Action Commands",value="`*help action`")
     em.add_field(name=":mag: | Info Commands",value="`*help info`")
     em.add_field(name=":camera: | Image Commands",value="`*help image`")
@@ -61,20 +60,16 @@ async def utility(ctx):
 
 @help.command(name="admin")
 async def admin(ctx):
-    em = discord.Embed(title=":lock: | Admin Commands",description="`Givelevel`, `Prefix`, `Purge`, `Disable`, `Enable`, `Role`, `Settings`",color=discord.Color.random())
+    em = discord.Embed(title=":lock: | Admin Commands",description="`Givelevel`, `Prefix`, `Purge`, `Disable`, `Enable`, `Resetexp`, `Role`, `Settings`",color=discord.Color.random())
     await ctx.send(embed=em)
 
 @help.command(name="fun")
 async def fun(ctx):
-    em = discord.Embed(title=":joystick: | Fun Commands",description="`Fact`, `Truth`, `Dare`, `8ball`, `Opinion`, `Roast`, `Joke`, `Gayrate`, `IQ`",color=discord.Color.random())
+    em = discord.Embed(title=":joystick: | Fun Commands",description="`Fact`, `Truth`, `Dare`, `8ball`, `Opinion`, `Roast`, `Joke`, `Gayrate`, `IQ`, `Fight`, `Shoot`",color=discord.Color.random())
     await ctx.send(embed=em)
 @help.command(name="music")
 async def music(ctx):
     em = discord.Embed(title=":headphones: | Music Commands",description="`Play`, `Connect`, `Disconnect`, `Skip`, `Queue`, `Pause`, `Resume`, `Stop`, `Shuffle`, `Loop`, `Nowplaying`, `Seek`, `Bassboost`, `Move`, `Remove`, `ytsearch`, `Suggest`, `Lyrics`, `Volume`")
-    await ctx.send(embed=em)
-@help.command(name="fights")
-async def fight_help(ctx):
-    em = discord.Embed(title=":karate_uniform: | Fight Commands",description="`Fight`, `Shoot`, `Train`, `Profile`, `Buy`, `Shop`",color=discord.Color.random())
     await ctx.send(embed=em)
 
 @help.command(name="action",aliases=["actions"])
@@ -420,7 +415,7 @@ async def seek(ctx):
     em = discord.Embed(title=":fast_forward: | Seek",description="This command fast forwards the track to the given position.")
     em.add_field(name="Syntax",value="*ff|seek <time>")
     await ctx.send(embed=em)
-@help.command(name="ytsearch",aliases=["searchsong","songsearch"])
+@help.command(name="ytsearch",aliases=["searchsong","songsearch","yt"])
 async def ytsearch(ctx):
     await ctx.send(embed=HelpEmbeds.ytsearch_embed())
 

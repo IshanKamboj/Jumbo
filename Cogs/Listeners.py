@@ -54,6 +54,7 @@ calcOPT = {
     "sec60":str(mpmath.sec(60)),
 }
 number_list = ['1','2','3','4','5','6','7','8','9','0','tan','sec','sin','cosec','cot','cos']
+sign_list = ['+','-','e','^','/','*']
 class CommandDisabled(commands.CheckFailure):
     pass
 class MissingRequiredServerRoles(commands.CheckFailure):
@@ -123,7 +124,24 @@ class AllListeners(commands.Cog):
             if "general" in channel.name:
                 await channel.send(embed=em)
                 break
-        
+    @commands.Cog.listener()
+    async def on_guild_remove(self,guild):
+        db = firebase.database()
+        db.child("Levels").child(str(guild.id)).remove()
+        db.child("AFK").child(str(guild.id)).remove()
+        db.child("Announcement").child(str(guild.id)).remove()
+        db.child("Disabled").child(str(guild.id)).remove()
+        db.child("Multi").child(str(guild.id)).remove()
+        db.child("Reactions").child(str(guild.id)).remove()
+        db.child("Settings").child(str(guild.id)).remove()
+        emb = discord.Embed(title='Jumbo left a guild.',color=discord.Color.random(),thumbnail=guild.icon_url)
+        emb.add_field(name='Guild Name',value=f'`{guild.name}`')
+        emb.add_field(name='Guild ID',value=f'`{guild.id}`')
+        emb.add_field(name='Guild owner',value=f'`{guild.owner}`')
+        emb.add_field(name='No. of members',value=f'`{guild.member_count}`')
+        emb.add_field(name='Joined on',value=f'`{datetime.utcnow()}`')
+        emb.add_field(name='Guild created at',value=f'{guild.created_at}')
+        await self.bot.get_channel(826719835630338058).send(embed=emb)
     def replace_all(self,text,dic):
         for i , j in dic.items():
             text = text.replace(i,j)
@@ -140,7 +158,7 @@ class AllListeners(commands.Cog):
                 pass
             seen_data = db.child("Last Seen").child(str(message.author.id)).get()
             if message.author != self.bot.user:
-                if any(i for i in number_list if message.content.startswith(i)):
+                if any(i for i in number_list if message.content.startswith(i)) and any(i for i in sign_list if i in str(message.content)):
 
                     try:
                         msg = message.content
