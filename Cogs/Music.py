@@ -323,6 +323,7 @@ class Music(commands.Cog):
                         reaction, user = await self.bot.wait_for("reaction_add",check=lambda reaction, user: user == ctx.author and reaction.emoji in buttons, timeout=20.0)
                     except asyncio.TimeoutError:
                         await msg.clear_reactions()
+                        break
                     else:
                         previous_pg = current_page
                         if reaction.emoji == "⬅️":
