@@ -8,6 +8,12 @@ import pyjokes
 import requests
 import json
 import asyncio
+OPTIONS = {
+    "1️⃣": 0,
+    "2️⃣": 1,
+    "3️⃣": 2,
+    "4️⃣": 3,
+}
 
 class Fun(commands.Cog):
     def __init__(self,bot):
@@ -287,5 +293,70 @@ class Fun(commands.Cog):
                 
                 await a.remove_roles(mutedRole)
                 await ctx.send(f"**{a.name} has been umuted..... Better not use gun now**")
+
+    @commands.command(name="trivia",aliases=["questions","triv","tr"])
+    @commands.guild_only()
+    @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
+    @commands.cooldown(1, 7, commands.BucketType.user)
+    async def _trivia(self,ctx,ques:int=None):
+        if ques is None:
+            ques = 10
+        if ques > 15:
+            ques = 15
+        elif ques < 1:
+            await ctx.send("Sorry cannot have less than 0 questions. So u will have 1 question")
+            ques = 1
+        url = f"https://opentdb.com/api.php?amount={ques}&type=multiple"
+        r = requests.get(url=url).json()
+        results = r["results"]
+        correct = 0
+        for i in range(len(results)):
+            cat = results[i]['category']
+            
+            diff = results[i]['difficulty']
+            
+            question = results[i]['question']
+            question = question.replace("&#039;","'")
+            question = question.replace("&quot;","'")
+
+            ans = results[i]['correct_answer']
+            wans = results[i]['incorrect_answers']
+            
+            options = wans
+            options.append(ans)
+            for j in options:
+                j.replace("&#039;","'")
+                j.replace("&quot;","'")
+            random.shuffle(options)
+            em = discord.Embed(title=f"Question : {i+1}.)", description=f"**{question}\n1️⃣ {options[0]}\n2️⃣ {options[1]}\n3️⃣ {options[2]}\n4️⃣ {options[3]}**",color = discord.Color.blurple())
+            em.add_field(name="Difficulty",value=f"`{diff}`")
+            em.add_field(name="Category",value=f"`{cat}`")
+            msg = await ctx.send(embed=em)
+            def _check(r,u):
+                return (r.emoji in OPTIONS.keys()
+                and u == ctx.author
+                and r.message.id == msg.id
+                )
+            for emoji in list(OPTIONS.keys())[:len(OPTIONS)]:
+                await msg.add_reaction(emoji)
+
+            try:
+                reaction, _ = await self.bot.wait_for("reaction_add", timeout=60.0, check=_check)
+            except asyncio.TimeoutError:
+                await msg.delete()
+                await ctx.send("Timed out! You didn't responsed in time")
+                break
+            else:
+                choice = options[OPTIONS[reaction.emoji]]
+                if choice == ans:
+                    correct += 1
+                    em.color = discord.Color.dark_green()
+                    await msg.edit(embed=em)
+                else:
+                    em.color = discord.Color.dark_red()
+                    await msg.edit(embed=em)
+        em = discord.Embed(title=f"Your Score: {correct}/{ques}",color=discord.Color.dark_teal())
+        await ctx.send(embed=em)
 def setup(bot):
     bot.add_cog(Fun(bot))
