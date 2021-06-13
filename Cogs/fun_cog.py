@@ -351,7 +351,7 @@ class Fun(commands.Cog):
                 await ctx.send("Timed out! You didn't responsed in time")
                 break
             else:
-                choice = options[OPTIONS[reaction.emoji]]
+                choice = option[OPTIONS[reaction.emoji]]
                 if choice == ans:
                     correct += 1
                     em.color = discord.Color.dark_green()
@@ -421,7 +421,7 @@ class Fun(commands.Cog):
                 await ctx.send("Timed out! You didn't responsed in time")
                 break
             else:
-                choice = options[OPTIONS[reaction.emoji]]
+                choice = option[OPTIONS[reaction.emoji]]
                 if choice == ans:
                     correct += 1
                     em.color = discord.Color.dark_green()
