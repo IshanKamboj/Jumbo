@@ -323,15 +323,18 @@ class Fun(commands.Cog):
             ans = results[i]['correct_answer']
             wans = results[i]['incorrect_answers']
             
-            options = wans
-            options.append(ans)
-            for j in options:
-                j.replace("&#039;","'")
-                j.replace("&quot;","'")
+            option = wans
+            option.append(ans)
+            options = []
+            for j in option:
+                temp = j.replace("&#039;","'")
+                temp = j.replace("&quot;","'")
+                options.append(temp)
             random.shuffle(options)
             em = discord.Embed(title=f"Question : {i+1}.)", description=f"**{question}\n1️⃣ {options[0]}\n2️⃣ {options[1]}\n3️⃣ {options[2]}\n4️⃣ {options[3]}**",color = discord.Color.blurple())
             em.add_field(name="Difficulty",value=f"`{diff}`")
             em.add_field(name="Category",value=f"`{cat}`")
+            em.set_author(name=f"{ctx.author.name}'s Trivia Game",icon_url=ctx.author.avatar_url)
             msg = await ctx.send(embed=em)
             def _check(r,u):
                 return (r.emoji in OPTIONS.keys()
@@ -356,7 +359,7 @@ class Fun(commands.Cog):
                 else:
                     em.color = discord.Color.dark_red()
                     await msg.edit(embed=em)
-        em = discord.Embed(title=f"Your Score: {correct}/{ques}",color=discord.Color.dark_teal())
+        em = discord.Embed(description=f"**{ctx.author.name}'s Score: {correct}/{ques}**",color=discord.Color.dark_teal())
         await ctx.send(embed=em)
     
     @commands.command(name="animetrivia",aliases=["atrivia","animetriv","atr"])
@@ -388,15 +391,18 @@ class Fun(commands.Cog):
             ans = results[i]['correct_answer']
             wans = results[i]['incorrect_answers']
             
-            options = wans
-            options.append(ans)
-            for j in options:
-                j.replace("&#039;","'")
-                j.replace("&quot;","'")
+            option = wans
+            option.append(ans)
+            options = []
+            for j in option:
+                temp = j.replace("&#039;","'")
+                temp = j.replace("&quot;","'")
+                options.append(temp)
             random.shuffle(options)
             em = discord.Embed(title=f"Question : {i+1}.)", description=f"**{question}\n1️⃣ {options[0]}\n2️⃣ {options[1]}\n3️⃣ {options[2]}\n4️⃣ {options[3]}**",color = discord.Color.blurple())
             em.add_field(name="Difficulty",value=f"`{diff}`")
             em.add_field(name="Category",value=f"`{cat}`")
+            em.set_author(name=f"{ctx.author.name}'s Trivia Game",icon_url=ctx.author.avatar_url)
             msg = await ctx.send(embed=em)
             def _check(r,u):
                 return (r.emoji in OPTIONS.keys()
@@ -421,7 +427,7 @@ class Fun(commands.Cog):
                 else:
                     em.color = discord.Color.dark_red()
                     await msg.edit(embed=em)
-        em = discord.Embed(title=f"Your Score: {correct}/{ques}",color=discord.Color.dark_teal())
+        em = discord.Embed(description=f"**{ctx.author.name}'s Score: {correct}/{ques}**",color=discord.Color.dark_teal())
         await ctx.send(embed=em)
 def setup(bot):
     bot.add_cog(Fun(bot))
