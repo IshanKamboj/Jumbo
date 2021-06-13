@@ -358,7 +358,9 @@ class Fun(commands.Cog):
                     await msg.edit(embed=em)
                 else:
                     em.color = discord.Color.dark_red()
+                    em.set_footer(text=f"Correct answer: {ans}")
                     await msg.edit(embed=em)
+                await asyncio.sleep(2)
         em = discord.Embed(description=f"**{ctx.author.name}'s Score: {correct}/{ques}**",color=discord.Color.dark_teal())
         await ctx.send(embed=em)
     
@@ -426,7 +428,9 @@ class Fun(commands.Cog):
                     await msg.edit(embed=em)
                 else:
                     em.color = discord.Color.dark_red()
+                    em.set_footer(text=f"Correct answer: {ans}")
                     await msg.edit(embed=em)
+                await asyncio.sleep(2)
         em = discord.Embed(description=f"**{ctx.author.name}'s Score: {correct}/{ques}**",color=discord.Color.dark_teal())
         await ctx.send(embed=em)
 def setup(bot):
