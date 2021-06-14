@@ -321,6 +321,8 @@ class Fun(commands.Cog):
             question = question.replace("&quot;","'")
 
             ans = results[i]['correct_answer']
+            ans = ans.replace("&#039;","'")
+            ans = ans.replace("&quot;","'")
             wans = results[i]['incorrect_answers']
             
             option = wans
@@ -351,14 +353,14 @@ class Fun(commands.Cog):
                 await ctx.send("Timed out! You didn't responsed in time")
                 break
             else:
-                choice = option[OPTIONS[reaction.emoji]]
+                choice = options[OPTIONS[reaction.emoji]]
                 if choice == ans:
                     correct += 1
                     em.color = discord.Color.dark_green()
                     await msg.edit(embed=em)
                 else:
                     em.color = discord.Color.dark_red()
-                    em.set_footer(text=f"Correct answer: {ans}")
+                    em.set_footer(text=f"Correct answer: {ans}\nYour Answer: {choice}")
                     await msg.edit(embed=em)
                 await asyncio.sleep(2)
         em = discord.Embed(description=f"**{ctx.author.name}'s Score: {correct}/{ques}**",color=discord.Color.dark_teal())
@@ -391,6 +393,8 @@ class Fun(commands.Cog):
             question = question.replace("&quot;","'")
 
             ans = results[i]['correct_answer']
+            ans = ans.replace("&#039;","'")
+            ans = ans.replace("&quot;","'")
             wans = results[i]['incorrect_answers']
             
             option = wans
@@ -421,14 +425,14 @@ class Fun(commands.Cog):
                 await ctx.send("Timed out! You didn't responsed in time")
                 break
             else:
-                choice = option[OPTIONS[reaction.emoji]]
+                choice = options[OPTIONS[reaction.emoji]]
                 if choice == ans:
                     correct += 1
                     em.color = discord.Color.dark_green()
                     await msg.edit(embed=em)
                 else:
                     em.color = discord.Color.dark_red()
-                    em.set_footer(text=f"Correct answer: {ans}")
+                    em.set_footer(text=f"Correct answer: {ans}\nYour Answer: {choice}")
                     await msg.edit(embed=em)
                 await asyncio.sleep(2)
         em = discord.Embed(description=f"**{ctx.author.name}'s Score: {correct}/{ques}**",color=discord.Color.dark_teal())
