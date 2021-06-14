@@ -319,10 +319,16 @@ class Fun(commands.Cog):
             question = results[i]['question']
             question = question.replace("&#039;","'")
             question = question.replace("&quot;","'")
+            question = question.replace("&deg;","°")
+            question = question.replace("acute;","")
+            question = question.replace("&","")
 
             ans = results[i]['correct_answer']
             ans = ans.replace("&#039;","'")
             ans = ans.replace("&quot;","'")
+            ans = ans.replace("&deg;","°")
+            ans = ans.replace("acute;","")
+            ans = ans.replace("&","")
             wans = results[i]['incorrect_answers']
             
             option = wans
@@ -331,6 +337,9 @@ class Fun(commands.Cog):
             for j in option:
                 temp = j.replace("&#039;","'")
                 temp = j.replace("&quot;","'")
+                temp = temp.replace("&deg;","°")
+                temp = temp.replace("acute;","")
+                temp = temp.replace("&","")
                 options.append(temp)
             random.shuffle(options)
             em = discord.Embed(title=f"Question : {i+1}.)", description=f"**{question}\n1️⃣ {options[0]}\n2️⃣ {options[1]}\n3️⃣ {options[2]}\n4️⃣ {options[3]}**",color = discord.Color.blurple())
@@ -391,10 +400,16 @@ class Fun(commands.Cog):
             question = results[i]['question']
             question = question.replace("&#039;","'")
             question = question.replace("&quot;","'")
+            question = question.replace("&deg;","°")
+            question = question.replace("acute;","")
+            question = question.replace("&","")
 
             ans = results[i]['correct_answer']
             ans = ans.replace("&#039;","'")
             ans = ans.replace("&quot;","'")
+            ans = ans.replace("&deg;","°")
+            ans = ans.replace("acute;","")
+            ans = ans.replace("&","")
             wans = results[i]['incorrect_answers']
             
             option = wans
@@ -403,6 +418,9 @@ class Fun(commands.Cog):
             for j in option:
                 temp = j.replace("&#039;","'")
                 temp = j.replace("&quot;","'")
+                temp = temp.replace("&deg;","°")
+                temp = temp.replace("acute;","")
+                temp = temp.replace("&","")
                 options.append(temp)
             random.shuffle(options)
             em = discord.Embed(title=f"Question : {i+1}.)", description=f"**{question}\n1️⃣ {options[0]}\n2️⃣ {options[1]}\n3️⃣ {options[2]}\n4️⃣ {options[3]}**",color = discord.Color.blurple())
