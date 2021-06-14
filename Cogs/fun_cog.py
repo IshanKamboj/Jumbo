@@ -360,7 +360,7 @@ class Fun(commands.Cog):
                     await msg.edit(embed=em)
                 else:
                     em.color = discord.Color.dark_red()
-                    em.set_footer(text=f"Correct answer: {ans}\nYour Answer: {choice}")
+                    em.set_footer(text=f"✔️Correct answer: {ans}\n❌Your Answer: {choice}")
                     await msg.edit(embed=em)
                 await asyncio.sleep(2)
         em = discord.Embed(description=f"**{ctx.author.name}'s Score: {correct}/{ques}**",color=discord.Color.dark_teal())
@@ -432,7 +432,7 @@ class Fun(commands.Cog):
                     await msg.edit(embed=em)
                 else:
                     em.color = discord.Color.dark_red()
-                    em.set_footer(text=f"Correct answer: {ans}\nYour Answer: {choice}")
+                    em.set_footer(text=f"✔️Correct answer: {ans}\n❎Your Answer: {choice}")
                     await msg.edit(embed=em)
                 await asyncio.sleep(2)
         em = discord.Embed(description=f"**{ctx.author.name}'s Score: {correct}/{ques}**",color=discord.Color.dark_teal())
