@@ -106,16 +106,10 @@ class Utility(commands.Cog):
     async def _afk(self,ctx:commands.Context,*,reason="Busy...smh"):
         db = firebase.database()
         data = db.child("AFK").child(str(ctx.guild.id)).child(str(ctx.author.id)).get()
-        if data.val() is None:
-            db.child("AFK").child(str(ctx.guild.id)).child(str(ctx.author.id)).set({"reason":reason})        
-            em = discord.Embed(title="SET AFK",description=f"I set your AFK {ctx.author.mention}, reason : {reason}",color=discord.Color.from_rgb(255,20,147))
-            await ctx.send(embed=em)
-            await ctx.author.edit(nick=f"[AFK] {ctx.author.name}")
-        elif data.val() is not None:
-            db.child("AFK").child(str(ctx.guild.id)).child(str(ctx.author.id)).remove()
-            em = discord.Embed(title="AFK removed",description=f"Your AFK was removed {ctx.author.mention}",color=discord.Color.from_rgb(255,20,147))
-            await ctx.send(ctx.author.mention,embed=em)
-            await ctx.author.edit(nick = f"{ctx.author.name}")
+        db.child("AFK").child(str(ctx.guild.id)).child(str(ctx.author.id)).set({"reason":reason})        
+        em = discord.Embed(title="SET AFK",description=f"I set your AFK {ctx.author.mention}, reason : {reason}",color=discord.Color.from_rgb(255,20,147))
+        await ctx.send(embed=em)
+        await ctx.author.edit(nick=f"[AFK] {ctx.author.name}")
         
     @_afk.error
     async def afk_error(self,ctx,error):

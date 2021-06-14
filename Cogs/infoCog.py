@@ -210,8 +210,6 @@ class InfoCogs(commands.Cog):
             ("Users", f"{len(self.bot.users)}", True),
             ("Registered", user.created_at.strftime(date_format), True),
             ("Number of Commands", len(self.bot.commands)+12,True),
-            ("Lavalink Players",player.node.stats.players,True),
-            ("Node region",player.node.region,True),
             ]
         for name, value, inline in fields:
             em.add_field(name=name, value=value, inline=inline)
