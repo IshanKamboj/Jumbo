@@ -89,59 +89,63 @@ class Music(commands.Cog):
         """ Searches and plays a song from a given query. """
         player = self.bot.lavalink.player_manager.get(ctx.guild.id)
         embed = discord.Embed(color=discord.Color.blurple())
-        query = query.strip('<>')
-        if "https://open.spotify.com/playlist/" in query or "spotify:playlist:" in query:
-            tracks = self.get_tracks_spotify(query)
-            for track in tracks:
-                results = await player.node.get_tracks(track)
-                # if not player.is_playing:
-                #     await player.play()
-                player.add(requester=ctx.author.id, track=results['tracks'][0])
-            embed.title = 'Playlist Enqueued!'
-            embed.description = f"Queued `{len(tracks)}` tracks"
+        if query is None and player.paused:
+            await player.set_pause(False)
+            await ctx.message.add_reaction("⏯️")
         else:
-            if not url_rx.match(query):
-                query = f'ytsearch:{query}'
-
-            results = await player.node.get_tracks(query)
-
-            if not results or not results['tracks']:
-                return await ctx.send('Nothing found!')
-
-            
-            # Valid loadTypes are:
-            #   TRACK_LOADED    - single video/direct URL)
-            #   PLAYLIST_LOADED - direct URL to playlist)
-            #   SEARCH_RESULT   - query prefixed with either ytsearch: or scsearch:.
-            #   NO_MATCHES      - query yielded no results
-            #   LOAD_FAILED     - most likely, the video encountered an exception during loading.
-            if results['loadType'] == 'PLAYLIST_LOADED':
-                tracks = results['tracks']
-
+            query = query.strip('<>')
+            if "https://open.spotify.com/playlist/" in query or "spotify:playlist:" in query:
+                tracks = self.get_tracks_spotify(query)
                 for track in tracks:
-                    
+                    results = await player.node.get_tracks(track)
+                    # if not player.is_playing:
+                    #     await player.play()
+                    player.add(requester=ctx.author.id, track=results['tracks'][0])
+                embed.title = 'Playlist Enqueued!'
+                embed.description = f"Queued `{len(tracks)}` tracks"
+            else:
+                if not url_rx.match(query):
+                    query = f'ytsearch:{query}'
+
+                results = await player.node.get_tracks(query)
+
+                if not results or not results['tracks']:
+                    return await ctx.send('Nothing found!')
+
+                
+                # Valid loadTypes are:
+                #   TRACK_LOADED    - single video/direct URL)
+                #   PLAYLIST_LOADED - direct URL to playlist)
+                #   SEARCH_RESULT   - query prefixed with either ytsearch: or scsearch:.
+                #   NO_MATCHES      - query yielded no results
+                #   LOAD_FAILED     - most likely, the video encountered an exception during loading.
+                if results['loadType'] == 'PLAYLIST_LOADED':
+                    tracks = results['tracks']
+
+                    for track in tracks:
+                        
+                        player.add(requester=ctx.author.id, track=track)
+
+                    embed.title = 'Playlist Enqueued!'
+                    #print(results["playlistInfo"])
+                    embed.description = f'{results["playlistInfo"]["name"]} - {len(tracks)} tracks'
+                else:
+                    track = results['tracks'][0]
+                    #print(track)
+                    embed.title = 'Track Enqueued'
+                    embed.description = f'[{track["info"]["title"]}]({track["info"]["uri"]})'
+
+                    # You can attach additional information to audiotracks through kwargs, however this involves
+                    # constructing the AudioTrack class yourself.
+                    track = lavalink.models.AudioTrack(track, ctx.author.id, recommended=True)
                     player.add(requester=ctx.author.id, track=track)
 
-                embed.title = 'Playlist Enqueued!'
-                #print(results["playlistInfo"])
-                embed.description = f'{results["playlistInfo"]["name"]} - {len(tracks)} tracks'
-            else:
-                track = results['tracks'][0]
-                #print(track)
-                embed.title = 'Track Enqueued'
-                embed.description = f'[{track["info"]["title"]}]({track["info"]["uri"]})'
+            await ctx.send(embed=embed)
 
-                # You can attach additional information to audiotracks through kwargs, however this involves
-                # constructing the AudioTrack class yourself.
-                track = lavalink.models.AudioTrack(track, ctx.author.id, recommended=True)
-                player.add(requester=ctx.author.id, track=track)
-
-        await ctx.send(embed=embed)
-
-        # We don't want to call .play() if the player is playing as that will effectively skip
-        # the current track.
-        if not player.is_playing:
-            await player.play()
+            # We don't want to call .play() if the player is playing as that will effectively skip
+            # the current track.
+            if not player.is_playing:
+                await player.play()
             
    
     def get_tracks_spotify(self,url):
