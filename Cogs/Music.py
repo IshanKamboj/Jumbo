@@ -85,11 +85,11 @@ class Music(commands.Cog):
                 raise commands.CommandInvokeError('You are not in the same voice channel.')
 
     @commands.command(aliases=['p'])
-    async def play(self, ctx, *, query: str):
+    async def play(self, ctx, *, query: str=None):
         """ Searches and plays a song from a given query. """
         player = self.bot.lavalink.player_manager.get(ctx.guild.id)
         embed = discord.Embed(color=discord.Color.blurple())
-        if query is None and player.paused:
+        if query == None and player.paused:
             await player.set_pause(False)
             await ctx.message.add_reaction("⏯️")
         else:
