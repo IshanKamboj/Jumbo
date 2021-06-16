@@ -9,6 +9,8 @@ import datetime as dt
 import random
 import math
 import asyncio
+
+import requests
 from .Listeners import AllListeners
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
@@ -96,6 +98,7 @@ class Music(commands.Cog):
             query = query.strip('<>')
             if "https://open.spotify.com/playlist/" in query or "spotify:playlist:" in query:
                 tracks = self.get_tracks_spotify(query)
+                await ctx.send("This might take some time......")
                 for track in tracks:
                     results = await player.node.get_tracks(track)
                     # if not player.is_playing:
@@ -103,6 +106,12 @@ class Music(commands.Cog):
                     player.add(requester=ctx.author.id, track=results['tracks'][0])
                 embed.title = 'Playlist Enqueued!'
                 embed.description = f"Queued `{len(tracks)}` tracks"
+            elif "https://open.spotify.com/track/" in query or "spotify:track:" in query:
+                ID = self.getTrackID(query)
+                track = self.getTrackFeatures(ID)
+                player.add(requester=ctx.author.id, track=track)
+                embed.title = "Track Enqueued"
+                embed.description = track
             else:
                 if not url_rx.match(query):
                     query = f'ytsearch:{query}'
@@ -147,7 +156,19 @@ class Music(commands.Cog):
             if not player.is_playing:
                 await player.play()
             
-   
+    def getTrackID(self, track):
+        track = sp.track(track)
+        return track["id"]
+    def getTrackFeatures(self, id):
+        meta = sp.track(id)
+        features = sp.audio_features(id)
+        name = meta['name']
+        album = meta['album']['name']
+        artist = meta['album']['artists'][0]['name']
+        release_date = meta['album']['release_date']
+        length = meta['duration_ms']
+        popularity = meta['popularity']
+        return f"ytsearch:{artist} - {album}"
     def get_tracks_spotify(self,url):
         x = sp.playlist_items(url,limit=30)
         temp = []

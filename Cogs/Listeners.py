@@ -92,13 +92,14 @@ class AllListeners(commands.Cog):
             return True
     @commands.Cog.listener()
     async def on_ready(self):
-        await self.change_status()
         print('Logged in as {0.user}'.format(self.bot))
-        await self.bot.get_channel(826719835630338058).send('Logged in as {0.user}'.format(self.bot))   
-    @tasks.loop(minutes=2)
-    async def change_status(self):
-        l = ["New Cmd: Try j!settings", "New Cmd: Try j!trivia","New Cmd: Try j!animetrivia","Checkout Cmds: Use j!help"]
-        await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=f"j!help | Version: {self.bot.version} | {choice(l)}"))
+        await self.bot.get_channel(826719835630338058).send('Logged in as {0.user}'.format(self.bot))
+
+        l = ["New Cmd: Try j!settings", "New Cmd: Try j!trivia","New Cmd: Try j!animetrivia","Checkout Cmds: Use j!help",f"Version: {self.bot.version}"]
+        while True:
+            await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=f"j!help | {choice(l)}"))
+            await asyncio.sleep(120)
+
     @commands.Cog.listener()
     async def on_guild_join(self,guild):
         emb = discord.Embed(title='Jumbo joined a guild.',color=discord.Color.random(),thumbnail=f'{guild.icon_url}')

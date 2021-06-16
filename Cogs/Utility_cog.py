@@ -1,3 +1,4 @@
+import asyncio
 import discord
 from discord.ext import commands
 from discord.ext.commands.errors import MissingRequiredArgument
@@ -12,6 +13,8 @@ from mal import AnimeSearch
 from datetime import datetime
 from colour import Color
 import json
+import time
+import sys
 class Utility(commands.Cog):
     def __init__(self,bot,difficulty):
         self.bot = bot
@@ -373,6 +376,6 @@ class Utility(commands.Cog):
         else:
             em = discord.Embed(description="City not found",color=discord.Color.red())
             await ctx.send(embed=em)
-                    
+            
 def setup(bot):
     bot.add_cog(Utility(bot,difficulty))
