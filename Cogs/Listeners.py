@@ -1,6 +1,8 @@
 import discord
-from discord.ext import commands
+from discord.ext import commands, tasks
 import asyncio
+
+from oauth2client.client import Error
 from Database.db_files import firebase
 from datetime import datetime
 import math
@@ -89,10 +91,9 @@ class AllListeners(commands.Cog):
             return True
     @commands.Cog.listener()
     async def on_ready(self):
-        await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="j!help"))
+        await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=f"j!help | Version: {self.bot.version}"))
         print('Logged in as {0.user}'.format(self.bot))
-        await self.bot.get_channel(826719835630338058).send('Logged in as {0.user}'.format(self.bot))
-        
+        await self.bot.get_channel(826719835630338058).send('Logged in as {0.user}'.format(self.bot))   
     @commands.Cog.listener()
     async def on_guild_join(self,guild):
         emb = discord.Embed(title='Jumbo joined a guild.',color=discord.Color.random(),thumbnail=f'{guild.icon_url}')
@@ -321,6 +322,7 @@ class AllListeners(commands.Cog):
 
     @commands.Cog.listener()
     async def on_command_error(self,ctx,error):
+        error = getattr(error, "original", error)
         if hasattr(ctx.command, 'on_error'):
             return
         db = firebase.database()
@@ -353,34 +355,25 @@ class AllListeners(commands.Cog):
             #print(finalTime)
             await ctx.send(embed=em)
         elif isinstance(error,commands.BotMissingPermissions):
-            try:
-                em = discord.Embed(title="Bot Missing Perms",description="Bot might be missing the perms required to use this command. Please check and try again.",color=discord.Color.red())
-                msg = await ctx.user.send(embed=em)
-                await msg.add_reaction('❌')
-            except:
-                pass
+            em = discord.Embed(title="Bot Missing Perms",description="Bot might be missing the perms required to use this command. Please check and try again.",color=discord.Color.red())
+            msg = await ctx.author.send(embed=em)
+            await msg.add_reaction('❌')
         elif isinstance(error, commands.MissingRequiredArgument):
-            try:
-                em = discord.Embed(title="Command Missing required arguments",description="The command is missing required arguments. See `*help <command_name>` for more details",color=discord.Color.red())
-                msg = await ctx.send(embed=em)
-                await msg.add_reaction('❌')
-            except:
-                pass
+            em = discord.Embed(title="Command Missing required arguments",description="The command is missing required arguments. See `*help <command_name>` for more details",color=discord.Color.red())
+            msg = await ctx.send(embed=em)
+            await msg.add_reaction('❌')
         elif isinstance(error, commands.MissingPermissions):
-            try:
-                em = discord.Embed(title="Missing Permission",description=f"{str(error)}",color=discord.Color.red())
-                msg = await ctx.send(embed=em)
-                await msg.add_reaction('❌')
-            except:
-                pass
-        elif isinstance(error,commands.CommandInvokeError):
-            em = discord.Embed(description=f"{error.original}",color=discord.Color.red())
-            await ctx.send(embed=em)
+            em = discord.Embed(title="Missing Permission",description=f"{str(error)}",color=discord.Color.red())
+            msg = await ctx.author.send(embed=em)
+            await msg.add_reaction('❌')
+        elif isinstance(error,discord.errors.Forbidden):
+            em = discord.Embed(title="Bot Missing Perms" , description=f"{error}",color=discord.Color.red())
+            await ctx.author.send(embed=em)
         else:
             try:
                 typ = type(error).__name__
                 em = discord.Embed(title="Uh oh!",description=f"""
-                An unkown error occured : `{typ}`
+                An unkown error occured : `{error}`
 
             Pls try again and if this persists please report in the support server.
                 

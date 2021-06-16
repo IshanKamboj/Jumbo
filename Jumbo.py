@@ -20,6 +20,7 @@ intent = Intents().all()
 bot = commands.AutoShardedBot(command_prefix=get_prefix,intents=intent,case_insensitive=True,strip_after_prefix=True)
 bot.remove_command("help")
 
+bot.version = "0.0.5"
 
 
 ## Making a group of Help cmds and embeds..........############################

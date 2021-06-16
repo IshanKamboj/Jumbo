@@ -118,20 +118,21 @@ class InfoCogs(commands.Cog):
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _ping(self, ctx):
         lat = round((self.bot.latency)*1000)
-        em = discord.Embed(title=":ping_pong: | Pong!")
-        if lat < 150:
-            em.color = 0x008000
-            em.add_field(name="DWSP Latency:",value=f"`{lat}ms.`")
-        elif lat >= 150:
-            em.color = 0xffff00
-            em.add_field(name="DWSP Latency:",value=f"`{lat}ms.`")
-        else:
-            em.color = 0xff0000
-            em.add_field(name="DWSP Latency:",value=f"`{lat}ms.`")
+        em = discord.Embed(title=":ping_pong: | Pong!",color=discord.Color.gold())
+        em.add_field(name="DWSP Latency:",value=f"`{lat}ms.`")
         start = time()
         message = await ctx.send(embed=em)
         end = time()
         em.add_field(name="Response Time:",value=f"`{(end-start)*1000:,.0f} ms.`")
+        start = time()
+        db = firebase.database()
+        prefix_data = db.child('Prefixes').child(str(ctx.guild.id)).get()
+        end = time()
+        em.add_field(name="DB read:",value=f"`{(end-start)*1000:,.0f} ms.`")
+        start = time()
+        db.child('Dump').child(str(ctx.guild.id)).set({"Dump":"Dump"})
+        end = time()
+        em.add_field(name="DB write:",value=f"`{(end-start)*1000:,.0f} ms.`")
         await message.edit(embed=em)
     @commands.command(name="avatar", aliases=["av", "pfp"])
     @commands.guild_only()
@@ -198,9 +199,9 @@ class InfoCogs(commands.Cog):
             mem_of_total = proc.memory_percent()
             mem_usage = mem_total * (mem_of_total / 100)
         usage = psutil.cpu_percent(2)
-        player = self.bot.lavalink.player_manager.get(ctx.guild.id)
+        #player = self.bot.lavalink.player_manager.get(ctx.guild.id)
         fields = [
-            ("Owner","TheMonkeyCoder#5413",True),
+            ("Owner","TheMonkeyCoder#0001",True),
             ("Python version", python_version(), True),
             ("discord.py version", discord_version, True),
             ("Uptime", uptime, True),
@@ -210,6 +211,7 @@ class InfoCogs(commands.Cog):
             ("Users", f"{len(self.bot.users)}", True),
             ("Registered", user.created_at.strftime(date_format), True),
             ("Number of Commands", len(self.bot.commands)+12,True),
+            ("Version", self.bot.version,True)
             ]
         for name, value, inline in fields:
             em.add_field(name=name, value=value, inline=inline)

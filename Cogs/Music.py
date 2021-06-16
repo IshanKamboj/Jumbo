@@ -92,7 +92,7 @@ class Music(commands.Cog):
         if query == None and player.paused:
             await player.set_pause(False)
             await ctx.message.add_reaction("⏯️")
-        else:
+        elif query is not None:
             query = query.strip('<>')
             if "https://open.spotify.com/playlist/" in query or "spotify:playlist:" in query:
                 tracks = self.get_tracks_spotify(query)
@@ -159,31 +159,31 @@ class Music(commands.Cog):
         return temp
 
     async def track_hook(self, event):
-        if isinstance(event, lavalink.events.QueueEndEvent):
-            # When this track_hook receives a "QueueEndEvent" from lavalink.py
-            # it indicates that there are no tracks left in the player's queue.
-            # To save on resources, we can tell the bot to disconnect from the voicechannel.
-            # if self.repeat_mode ==  RepeatMode.ALL:
-            #     # guild_id = int(event.player.guild_id)
-            #     # player = self.bot.lavalink.player_manager.get(guild_id)
-            #     ...
-            guild_id = int(event.player.guild_id)
-            guild = self.bot.get_guild(guild_id)
-            player = self.bot.lavalink.player_manager.get(guild_id)
-            channel = player.fetch('channel')
-            #requester = await self.bot.fetch_user(player.current.requester)
-            embed = discord.Embed(title='I Left Voice Channel',description="I left the voice channel due to ideling. Use `*play <query>` connect and start the playback",color=discord.Color.blurple())
-            def check(msg):
-                return "p" in msg.content.lower() or "play" in msg.content.lower()
-            try:
-                msg = await self.bot.wait_for("message",check=check,timeout=60)
-            except asyncio.TimeoutError:
-                await self.bot.get_channel(channel).send(embed=embed)
-                player.queue.clear()
-                # Stop the current track so Lavalink consumes less resources.
-                await player.stop()
-                # Disconnect from the voice channel.
-                await guild.change_voice_state(channel=None)
+        # if isinstance(event, lavalink.events.QueueEndEvent):
+        #     # When this track_hook receives a "QueueEndEvent" from lavalink.py
+        #     # it indicates that there are no tracks left in the player's queue.
+        #     # To save on resources, we can tell the bot to disconnect from the voicechannel.
+        #     # if self.repeat_mode ==  RepeatMode.ALL:
+        #     #     # guild_id = int(event.player.guild_id)
+        #     #     # player = self.bot.lavalink.player_manager.get(guild_id)
+        #     #     ...
+        #     guild_id = int(event.player.guild_id)
+        #     guild = self.bot.get_guild(guild_id)
+        #     player = self.bot.lavalink.player_manager.get(guild_id)
+        #     channel = player.fetch('channel')
+        #     #requester = await self.bot.fetch_user(player.current.requester)
+        #     embed = discord.Embed(title='I Left Voice Channel',description="I left the voice channel due to ideling. Use `*play <query>` connect and start the playback",color=discord.Color.blurple())
+        #     def check(msg):
+        #         return "p" in msg.content.lower() or "play" in msg.content.lower()
+        #     try:
+        #         msg = await self.bot.wait_for("message",check=check,timeout=60)
+        #     except asyncio.TimeoutError:
+        #         await self.bot.get_channel(channel).send(embed=embed)
+        #         player.queue.clear()
+        #         # Stop the current track so Lavalink consumes less resources.
+        #         await player.stop()
+        #         # Disconnect from the voice channel.
+        #         await guild.change_voice_state(channel=None)
         
         if isinstance(event, lavalink.TrackStartEvent):
             guild_id = int(event.player.guild_id)
@@ -239,7 +239,7 @@ class Music(commands.Cog):
         await player.stop()
         # Disconnect from the voice channel.
         await ctx.guild.change_voice_state(channel=None)
-        await ctx.send('*⃣ | Disconnected.')
+        await ctx.send(':mailbox_with_no_mail: Disconnected.')
 
     @commands.command(name="queue",aliases=["q"])
     @commands.guild_only()
@@ -464,7 +464,7 @@ class Music(commands.Cog):
         player.queue.insert(index1-1, y)
         await ctx.message.add_reaction("✅")
     
-    @commands.command(name="removesong",aliases=["rs","remove"])
+    @commands.command(name="removesong",aliases=["rs","remove","rm"])
     @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
@@ -624,11 +624,11 @@ class Music(commands.Cog):
     async def _volume(self,ctx,amount:int):
         if 0 <= amount <= 200:
             player = self.bot.lavalink.player_manager.get(ctx.guild.id)
-            await player.set_volume(amount)
             if amount > player.volume:
                 await ctx.message.add_reaction("🔊")
             elif amount <= player.volume:
                 await ctx.message.add_reaction("🔉")
+            await player.set_volume(amount)
         else:
             await ctx.send("The amount should be in between 0 and 200")
     
