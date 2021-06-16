@@ -91,7 +91,7 @@ class AllListeners(commands.Cog):
             return True
     @commands.Cog.listener()
     async def on_ready(self):
-        await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=f"j!help | Version: {self.bot.version}"))
+        await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=f"j!help | Version: {self.bot.version} | New Settings Cmd: Try j!settings"))
         print('Logged in as {0.user}'.format(self.bot))
         await self.bot.get_channel(826719835630338058).send('Logged in as {0.user}'.format(self.bot))   
     @commands.Cog.listener()
@@ -257,6 +257,7 @@ class AllListeners(commands.Cog):
                 if data.val() is None:
                     newUser = {"userName":str(message.author),"lvl":1,"exp":1}
                     db.child("Levels").child(str(message.guild.id)).child(str(message.author.id)).set(newUser)
+                    await self.check_level_role(message,1)
                 elif data.val() is not None:
                     if last_exp.val() is None:
                         exp = data.val()['exp']
@@ -281,6 +282,7 @@ class AllListeners(commands.Cog):
                             else:
                                 ch = announcement_channel.val()["channel"]
                                 await self.bot.get_channel(ch).send(mention,embed=lvl_embed)
+                            await self.check_level_role(message,lvl)
                         if seen_data.val() is None:
                             db.child("Last Seen").child(str(message.author.id)).set({"Time":str(datetime.utcnow())})
                         elif seen_data.val() is not None:
@@ -313,13 +315,22 @@ class AllListeners(commands.Cog):
                                 else:
                                     ch = announcement_channel.val()["channel"]
                                     await self.bot.get_channel(ch).send(mention,embed=lvl_embed)
+                                await self.check_level_role(message,lvl)
                             if seen_data.val() is None:
                                 db.child("Last Seen").child(str(message.author.id)).set({"Time":str(datetime.utcnow())})
                             elif seen_data.val() is not None:
                                 db.child("Last Seen").child(str(message.author.id)).update({"Time":str(datetime.utcnow())})
                             db.child("Levels").child(str(message.guild.id)).child(str(message.author.id)).update({"userName":str(message.author),"exp":exp,"lvl":lvl})
 
-
+    async def check_level_role(self,message,lvl):
+        db = firebase.database()
+        x = db.child('LevelRoles').child(message.guild.id).child(lvl).get()
+        if not x.val() is None:
+            role_id = x.val()["roleid"]
+            role = discord.utils.get(message.guild.roles,id=role_id)
+            await message.author.add_roles(role)
+        else:
+            return
     @commands.Cog.listener()
     async def on_command_error(self,ctx,error):
         error = getattr(error, "original", error)

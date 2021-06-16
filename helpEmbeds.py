@@ -254,6 +254,7 @@ class HelpEmbeds():
         em.add_field(name="*settings cmdrole <command_name> <role_id/role>",value="Sets the required role for using any command. Removes the role if it is already there.",inline=False)
         em.add_field(name="*settings multi <multiplier> [channel(optional)]",value="Sets the level multiplier for a specific channel.",inline=False)
         em.add_field(name="*settings announcements",value="Sets an announcements channel for your guild. All the level up messages are then sent in that channel.",inline=False)
+        em.add_field(name="*settings lvlrole <lvl:int> <role:id/name>",value="Sets the level roles for your guild. These roles are automatically given on reaching specified levels",inline=False)
         return em
     def vote_embed():
         em =  discord.Embed(title=":envelope_with_arrow: Vote Command",description="Vote for the bot on top.gg to show some support",color=discord.Color.random())
