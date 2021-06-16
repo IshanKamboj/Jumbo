@@ -1,3 +1,4 @@
+from random import random, choice
 import discord
 from discord.ext import commands, tasks
 import asyncio
@@ -91,9 +92,13 @@ class AllListeners(commands.Cog):
             return True
     @commands.Cog.listener()
     async def on_ready(self):
-        await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=f"j!help | Version: {self.bot.version} | New Settings Cmd: Try j!settings"))
+        await self.change_status()
         print('Logged in as {0.user}'.format(self.bot))
         await self.bot.get_channel(826719835630338058).send('Logged in as {0.user}'.format(self.bot))   
+    @tasks.loop(minutes=2)
+    async def change_status(self):
+        l = ["New Cmd: Try j!settings", "New Cmd: Try j!trivia","New Cmd: Try j!animetrivia","Checkout Cmds: Use j!help"]
+        await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=f"j!help | Version: {self.bot.version} | {choice(l)}"))
     @commands.Cog.listener()
     async def on_guild_join(self,guild):
         emb = discord.Embed(title='Jumbo joined a guild.',color=discord.Color.random(),thumbnail=f'{guild.icon_url}')
