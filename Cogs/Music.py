@@ -225,6 +225,12 @@ class Music(commands.Cog):
             await self.bot.get_channel(channel).send(embed=em)
         if isinstance(event, lavalink.NodeConnectedEvent):
             print(f"lavalink node: {event.node} ready")
+        if isinstance(event, lavalink.TrackEndEvent):
+            guild_id = int(event.player.guild_id)
+            player = self.bot.lavalink.player_manager.get(guild_id)
+            #print(event.reason)
+            if self.repeat_mode == RepeatMode.ALL:
+                player.add(requester = player.current.requester, track = event.track)
     @commands.command(name="connect",aliases=["join"])
     @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
@@ -303,10 +309,13 @@ class Music(commands.Cog):
                 em.add_field(name="Requested by:",value=f"{requester.mention}")
             else:
                 em.add_field(name="Requested by:",value=f"--------")
-            if player.repeat:
-                em.add_field(name="Loop",value=":white_check_mark:")
-            else:
+            if self.repeat_mode == RepeatMode.ALL:
+                em.add_field(name="Loop",value=":repeat: `Queue`")
+            elif self.repeat_mode == RepeatMode.SONG:
+                em.add_field(name="Loop",value=":repeat_one: `Song`")
+            elif self.repeat_mode == RepeatMode.NONE:
                 em.add_field(name="Loop",value=":x:")
+            
             equaliser = [-0.075, 0.125, 0.125, 0.1, 0.1, 0.05, 0.075, 0.0, 0.0, 0.0, 0.0, 0.0, 0.125, 0.15, 0.05]
             if player.equalizer == equaliser:
                 em.add_field(name="BassBoost",value=":white_check_mark:")
@@ -589,11 +598,26 @@ class Music(commands.Cog):
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
-    async def _loop(self,ctx):
+    async def _loop(self,ctx,loop:str="song"):
         player = self.bot.lavalink.player_manager.get(ctx.guild.id)
-        x = not player.repeat
-        player.repeat = x
-        await ctx.message.add_reaction("🔁")
+        loop = loop.lower()
+        if loop =="song" or loop =="s":
+            x = not player.repeat
+            player.repeat = x
+            self.repeat_mode = RepeatMode.SONG
+            await ctx.message.add_reaction("🔂")
+        elif loop == "q" or loop == "queue":
+            self.repeat_mode = RepeatMode.ALL
+            player.repeat = False
+            await ctx.message.add_reaction("🔁")
+        elif loop == "none" or loop == "n":
+            self.repeat_mode = RepeatMode.NONE
+            player.repeat = False
+            em = discord.Embed(description="Looping set to: `None`",color=discord.Color.random())
+            await ctx.send(embed=em)
+        else:
+            em = discord.Embed(description="Please specify a valid option: `song`, `queue`, `none` or (`s`,`q`,`n`)",color=discord.Color.random())
+            await ctx.send(embed=em)
     @commands.command(name="bassboost",aliases=["boost","bass"])
     @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
