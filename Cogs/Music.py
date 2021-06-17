@@ -1,3 +1,4 @@
+from Jumbo import play
 import discord
 from discord import channel
 from discord.ext.commands.errors import CommandInvokeError, MissingRequiredArgument
@@ -37,7 +38,7 @@ class RepeatMode(Enum):
 class Music(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
-        bot.lavalink = lavalink.Client(805430097426513941)
+        bot.lavalink = lavalink.Client(721290767527575553)
         bot.lavalink.add_node('lava.link', 80, 'anything as a password', 'us', 'MAIN')  # Host, Port, Password, Region, Name
         bot.add_listener(bot.lavalink.voice_update_handler, 'on_socket_response')
         lavalink.add_event_hook(self.track_hook)
@@ -210,6 +211,7 @@ class Music(commands.Cog):
             guild_id = int(event.player.guild_id)
             player = self.bot.lavalink.player_manager.get(guild_id)
             channel = player.fetch('channel')
+            #print(player.current.requester)
             requester = await self.bot.fetch_user(player.current.requester)
             embed = discord.Embed(title='Now Playing',description=f'[{player.current.title}]({player.current.uri}) [{requester.mention}]',color=discord.Color.blurple())
             await self.bot.get_channel(channel).send(embed=embed)
@@ -228,9 +230,13 @@ class Music(commands.Cog):
         if isinstance(event, lavalink.TrackEndEvent):
             guild_id = int(event.player.guild_id)
             player = self.bot.lavalink.player_manager.get(guild_id)
+            #x = player.fetch('requester')
+            #print(x)
             #print(event.reason)
+            #print(player.current.requester)
+            #print(event.track)
             if self.repeat_mode == RepeatMode.ALL:
-                player.add(requester = player.current.requester, track = event.track)
+                player.add(requester=event.track.requester,track=event.track)
     @commands.command(name="connect",aliases=["join"])
     @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
