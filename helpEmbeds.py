@@ -342,3 +342,10 @@ class HelpEmbeds():
         em = discord.Embed(title="Trash",description="Generates a trash image of user.")
         em.add_field(name="Syntax",value="*trash <user>")
         return em
+    
+    def giveaway_embed():
+        em = discord.Embed(title="Giveaway Commands",color=discord.Color.random())
+        em.add_field(name="*gstart <time> <winners> <message/prize>",value="Starts a giveaway for the specified amount of time.",inline=False)
+        em.add_field(name="*greroll <message_id>",value="Re rolls the winners of the giveaway.",inline=False)
+        em.add_field(name="*gend <message_id>",value="Ends the specified giveaway",inline=False)
+        return em

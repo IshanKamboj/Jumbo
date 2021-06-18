@@ -51,6 +51,7 @@ Use `*help <command>` for extended information on a command.
     em.add_field(name=":mag: | Info Commands",value="`*help info`")
     em.add_field(name=":camera: | Image Commands",value="`*help image`")
     em.add_field(name=":triangular_ruler: | Calculation Commands",value="`*help calculation`")
+    em.add_field(name=":tada: Giveaway Commands",value="`*help gway`")
     await ctx.send(embed=em)
 
 #------------------------------ Section of help cmds -----------------------------
@@ -92,7 +93,16 @@ async def image(ctx):
 async def calculation(ctx):
     em = discord.Embed(title=':triangular_ruler: | Calculation Commands',description="`Area`, `Volume`, `Factorial`",color=discord.Color.random())
     await ctx.send(embed=em)
+
+@help.command(name="giveaway",aliases=["gway"])
+async def givea(ctx):
+    em = discord.Embed(title=':tada: | Giveaway Commands',description="`gstart`, `greroll`, `gend`",color=discord.Color.random())
+    await ctx.send(embed=em)
 #-------------------------------LEVEL HELP COMMAND-----------------------------------
+@help.command(name="gcreate",aliases=["gend","greroll","gstart","reroll","end"])
+async def gcreate(ctx):
+    await ctx.send(embed=HelpEmbeds.giveaway_embed())
+
 @help.command(name="Level",aliases=["level","lvl","rank","rnk"])
 async def Level(ctx):
     em = HelpEmbeds.level_embed()
@@ -437,4 +447,3 @@ for filename in os.listdir('./Cogs'):
 
 TOKEN = os.getenv('TOKEN')
 bot.run(TOKEN)
-#bot.run("NzIxMjkwNzY3NTI3NTc1NTUz.XuSYXw.l3AS-iEsIJALEoyPxcLZYjTwpfM")
