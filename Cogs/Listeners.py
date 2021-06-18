@@ -103,7 +103,7 @@ class AllListeners(commands.Cog):
         await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=f"j!help | {choice(l)}"))
         date = datetime.today()
         date = datetime.strftime(date, "%d-%m-%Y")
-        #print(date)
+        print(date)
 
         url = f"https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode=132001&date={date}"
         r = requests.get(url).json()
