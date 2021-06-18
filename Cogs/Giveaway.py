@@ -66,10 +66,9 @@ class Giveaway(commands.Cog):
         gchannel = ctx.channel
         await msg.add_reaction("🎉")
         await asyncio.sleep(time)
-        if "ended" not in msg.content.lower()
+        if "ended" not in msg.content.lower():
             await self.gend(msg,em,winners,message,gchannel,end)
-        else:
-            return
+        
         
 
     async def gend(self,msg,em,winners,message,gchannel,end):
