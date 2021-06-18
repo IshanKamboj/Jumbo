@@ -461,7 +461,7 @@ class Fun(commands.Cog):
     @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
-    @commands.cooldown(1, 600, commands.BucketType.user)
+    @commands.cooldown(1, 300, commands.BucketType.user)
     async def _simp(self,ctx,user:discord.User=None):
         if user == None:
             user = ctx.author

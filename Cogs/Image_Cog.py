@@ -107,7 +107,7 @@ class ImageCommands(commands.Cog):
     @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
-    @commands.cooldown(1, 60, commands.BucketType.user)
+    @commands.cooldown(1, 10, commands.BucketType.user)
     async def _waifu(self,ctx):
         db = firebase.database()
         t = db.child("Simp").child(str(ctx.author.id)).get()
