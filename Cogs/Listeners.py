@@ -13,6 +13,7 @@ default_prefix = "j!"
 lvl_add = 1
 difficulty = 300
 
+
 def convert_to_radians(angle):
     return math.radians(angle)
 calcOPT = {
