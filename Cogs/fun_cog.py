@@ -1,3 +1,4 @@
+from datetime import datetime
 import discord
 from discord.ext import commands
 import randfacts
@@ -454,6 +455,21 @@ class Fun(commands.Cog):
                     await msg.edit(embed=em)
                 await asyncio.sleep(2)
         em = discord.Embed(description=f"**{ctx.author.name}'s Score: {correct}/{ques}**",color=discord.Color.dark_teal())
+        await ctx.send(embed=em)
+    
+    @commands.command(name="simprate",aliases=["simp","srate"])
+    @commands.guild_only()
+    @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
+    @commands.cooldown(1, 600, commands.BucketType.user)
+    async def _simp(self,ctx,user:discord.User=None):
+        if user == None:
+            user = ctx.author
+        db = firebase.database()
+        #random.seed()
+        x = random.randint(1,100)
+        db.child("Simp").child(str(user.id)).set({"Simp":x})
+        em = discord.Embed(title=f"{user.name}'s Simp rate",description=f"{user.mention} is **{x}%** Simp.",color=discord.Color.random())
         await ctx.send(embed=em)
 def setup(bot):
     bot.add_cog(Fun(bot))

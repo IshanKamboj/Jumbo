@@ -1,3 +1,4 @@
+import random
 import discord 
 from discord.ext import commands
 from PIL import Image, ImageDraw, ImageFont
@@ -5,6 +6,9 @@ from .Listeners import AllListeners
 from io import BytesIO
 import io
 import aiohttp
+from waifu import WaifuClient
+import datetime
+from Database.db_files import firebase
 class ImageCommands(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
@@ -99,6 +103,37 @@ class ImageCommands(commands.Cog):
             trash.save(image_binary,"PNG")
             image_binary.seek(0)
             await ctx.send(file=discord.File(fp=image_binary, filename='image.png'))
-    
+    @commands.command(name="waifu",aliases=["waifus","waif"])
+    @commands.guild_only()
+    @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
+    @commands.cooldown(1, 60, commands.BucketType.user)
+    async def _waifu(self,ctx):
+        db = firebase.database()
+        t = db.child("Simp").child(str(ctx.author.id)).get()
+        if t.val() is not None:
+            if t.val()["Simp"] >= 75:
+                client = WaifuClient()
+                x = client.sfw(category='waifu')
+                em = discord.Embed(title="Oh! Yeah. You got a waifu",color=discord.Color.blurple())
+                em.set_image(url=x)
+                em.set_footer(text=f"Invoked by: {ctx.author.name}#{ctx.author.discriminator}",icon_url=f'{ctx.author.avatar_url}')
+                em.timestamp = datetime.datetime.utcnow()
+                await ctx.send(embed=em)
+            elif t.val()["Simp"] < 75:
+                s = t.val()["Simp"]
+                em = discord.Embed(description=f"You are not enough simp to get a waifu. Use `j!simp` to get your simp rate\nYour current simp rate: **{s}**",color=discord.Color.dark_orange())
+                em.set_footer(text=f"Invoked by: {ctx.author.name}#{ctx.author.discriminator}",icon_url=f'{ctx.author.avatar_url}')
+                await ctx.send(embed=em)
+        else:
+            simp = random.randint(1,100)
+            db.child("Simp").child(str(ctx.author.id)).set({"Simp":simp})
+            client = WaifuClient()
+            x = client.sfw(category='waifu')
+            em = discord.Embed(title="Oh! Yeah. You got a waifu",color=discord.Color.blurple())
+            em.set_image(url=x)
+            em.set_footer(text=f"Invoked by: {ctx.author.name}#{ctx.author.discriminator}",icon_url=f'{ctx.author.avatar_url}')
+            em.timestamp = datetime.datetime.utcnow()
+            await ctx.send(embed=em)
 def setup(bot):
     bot.add_cog(ImageCommands(bot))

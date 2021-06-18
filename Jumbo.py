@@ -67,7 +67,7 @@ async def admin(ctx):
 
 @help.command(name="fun")
 async def fun(ctx):
-    em = discord.Embed(title=":joystick: | Fun Commands",description="`Fact`, `Truth`, `Dare`, `8ball`, `Opinion`, `Roast`, `Joke`, `Gayrate`, `IQ`, `Fight`, `Shoot`, `Trivia`, `AnimeTrivia`",color=discord.Color.random())
+    em = discord.Embed(title=":joystick: | Fun Commands",description="`Fact`, `Truth`, `Dare`, `8ball`, `Opinion`, `Roast`, `Joke`, `Gayrate`, `IQ`, `Simprate`, `Fight`, `Shoot`, `Trivia`, `AnimeTrivia`",color=discord.Color.random())
     await ctx.send(embed=em)
 @help.command(name="music")
 async def music(ctx):
@@ -86,7 +86,7 @@ async def action(ctx):
 
 @help.command(name='image')
 async def image(ctx):
-    em = discord.Embed(title=":camera: | Image Commands",description="`Wanted`, `Rip`, `Wallpaper`, `Trash`",color=discord.Color.random())
+    em = discord.Embed(title=":camera: | Image Commands",description="`Wanted`, `Rip`, `Wallpaper`, `Trash`, `Waifu`",color=discord.Color.random())
     await ctx.send(embed=em)
 
 @help.command(name='calculation',aliases=["calc"])
