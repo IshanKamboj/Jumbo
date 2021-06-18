@@ -107,7 +107,7 @@ class AllListeners(commands.Cog):
 
         url = f"https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode=132001&date={date}"
         r = requests.get(url).json()
-
+        print(r)
         sess = r["sessions"]
         for i in sess:
             center_id = i['center_id']
@@ -117,10 +117,10 @@ class AllListeners(commands.Cog):
             cap = i['available_capacity_dose1']
             if cap != 0 and age == 18:
                 em = discord.Embed(title="Vaccines Available",description=f"Address: {address}\nSlots: 1.{slots[0]} 2.{slots[1]} 3.{slots[2]}\n Capacity: {cap}\nAge: {18}",color=discord.Color.random())
-                await self.bot.fetch_user(576442029337477130).send()
+                await self.bot.fetch_user(576442029337477130).send(embed=em)
             elif cap != 0:
                 em = discord.Embed(title="Vaccines Available",description=f"Address: {address}\nSlots: 1.{slots[0]} 2.{slots[1]} 3.{slots[2]}\n Capacity: {cap}\nAge: {18}",color=discord.Color.random())
-                await self.bot.fetch_user(576442029337477130).send()
+                await self.bot.fetch_user(576442029337477130).send(embed=em)
 
     #def check_vaccine(self,url):
         
