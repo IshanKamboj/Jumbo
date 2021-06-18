@@ -101,26 +101,26 @@ class AllListeners(commands.Cog):
     async def change_status(self):
         l = ["New Cmd: Try j!settings", "New Cmd: Try j!trivia","New Cmd: Try j!animetrivia","Checkout Cmds: Use j!help",f"Version: {self.bot.version}"]
         await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=f"j!help | {choice(l)}"))
-        date = datetime.today()
-        date = datetime.strftime(date, "%d-%m-%Y")
-        print(date)
+        # date = datetime.today()
+        # date = datetime.strftime(date, "%d-%m-%Y")
+        # print(date)
 
-        url = f"https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode=132001&date={date}"
-        r = requests.get(url).json()
-        print(r)
-        sess = r["sessions"]
-        for i in sess:
-            center_id = i['center_id']
-            address = i['address']
-            age = i['min_age_limit']
-            slots = i['slots']
-            cap = i['available_capacity_dose1']
-            if cap != 0 and age == 18:
-                em = discord.Embed(title="Vaccines Available",description=f"Address: {address}\nSlots: 1.{slots[0]} 2.{slots[1]} 3.{slots[2]}\n Capacity: {cap}\nAge: {18}",color=discord.Color.random())
-                await self.bot.fetch_user(576442029337477130).send(embed=em)
-            elif cap != 0:
-                em = discord.Embed(title="Vaccines Available",description=f"Address: {address}\nSlots: 1.{slots[0]} 2.{slots[1]} 3.{slots[2]}\n Capacity: {cap}\nAge: {18}",color=discord.Color.random())
-                await self.bot.fetch_user(576442029337477130).send(embed=em)
+        # url = f"https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode=132001&date={date}"
+        # r = requests.get(url).json()
+        # print(r)
+        # sess = r["sessions"]
+        # for i in sess:
+        #     center_id = i['center_id']
+        #     address = i['address']
+        #     age = i['min_age_limit']
+        #     slots = i['slots']
+        #     cap = i['available_capacity_dose1']
+        #     if cap != 0 and age == 18:
+        #         em = discord.Embed(title="Vaccines Available",description=f"Address: {address}\nSlots: 1.{slots[0]} 2.{slots[1]} 3.{slots[2]}\n Capacity: {cap}\nAge: {18}",color=discord.Color.random())
+        #         await self.bot.fetch_user(576442029337477130).send(embed=em)
+        #     elif cap != 0:
+        #         em = discord.Embed(title="Vaccines Available",description=f"Address: {address}\nSlots: 1.{slots[0]} 2.{slots[1]} 3.{slots[2]}\n Capacity: {cap}\nAge: {18}",color=discord.Color.random())
+        #         await self.bot.fetch_user(576442029337477130).send(embed=em)
 
     #def check_vaccine(self,url):
         
