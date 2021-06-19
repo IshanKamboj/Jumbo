@@ -463,12 +463,8 @@ class Fun(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 300, commands.BucketType.user)
     async def _simp(self,ctx,user:discord.User=None):
-        if user == None:
-            user = ctx.author
-        db = firebase.database()
         #random.seed()
         x = random.randint(1,100)
-        db.child("Simp").child(str(user.id)).set({"Simp":x})
         em = discord.Embed(title=f"{user.name}'s Simp rate",description=f"{user.mention} is **{x}%** Simp.",color=discord.Color.random())
         await ctx.send(embed=em)
 def setup(bot):
