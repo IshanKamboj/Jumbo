@@ -86,7 +86,7 @@ async def action(ctx):
 
 @help.command(name='image')
 async def image(ctx):
-    em = discord.Embed(title=":camera: | Image Commands",description="`Wanted`, `Rip`, `Wallpaper`, `Trash`, `Waifu`",color=discord.Color.random())
+    em = discord.Embed(title=":camera: | Image Commands",description="`Wanted`, `Rip`, `Wallpaper`, `Trash`, `Waifu`, `Grayscale`, `Emboss`",color=discord.Color.random())
     await ctx.send(embed=em)
 
 @help.command(name='calculation',aliases=["calc"])
@@ -437,6 +437,19 @@ async def weather(ctx):
 @help.command(name="suggest",aliases=["sgst","trending"])
 async def suggest(ctx):
     await ctx.send(embed=HelpEmbeds.suggest_embed())
+
+@help.command(name="waifu",aliases=["waifus","waif"])
+async def _waifu(ctx):
+    await ctx.send(embed=HelpEmbeds.waifu_embed())
+
+@help.command(name="grayscale",aliases=["gray",'gscal'])
+async def grayscale(ctx):
+    await ctx.send(embed=HelpEmbeds.gray_embed())
+
+@help.command(name="emboss")
+async def grayscale(ctx):
+    await ctx.send(embed=HelpEmbeds.emboss_embed())
+
 #####################################    LOADING COGS    #########################################################
 for filename in os.listdir('./Cogs'):
     if filename.endswith('.py'):

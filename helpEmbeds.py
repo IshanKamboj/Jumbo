@@ -349,3 +349,14 @@ class HelpEmbeds():
         em.add_field(name="*greroll <message_id>",value="Re rolls the winners of the giveaway.",inline=False)
         em.add_field(name="*gend <message_id>",value="Ends the specified giveaway",inline=False)
         return em
+    def emboss_embed():
+        em = discord.Embed(title="Emboss Command",description="Return an image with an emboss filter.",color=discord.Color.random())
+        em.add_field(name="Syntax",value="*emboss <url>")
+    
+    def gray_embed():
+        em = discord.Embed(title="GrayScale Command",description="Return an image in grayscale",color=discord.Color.random())
+        em.add_field(name="Syntax",value="*grayscale <url>")
+    
+    def waifu_embed():
+        em = discord.Embed(title="Waifu Command",description="Return a waifu image depending on your luck",color=discord.Color.random())
+        em.add_field(name="Syntax",value="*waifu")

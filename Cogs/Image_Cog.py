@@ -1,14 +1,14 @@
 import random
 import discord 
 from discord.ext import commands
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageFilter
 from .Listeners import AllListeners
 from io import BytesIO
 import io
 import aiohttp
 from waifu import WaifuClient
 import datetime
-from Database.db_files import firebase
+import requests
 class ImageCommands(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
@@ -77,7 +77,7 @@ class ImageCommands(commands.Cog):
         if query == None:
             url = 'https://source.unsplash.com/random/1920x1080'
         else:
-            url = f'https://source.unsplash.com/featured/?{query}'
+            url = f'https://source.unsplash.com/1920x1080/?{query}'
         async with aiohttp.ClientSession() as session:
             async with session.get(url) as resp:
                 if resp.status != 200:
@@ -110,7 +110,10 @@ class ImageCommands(commands.Cog):
     @commands.cooldown(1, 10, commands.BucketType.user)
     async def _waifu(self,ctx):
         t = random.randint(1,100)
-        if t >= 70:
+        if ctx.author.id == 576442029337477130 or ctx.author.id == 752492486714327131:
+            t = 100
+            
+        if t >= 60:
             client = WaifuClient()
             x = client.sfw(category='waifu')
             em = discord.Embed(title="Oh! Yeah. You got a waifu",description=f"[Download]({x})",color=discord.Color.blurple())
@@ -118,11 +121,39 @@ class ImageCommands(commands.Cog):
             em.set_footer(text=f"Invoked by: {ctx.author.name}#{ctx.author.discriminator}",icon_url=f'{ctx.author.avatar_url}')
             em.timestamp = datetime.datetime.utcnow()
             await ctx.send(embed=em)
-        elif t < 70:
+        elif t < 60:
             em = discord.Embed(title="Uh Oh!",description=f"You weren't lucky enough to get a waifu. Luck percent: {t}%",color=discord.Color.dark_orange())
+            em.timestamp = datetime.datetime.utcnow()
             em.set_footer(text=f"Invoked by: {ctx.author.name}#{ctx.author.discriminator}",icon_url=f'{ctx.author.avatar_url}')
             await ctx.send(embed=em)
     
-
+    @commands.command(name="grayscale",aliases=["gray",'gscal'])
+    @commands.guild_only()
+    @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
+    @commands.cooldown(1, 10, commands.BucketType.user)
+    async def _grayscale(self,ctx,link:str):
+        link = link.replace("<","")
+        link = link.replace(">","")
+        x = Image.open(requests.get(link, stream=True).raw)
+        y = x.convert("L")
+        with io.BytesIO() as image_binary:
+            y.save(image_binary,"PNG")
+            image_binary.seek(0)
+            await ctx.send(file=discord.File(fp=image_binary, filename='image.png'))
+    @commands.command(name="emboss")
+    @commands.guild_only()
+    @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
+    @commands.cooldown(1, 10, commands.BucketType.user)
+    async def _emboss(self,ctx,link:str):
+        link = link.replace("<","")
+        link = link.replace(">","")
+        x = Image.open(requests.get(link, stream=True).raw)
+        y = x.filter(ImageFilter.EMBOSS)
+        with io.BytesIO() as image_binary:
+            y.save(image_binary,"PNG")
+            image_binary.seek(0)
+            await ctx.send(file=discord.File(fp=image_binary, filename='image.png'))
 def setup(bot):
     bot.add_cog(ImageCommands(bot))
