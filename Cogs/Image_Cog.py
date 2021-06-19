@@ -112,11 +112,11 @@ class ImageCommands(commands.Cog):
         t = random.randint(1,100)
         if ctx.author.id == 576442029337477130 or ctx.author.id == 752492486714327131:
             t = 100
-            
+
         if t >= 60:
             client = WaifuClient()
             x = client.sfw(category='waifu')
-            em = discord.Embed(title="Oh! Yeah. You got a waifu",description=f"[Download]({x})",color=discord.Color.blurple())
+            em = discord.Embed(title="Oh Yeah! You got a waifu",description=f"[Download]({x})",color=discord.Color.blurple())
             em.set_image(url=x)
             em.set_footer(text=f"Invoked by: {ctx.author.name}#{ctx.author.discriminator}",icon_url=f'{ctx.author.avatar_url}')
             em.timestamp = datetime.datetime.utcnow()

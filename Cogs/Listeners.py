@@ -96,12 +96,12 @@ class AllListeners(commands.Cog):
         print('Logged in as {0.user}'.format(self.bot))
         await self.bot.get_channel(826719835630338058).send('Logged in as {0.user}'.format(self.bot))
         #await self.change_status()
-        while True:
-            l = ["New Cmd: Try j!settings", "New Cmd: Try j!trivia","New Cmd: Try j!animetrivia",
+        l = ["New Cmd: Try j!settings", "New Cmd: Try j!trivia","New Cmd: Try j!animetrivia",
             "Checkout Cmds: Use j!help",f"Version: {self.bot.version}",
             "New Cmds: Try j!giveaway","Try j!help music", "New Cmd: Try j!waifu",
             "New Cmd: Try j!grayscale", "New Cmd: Try j!emboss"
             ]
+        while True:
             await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=f"j!help | {choice(l)}"))
             await asyncio.sleep(120)
         
