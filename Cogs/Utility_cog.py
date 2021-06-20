@@ -1,7 +1,6 @@
-import asyncio
+from urllib.parse import quote_plus
 import discord
 from discord.ext import commands
-from discord.ext.commands.errors import MissingRequiredArgument
 from Database.db_files import firebase
 from Image_generation import LevelIMG
 from bs4 import BeautifulSoup
@@ -13,8 +12,8 @@ from mal import AnimeSearch
 from datetime import datetime
 from colour import Color
 import json
-import time
-import sys
+from jikanpy import Jikan
+import asyncio
 class Utility(commands.Cog):
     def __init__(self,bot,difficulty):
         self.bot = bot
@@ -376,6 +375,49 @@ class Utility(commands.Cog):
         else:
             em = discord.Embed(description="City not found",color=discord.Color.red())
             await ctx.send(embed=em)
-            
+
+    @commands.command(name="character",aliases=["animechar","animecharacter","achar"])
+    @commands.guild_only()
+    @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
+    @commands.cooldown(1, 7, commands.BucketType.user)        
+    async def _character(self,ctx,*,query:str):
+        jikan = Jikan()
+        search_result = jikan.search('character', query=query)
+        x = 0
+        pages = len(search_result["results"])
+        results = search_result['results'][x]
+        #print(results)
+        # id_ = results['mal_id']
+        # d = jikan.character(id_)
+        img_url = results['image_url']
+        name = results['name']
+        em = discord.Embed(title=name,color=discord.Color.random()).set_image(url=img_url).set_footer(text=f"Page: {x+1}/{pages}")
+        msg = await ctx.send(embed=em)
+        buttons = ["⬅️","⏹️","➡️"]
+        for i in buttons:
+            await msg.add_reaction(i)
+        while True:
+            try:
+                reaction, user = await self.bot.wait_for("reaction_add",check=lambda reaction, user: user == ctx.author and not user.bot and reaction.emoji in buttons, timeout=20.0)
+            except asyncio.TimeoutError:
+                await msg.clear_reactions()
+                break
+            else:
+                if reaction.emoji == "⬅️" and x > 0:
+                    x -= 1
+                elif reaction.emoji == "➡️" and x < len(search_result["results"]):
+                    x += 1
+                elif reaction.emoji == "⏹️":
+                    await msg.clear_reactions()
+                    break
+                for button in buttons:
+                    await msg.remove_reaction(button,ctx.author)
+                results = search_result['results'][x]
+                img_url = results['image_url']
+                name = results['name']
+                em = discord.Embed(title=name,color=discord.Color.random()).set_image(url=img_url).set_footer(text=f"Page: {x+1}/{pages}")
+                await msg.edit(embed=em)
+
 def setup(bot):
     bot.add_cog(Utility(bot,difficulty))

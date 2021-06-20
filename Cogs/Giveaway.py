@@ -6,6 +6,7 @@ from discord.ext.commands.errors import CommandInvokeError
 import random
 import datetime
 from helpEmbeds import HelpEmbeds
+from .Listeners import AllListeners
 alias = {
     "s":1,
     'sec':1,
@@ -40,10 +41,18 @@ class Giveaway(commands.Cog):
         return val * alias[unit]
 
     @commands.command(name="giveaway",aliases=["gway"])
+    @commands.guild_only()
+    @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
+    @commands.cooldown(1, 7, commands.BucketType.user)
     async def _giveaway(self,ctx):
         await ctx.send(embed=HelpEmbeds.giveaway_embed())
 
     @commands.command(name="gstart",aliases=["giveawaystart","gcreate"])
+    @commands.guild_only()
+    @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
+    @commands.cooldown(1, 7, commands.BucketType.user)
     async def _gstart(self,ctx,timee:str,winners:str,*,message):
         winners = winners.replace("w"," ")
         winners = int(winners)
@@ -105,6 +114,10 @@ class Giveaway(commands.Cog):
             await gchannel.send(x)
     
     @commands.command(name="reroll",aliases=["re","greroll"])
+    @commands.guild_only()
+    @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
+    @commands.cooldown(1, 7, commands.BucketType.user)
     async def _reroll(self,ctx,msg_id):
         reroll = await ctx.fetch_message(msg_id)
         em = reroll.embeds[0]
@@ -121,6 +134,10 @@ class Giveaway(commands.Cog):
 
 
     @commands.command(name="gend",aliases=["giveawayend","end"])
+    @commands.guild_only()
+    @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
+    @commands.cooldown(1, 7, commands.BucketType.user)
     async def _end(self,ctx,msg_id):
         msg = await ctx.fetch_message(msg_id)
         if "ended" in msg.content.lower():
