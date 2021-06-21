@@ -256,9 +256,13 @@ class InfoCogs(commands.Cog):
         em = discord.Embed(title=f"{user.name}#{user.discriminator} ---- {user.id}",color=discord.Color.random())
         em.set_thumbnail(url=f"{user.avatar_url}")
         em.add_field(name="Created on:",value=user.created_at.strftime(date_format))
-        em.add_field(name="Animated Avatar:",value=user.is_avatar_animated())
+        #em.add_field(name="Animated Avatar:",value=user.is_avatar_animated())
         em.add_field(name="Bot:",value=user.bot)
+        em.add_field(name="Mutual Servers:",
+        value="\n".join(f"`{i.id}` **{i.name}**" for i in user.mutual_guilds)
+        )
         await ctx.send(embed=em)
+        #print(user.mutual_guilds)
 
 def setup(bot):
     bot.add_cog(InfoCogs(bot))

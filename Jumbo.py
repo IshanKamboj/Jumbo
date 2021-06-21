@@ -20,7 +20,7 @@ intent = Intents().all()
 bot = commands.AutoShardedBot(command_prefix=get_prefix,intents=intent,case_insensitive=True,strip_after_prefix=True)
 bot.remove_command("help")
 
-bot.version = "0.0.6"
+bot.version = "0.0.10"
 
 
 ## Making a group of Help cmds and embeds..........############################
@@ -57,7 +57,7 @@ Use `*help <command>` for extended information on a command.
 #------------------------------ Section of help cmds -----------------------------
 @help.command(name="utility",aliases=["utils"])
 async def utility(ctx):
-    em = discord.Embed(title=":tools: | Utility commands",description="`Level`, `Leaderboard`, `AFK`, `Seen`, `Autoreact`, `Google`, `Wikisearch`, `Hex`, `Poll`, `Animesearch`, `Vote`, `Emoji`, `Report`, `Pokedex`, `Weather`, `Animecharacter`",color=discord.Color.random())
+    em = discord.Embed(title=":tools: | Utility commands",description="`Level`, `Leaderboard`, `AFK`, `Seen`, `Autoreact`, `Google`, `Wikisearch`, `Hex`, `Poll`, `Animesearch`, `Vote`, `Emoji`, `Report`, `Pokedex`, `Weather`",color=discord.Color.random())
     await ctx.send(embed=em)
 
 @help.command(name="admin")
@@ -86,7 +86,7 @@ async def action(ctx):
 
 @help.command(name='image')
 async def image(ctx):
-    em = discord.Embed(title=":camera: | Image Commands",description="`Wanted`, `Rip`, `Wallpaper`, `Trash`, `Waifu`, `Grayscale`, `Emboss`",color=discord.Color.random())
+    em = discord.Embed(title=":camera: | Image Commands",description="`Wanted`, `Rip`, `Wallpaper`, `Trash`, `Waifu`, `Grayscale`, `Emboss`, `Cat`, `Dog`, `Animecharacter`",color=discord.Color.random())
     await ctx.send(embed=em)
 
 @help.command(name='calculation',aliases=["calc"])
