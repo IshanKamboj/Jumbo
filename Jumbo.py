@@ -81,12 +81,12 @@ async def action(ctx):
 
 @help.command(name="info")
 async def action(ctx):
-    em = discord.Embed(title=":mag: | Info Commands",description="`Userinfo`, `Roleinfo`, `OnlineInfo`, `Ping`, `Avatar`, `Snipe`, `Editsnipe`,`Botinfo`, `Whois`",color=discord.Color.random())
+    em = discord.Embed(title=":mag: | Info Commands",description="`Userinfo`, `Roleinfo`, `OnlineInfo`, `Ping`, `Avatar`, `Snipe`, `Editsnipe`,`Botinfo`, `Whois`, `Github`",color=discord.Color.random())
     await ctx.send(embed=em)
 
 @help.command(name='image')
 async def image(ctx):
-    em = discord.Embed(title=":camera: | Image Commands",description="`Wanted`, `Rip`, `Wallpaper`, `Trash`, `Waifu`, `Grayscale`, `Emboss`, `Cat`, `Dog`, `Animecharacter`",color=discord.Color.random())
+    em = discord.Embed(title=":camera: | Image Commands",description="`Wanted`, `Rip`, `Wallpaper`, `Trash`, `Waifu`, `Grayscale`, `Emboss`, `Cat`, `Dog`, `Fox`, `Animecharacter`",color=discord.Color.random())
     await ctx.send(embed=em)
 
 @help.command(name='calculation',aliases=["calc"])
@@ -449,6 +449,10 @@ async def grayscale(ctx):
 @help.command(name="emboss")
 async def grayscale(ctx):
     await ctx.send(embed=HelpEmbeds.emboss_embed())
+
+@help.command(name='github',aliases=["githubstats","gitstats"])
+async def github(ctx):
+    await ctx.send(embed=HelpEmbeds.github_embed())
 
 #####################################    LOADING COGS    #########################################################
 for filename in os.listdir('./Cogs'):

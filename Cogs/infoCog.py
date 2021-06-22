@@ -1,6 +1,8 @@
 import discord
 from discord.ext import commands
 from datetime import timedelta
+
+import requests
 from Database.db_files import firebase
 import asyncio
 from platform import python_version
@@ -263,6 +265,35 @@ class InfoCogs(commands.Cog):
         )
         await ctx.send(embed=em)
         #print(user.mutual_guilds)
-
+    @commands.command(name='github',aliases=["githubstats","gitstats"])
+    @commands.guild_only()
+    @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
+    @commands.cooldown(1, 7, commands.BucketType.user)
+    async def _github(self,ctx,*,username:str):
+        url = f"https://api2.snowflakedev.xyz/api/githubstats?username={username}"
+        r = requests.get(url=url,headers={"query":username,"Authorization":"NTc2NDQyMDI5MzM3NDc3MTMw.MTYxODU0MjEyNTA5Ng==.fc6b183fdd97d9bcc3cddce606e0ad70"},stream=True).json()
+        #x = requests.get(url=url,headers={"query":username,"Authorization":"NTc2NDQyMDI5MzM3NDc3MTMw.MTYxODU0MjEyNTA5Ng==.fc6b183fdd97d9bcc3cddce606e0ad70"},stream=True).url
+        name = r['name']
+        avatar = r['avatar']
+        followers = r['followers']
+        repos = r['repos']
+        pullreq = r['pullRequests']
+        issues = r['issues']
+        em = discord.Embed(color=discord.Color.dark_blue())
+        em.set_author(name=name,icon_url=avatar)
+        em.set_thumbnail(url=avatar)
+        em.add_field(name='Name',value=name,inline=False)
+        em.add_field(name='Followers',value=followers,inline=False)
+        em.add_field(name="Repos",value=repos,inline=False)
+        em.add_field(name='Issues',value=issues,inline=False)
+        em.add_field(name="Pull Requests",value=pullreq,inline=False)
+        await ctx.send(embed=em)
+        #print(r)
+        #x = Image.open(requests.get(url=url,headers={"Authorization":"NTc2NDQyMDI5MzM3NDc3MTMw.MTYxODU0MjEyNTA5Ng==.fc6b183fdd97d9bcc3cddce606e0ad70"},stream=True).raw)
+        # with io.BytesIO() as image_binary:
+        #     x.save(image_binary,"PNG")
+        #     image_binary.seek(0)
+        #     await ctx.send(file=discord.File(fp=image_binary, filename='image.png'))
 def setup(bot):
     bot.add_cog(InfoCogs(bot))

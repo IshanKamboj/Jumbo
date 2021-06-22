@@ -352,11 +352,16 @@ class HelpEmbeds():
     def emboss_embed():
         em = discord.Embed(title="Emboss Command",description="Return an image with an emboss filter.",color=discord.Color.random())
         em.add_field(name="Syntax",value="*emboss <url>")
-    
+        return em
     def gray_embed():
         em = discord.Embed(title="GrayScale Command",description="Return an image in grayscale",color=discord.Color.random())
         em.add_field(name="Syntax",value="*grayscale <url>")
-    
+        return em
     def waifu_embed():
         em = discord.Embed(title="Waifu Command",description="Return a waifu image depending on your luck",color=discord.Color.random())
         em.add_field(name="Syntax",value="*waifu")
+        return em
+    def github_embed():
+        em = discord.Embed(title="Github Command",description="Returns github stats of a user",color=discord.Color.random())
+        em.add_field(name="Syntax",value="*github <username>")
+        return em

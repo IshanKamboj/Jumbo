@@ -237,5 +237,17 @@ class ImageCommands(commands.Cog):
                 name = results['name']
                 em = discord.Embed(title=name,color=discord.Color.random()).set_image(url=img_url).set_footer(text=f"Page: {x+1}/{pages}")
                 await msg.edit(embed=em)
+    @commands.command(name="fox",aliases=["foxpic","foxpicture"])
+    @commands.guild_only()
+    @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
+    @commands.cooldown(1, 7, commands.BucketType.user)
+    async def _fox(self,ctx):
+        url = "https://api2.snowflakedev.xyz/api/fox"
+        x = Image.open(requests.get(url=url,headers={"Authorization":"NTc2NDQyMDI5MzM3NDc3MTMw.MTYxODU0MjEyNTA5Ng==.fc6b183fdd97d9bcc3cddce606e0ad70"},stream=True).raw)
+        with io.BytesIO() as image_binary:
+            x.save(image_binary,"PNG")
+            image_binary.seek(0)
+            await ctx.send(file=discord.File(fp=image_binary, filename='image.png'))
 def setup(bot):
     bot.add_cog(ImageCommands(bot))

@@ -99,7 +99,8 @@ class AllListeners(commands.Cog):
         l = ["New Cmd: Try j!settings", "New Cmd: Try j!trivia","New Cmd: Try j!animetrivia",
             "Checkout Cmds: Use j!help",f"Version: {self.bot.version}",
             "New Cmds: Try j!giveaway","Try j!help music", "New Cmd: Try j!waifu",
-            "New Cmd: Try j!grayscale", "New Cmd: Try j!emboss"
+            "New Cmd: Try j!grayscale", "New Cmd: Try j!emboss",
+            "New Cmd: Try j!github","New Cmds: Try j!help image"
             ]
         while True:
             await self.bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name=f"j!help | {choice(l)}"))
