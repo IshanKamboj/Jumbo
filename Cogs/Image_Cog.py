@@ -112,7 +112,7 @@ class ImageCommands(commands.Cog):
     @commands.cooldown(1, 10, commands.BucketType.user)
     async def _waifu(self,ctx):
         t = random.randint(1,100)
-        perm_simp = [752492486714327131,576442029337477130]
+        perm_simp = [752492486714327131,576442029337477130, 536444230659342337]
         if ctx.author.id in perm_simp:
             t = 100
         if t >= 60:
