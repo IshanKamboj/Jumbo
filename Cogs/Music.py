@@ -102,8 +102,8 @@ class Music(commands.Cog):
                 await ctx.send("This might take some time......")
                 for track in tracks:
                     results = await player.node.get_tracks(track)
-                    # if not player.is_playing:
-                    #     await player.play()
+                    if not player.is_playing:
+                        await player.play()
                     player.add(requester=ctx.author.id, track=results['tracks'][0])
                 embed.title = 'Playlist Enqueued!'
                 embed.description = f"Queued `{len(tracks)}` tracks"
@@ -171,7 +171,7 @@ class Music(commands.Cog):
         popularity = meta['popularity']
         return f"ytsearch:{artist} - {album}"
     def get_tracks_spotify(self,url):
-        x = sp.playlist_items(url,limit=30)
+        x = sp.playlist_items(url)
         temp = []
         for i in range(len(x['items'])-1):
             song = x['items'][i]['track']['artists'][0]['name']
