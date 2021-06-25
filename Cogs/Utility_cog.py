@@ -1,3 +1,4 @@
+from io import FileIO
 from urllib.parse import quote_plus
 import discord
 from discord.ext import commands
@@ -376,7 +377,36 @@ class Utility(commands.Cog):
             em = discord.Embed(description="City not found",color=discord.Color.red())
             await ctx.send(embed=em)
 
-    
-
+    @commands.command(name='removemydata')
+    async def rmd(self,ctx):
+        db = firebase.database()
+        em = discord.Embed(title='Remove Data',description="The following action would delete all your data it is irreversible, it means all your levels in all servers would be gone and also any other data.",color=discord.Color.gold())
+        r = ["❌","✅"]
+        msg = await ctx.send(embed=em)
+        for i in r:
+            await msg.add_reaction(i)
+        try:
+            reaction, user = await self.bot.wait_for("reaction_add", check=lambda reaction, user: reaction.emoji in r and not user.bot, timeout=60.0)
+        except asyncio.TimeoutError:
+            return
+        else:
+            if reaction.emoji == "❌":
+                return
+            elif reaction.emoji == "✅":
+                emoji = discord.utils.get(self.bot.emojis, name = "loadingd")
+                em = discord.Embed(title="Deleting data",description=f"{emoji} Your data is being deleted. Please wait.....",color=discord.Color.gold())
+                msg2 = await ctx.send(embed=em)
+                self.delete_data(user,db)
+                em = discord.Embed(title="Data Deleted",description=f"Your data has been deleted",color=discord.Color.green())
+                await msg2.edit(embed=em)
+    def delete_data(self, user,db):
+        db.child('Last Seen').child(str(user.id)).remove()
+        x = db.child('Reactions').get()
+        for i in x.val():
+            db.child('Reactions').child(i).child(str(user.id)).remove()
+        y = db.child('Levels').get()
+        for i in y.val():
+            db.child('Levels').child(i).child(str(user.id)).remove()
+        
 def setup(bot):
     bot.add_cog(Utility(bot,difficulty))

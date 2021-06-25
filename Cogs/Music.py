@@ -85,6 +85,8 @@ class Music(commands.Cog):
 
             player.store('channel', ctx.channel.id)
             await ctx.guild.change_voice_state(channel=ctx.author.voice.channel,self_deaf=True)
+            em = discord.Embed(description=f"Joined {ctx.author.voice.channel.mention}",color=discord.Color.blurple())
+            await ctx.send(embed=em)
         else:
             if int(player.channel_id) != ctx.author.voice.channel.id:
                 raise commands.CommandInvokeError('You are not in the same voice channel.')
@@ -113,7 +115,8 @@ class Music(commands.Cog):
             elif "https://open.spotify.com/track/" in query or "spotify:track:" in query:
                 ID = self.getTrackID(query)
                 track = self.getTrackFeatures(ID)
-                player.add(requester=ctx.author.id, track=track)
+                results = await player.node.get_tracks(track)
+                player.add(requester=ctx.author.id, track=results['tracks'][0])
                 embed.title = "Track Enqueued"
                 embed.description = track
             else:
@@ -636,7 +639,7 @@ class Music(commands.Cog):
         player = self.bot.lavalink.player_manager.get(ctx.guild.id)
         # print(type(player.equalizer.name))
         # print(player.equalizer.name)
-        print(player.equalizer)
+        #print(player.equalizer)
         equaliser = [(0, -0.075), (1, .125), (2, .125), (3, .1), (4, .1),
                   (5, .05), (6, 0.075), (7, .0), (8, .0), (9, .0),
                   (10, .0), (11, .0), (12, .125), (13, .15), (14, .05)]
