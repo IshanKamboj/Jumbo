@@ -99,7 +99,8 @@ class Music(commands.Cog):
             query = query.strip('<>')
             if "https://open.spotify.com/playlist/" in query or "spotify:playlist:" in query:
                 tracks = self.get_tracks_spotify(query)
-                await ctx.send("This might take some time......")
+                embed = discord.Embed(title="Loading Playlist",description="This might take some time but the playback should start right away.",color=discord.Color.random())
+                await ctx.send(embed = embed)
                 for track in tracks:
                     results = await player.node.get_tracks(track)
                     # if not player.is_playing:
