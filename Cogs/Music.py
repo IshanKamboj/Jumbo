@@ -39,7 +39,9 @@ class Music(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
         bot.lavalink = lavalink.Client(805430097426513941)
-        bot.lavalink.add_node('lava.link', 80, 'anything as a password', 'us', 'MAIN')  # Host, Port, Password, Region, Name
+        bot.lavalink.add_node('lava.link', 80, 'anything as a password', 'us', 'MAIN')
+        bot.lavalink.add_node('lava.link', 80, 'anything as a password', 'us', 'Second')
+        bot.lavalink.add_node('lava.link', 80, 'anything as a password', 'us', 'Third')# Host, Port, Password, Region, Name
         bot.add_listener(bot.lavalink.voice_update_handler, 'on_socket_response')
         lavalink.add_event_hook(self.track_hook)
         self.repeat_mode = RepeatMode.NONE
@@ -103,11 +105,11 @@ class Music(commands.Cog):
                 await ctx.send(embed = embed)
                 for track in tracks:
                     results = await player.node.get_tracks(track)
-                    # if not player.is_playing:
-                    #     await player.play()
+                    if not player.is_playing:
+                        await player.play()
                     player.add(requester=ctx.author.id, track=results['tracks'][0])
                 embed.title = 'Playlist Enqueued!'
-                embed.description = f"Queued `{len(tracks)}` tracks"
+                embed.description = f"Queued `{len(tracks)-1}` tracks"
             elif "https://open.spotify.com/track/" in query or "spotify:track:" in query:
                 ID = self.getTrackID(query)
                 track = self.getTrackFeatures(ID)
@@ -172,7 +174,7 @@ class Music(commands.Cog):
         popularity = meta['popularity']
         return f"ytsearch:{artist} - {album}"
     def get_tracks_spotify(self,url):
-        x = sp.playlist_items(url,limit=30)
+        x = sp.playlist_items(url)
         temp = []
         for i in range(len(x['items'])-1):
             song = x['items'][i]['track']['artists'][0]['name']
