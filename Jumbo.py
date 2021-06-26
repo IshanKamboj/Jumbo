@@ -71,7 +71,7 @@ async def fun(ctx):
     await ctx.send(embed=em)
 @help.command(name="music")
 async def music(ctx):
-    em = discord.Embed(title=":headphones: | Music Commands",description="`Play`, `Connect`, `Disconnect`, `Skip`, `Queue`, `Pause`, `Resume`, `Stop`, `Shuffle`, `Loop`, `Nowplaying`, `Seek`, `Bassboost`, `Move`, `Remove`, `ytsearch`, `Suggest`, `Lyrics`, `Volume`")
+    em = discord.Embed(title=":headphones: | Music Commands",description="`Play`, `Connect`, `Disconnect`, `Skip`, `Queue`, `Pause`, `Resume`, `Stop`, `Shuffle`, `Loop`, `Nowplaying`, `Seek`, `Bassboost`, `Move`, `Remove`, `ytsearch`, `Suggest`, `Lyrics`, `Volume`, `Clearqueue`")
     await ctx.send(embed=em)
 
 @help.command(name="action",aliases=["actions"])
@@ -86,7 +86,7 @@ async def action(ctx):
 
 @help.command(name='image')
 async def image(ctx):
-    em = discord.Embed(title=":camera: | Image Commands",description="`Wanted`, `Rip`, `Wallpaper`, `Trash`, `Waifu`, `Grayscale`, `Emboss`, `Cat`, `Dog`, `Fox`, `Animecharacter`",color=discord.Color.random())
+    em = discord.Embed(title=":camera: | Image Commands",description="`Wanted`, `Rip`, `Wallpaper`, `Trash`, `Waifu`, `Grayscale`, `Emboss`, `Cat`, `Dog`, `Fox`, `Animecharacter`, `Wasted`",color=discord.Color.random())
     await ctx.send(embed=em)
 
 @help.command(name='calculation',aliases=["calc"])

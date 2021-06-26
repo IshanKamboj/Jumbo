@@ -249,5 +249,25 @@ class ImageCommands(commands.Cog):
             x.save(image_binary,"PNG")
             image_binary.seek(0)
             await ctx.send(file=discord.File(fp=image_binary, filename='image.png'))
+    @commands.command(name="wasted")
+    @commands.guild_only()
+    @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
+    @commands.cooldown(1, 7, commands.BucketType.user)
+    async def _wasted(self,ctx,user:discord.Member=None):
+        if user == None:
+            user = ctx.author
+        pfp = Image.open(requests.get(url=user.avatar_url,stream=True).raw)
+        pfp = pfp.convert("RGBA")
+        img = Image.open("template_imgs/wasted2.png")
+        img = img.resize(pfp.size)
+        pfp.paste(img,(0,0),img)
+        draw = ImageDraw.Draw(img)
+        draw.rectangle(((0, 0), pfp.size), fill=(109,51,54,130))
+        image = Image.alpha_composite(pfp, img)
+        with io.BytesIO() as image_binary:
+            image.save(image_binary,"PNG")
+            image_binary.seek(0)
+            await ctx.send(file=discord.File(fp=image_binary, filename='image.png'))
 def setup(bot):
     bot.add_cog(ImageCommands(bot))

@@ -259,10 +259,18 @@ class InfoCogs(commands.Cog):
         em.set_thumbnail(url=f"{user.avatar_url}")
         em.add_field(name="Created on:",value=user.created_at.strftime(date_format))
         #em.add_field(name="Animated Avatar:",value=user.is_avatar_animated())
-        em.add_field(name="Bot:",value=user.bot)
-        em.add_field(name="Mutual Servers:",
-        value="\n".join(f"`{i.id}` **{i.name}**" for i in user.mutual_guilds)
-        )
+        em.add_field(name="Bot:",value=user.bot,inline=False)
+        try:
+            em.add_field(name="Mutual Servers:",
+            value="\n".join(f"`{i.id}` **{i.name}**" for i in user.mutual_guilds),
+            inline = False
+            )
+            
+        except:
+            em.add_field(name="Mutual Servers:",
+            value="`None`",
+            inline = False
+            )
         await ctx.send(embed=em)
         #print(user.mutual_guilds)
     @commands.command(name='github',aliases=["githubstats","gitstats"])

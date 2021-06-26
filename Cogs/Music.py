@@ -14,8 +14,10 @@ from spotipy.oauth2 import SpotifyClientCredentials
 from enum import Enum
 import os
 
-client_id = os.getenv('spotify_client_id')
-client_secret = os.getenv('spotify_client_secret')
+# client_id = os.getenv('spotify_client_id')
+# client_secret = os.getenv('spotify_client_secret')
+client_id = "9f76fdf6ec2f4d3fb506297168c618b0"
+client_secret = "f497831f91354e40acaf9538fce95367"
 sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(client_id=client_id,client_secret=client_secret))
 
 url_rx = re.compile(r'https?://(?:www\.)?.+')
@@ -693,8 +695,15 @@ class Music(commands.Cog):
             await player.set_volume(amount)
         else:
             await ctx.send("The amount should be in between 0 and 200")
-    
-    
+    @commands.command(name="clearqueue",aliases=["queueclear"])
+    @commands.guild_only()
+    @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
+    @commands.cooldown(1, 7, commands.BucketType.user)
+    async def _clearqueue(self,ctx):
+        player = self.bot.lavalink.player_manager.get(ctx.guild.id)
+        player.queue.clear()
+        await ctx.message.add_reaction("✅")
 
 def setup(bot):
     bot.add_cog(Music(bot))
