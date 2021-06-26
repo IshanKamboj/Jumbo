@@ -175,7 +175,7 @@ class Music(commands.Cog):
         popularity = meta['popularity']
         return f"ytsearch:{artist} - {album}"
     def get_tracks_spotify(self,url):
-        x = sp.playlist_items(url)
+        x = sp.playlist(url)
         temp = []
         for i in range(len(x['items'])-1):
             song = x['items'][i]['track']['artists'][0]['name']
