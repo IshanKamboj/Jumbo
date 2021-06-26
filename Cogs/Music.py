@@ -39,9 +39,13 @@ class Music(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
         bot.lavalink = lavalink.Client(805430097426513941)
-        bot.lavalink.add_node('lava.link', 80, 'anything as a password', 'us', 'MAIN')
-        bot.lavalink.add_node('lava.link', 80, 'anything as a password', 'us', 'Second')
-        bot.lavalink.add_node('lava.link', 80, 'anything as a password', 'us', 'Third')# Host, Port, Password, Region, Name
+        bot.lavalink.add_node('lava.link', 80, 'anything as a password', 'us', 'alpha')
+        bot.lavalink.add_node('lava.link', 80, 'anything as a password', 'us', 'beta')
+        bot.lavalink.add_node('lava.link', 80, 'anything as a password', 'us', 'gamma')
+        bot.lavalink.add_node('lava.link', 80, 'anything as a password', 'us', 'delta')
+        bot.lavalink.add_node('lava.link', 80, 'anything as a password', 'us', 'eta')
+        bot.lavalink.add_node('lava.link', 80, 'anything as a password', 'us', 'zeta')
+        bot.lavalink.add_node('lava.link', 80, 'anything as a password', 'us', 'theta')# Host, Port, Password, Region, Name
         bot.add_listener(bot.lavalink.voice_update_handler, 'on_socket_response')
         lavalink.add_event_hook(self.track_hook)
         self.repeat_mode = RepeatMode.NONE
@@ -227,7 +231,8 @@ class Music(commands.Cog):
             #print(player.current.requester)
             requester = await self.bot.fetch_user(player.current.requester)
             embed = discord.Embed(title='Now Playing',description=f'[{player.current.title}]({player.current.uri}) [{requester.mention}]',color=discord.Color.blurple())
-            await self.bot.get_channel(channel).send(embed=embed)
+            if self.repeat_mode != RepeatMode.SONG:
+                await self.bot.get_channel(channel).send(embed=embed)
         if isinstance(event, lavalink.TrackStuckEvent):
             guild_id = int(event.player.guild_id)
             player = self.bot.lavalink.player_manager.get(guild_id)

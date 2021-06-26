@@ -1,5 +1,3 @@
-from io import FileIO
-from urllib.parse import quote_plus
 import discord
 from discord.ext import commands
 from Database.db_files import firebase
@@ -13,7 +11,6 @@ from mal import AnimeSearch
 from datetime import datetime
 from colour import Color
 import json
-from jikanpy import Jikan
 import asyncio
 class Utility(commands.Cog):
     def __init__(self,bot,difficulty):
