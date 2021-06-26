@@ -1,7 +1,5 @@
-from Jumbo import play
 import discord
-from discord import channel
-from discord.ext.commands.errors import CommandInvokeError, MissingRequiredArgument
+from discord.ext.commands.errors import CommandInvokeError
 import lavalink
 from discord.ext import commands
 import asyncio
@@ -10,15 +8,15 @@ import datetime as dt
 import random
 import math
 import asyncio
-
-import requests
 from .Listeners import AllListeners
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 from enum import Enum
-from Database.db_files import firebase
-sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(client_id="9f76fdf6ec2f4d3fb506297168c618b0",client_secret="f497831f91354e40acaf9538fce95367"))
+import os
 
+client_id = os.getenv('spotify_client_id')
+client_secret = os.getenv('spotify_client_secret')
+sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(client_id=client_id,client_secret=client_secret))
 
 url_rx = re.compile(r'https?://(?:www\.)?.+')
 OPTIONS = {
