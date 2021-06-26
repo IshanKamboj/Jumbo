@@ -271,7 +271,7 @@ class InfoCogs(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _github(self,ctx,*,username:str):
-        url = f"https://api2.snowflakedev.xyz/api/githubstats?username={username}"
+        url = f"https://api.snowflake107.repl.co/api/githubstats?username={username}"
         r = requests.get(url=url,headers={"query":username,"Authorization":"NTc2NDQyMDI5MzM3NDc3MTMw.MTYxODU0MjEyNTA5Ng==.fc6b183fdd97d9bcc3cddce606e0ad70"},stream=True).json()
         #x = requests.get(url=url,headers={"query":username,"Authorization":"NTc2NDQyMDI5MzM3NDc3MTMw.MTYxODU0MjEyNTA5Ng==.fc6b183fdd97d9bcc3cddce606e0ad70"},stream=True).url
         name = r['name']
