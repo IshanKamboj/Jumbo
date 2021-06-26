@@ -101,7 +101,8 @@ class Music(commands.Cog):
             query = query.strip('<>')
             if "https://open.spotify.com/playlist/" in query or "spotify:playlist:" in query:
                 tracks = self.get_tracks_spotify(query)
-                embed = discord.Embed(title="Loading Playlist",description="This might take some time but the playback should start right away.",color=discord.Color.random())
+                emoji = discord.utils.get(self.bot.emojis, name = "loadingd")
+                embed = discord.Embed(title=f"{emoji} Loading Playlist",description="This might take some time but the playback should start right away.",color=discord.Color.random())
                 await ctx.send(embed = embed)
                 for track in tracks:
                     results = await player.node.get_tracks(track)
@@ -177,13 +178,13 @@ class Music(commands.Cog):
     def get_tracks_spotify(self,url):
         x = sp.playlist_items(url,offset=0)
         temp = []
-        for i in range(len(x['items'])-1):
+        for i in range(len(x['items'])):
             song = x['items'][i]['track']['artists'][0]['name']
             ar = x['items'][i]['track']['name']
             name_song = f"ytsearch:{song} - {ar}"
             temp.append(name_song)
         x = sp.playlist_items(url,offset=100)
-        for i in range(len(x['items'])-1):
+        for i in range(len(x['items'])):
             song = x['items'][i]['track']['artists'][0]['name']
             ar = x['items'][i]['track']['name']
             name_song = f"ytsearch:{song} - {ar}"
