@@ -14,10 +14,8 @@ from spotipy.oauth2 import SpotifyClientCredentials
 from enum import Enum
 import os
 
-# client_id = os.getenv('spotify_client_id')
-# client_secret = os.getenv('spotify_client_secret')
-client_id = "9f76fdf6ec2f4d3fb506297168c618b0"
-client_secret = "f497831f91354e40acaf9538fce95367"
+client_id = os.getenv('spotify_client_id')
+client_secret = os.getenv('spotify_client_secret')
 sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(client_id=client_id,client_secret=client_secret))
 
 url_rx = re.compile(r'https?://(?:www\.)?.+')
@@ -603,7 +601,7 @@ class Music(commands.Cog):
             #print(f"{h}")
             hrs = (player.current.duration//60000)//60
             x = (player.position/player.current.duration)*100
-            string = "▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"
+            string = "▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"
             y = int((x/100)*len(string))
             #print(len(string))
             final = string[:y]+":blue_circle:"+string[y:]+f" `[{round(x,1)}%]`"
@@ -653,7 +651,7 @@ class Music(commands.Cog):
         # print(type(player.equalizer.name))
         # print(player.equalizer.name)
         #print(player.equalizer)
-        equaliser = [(0, -0.075), (1, .125), (2, .125), (3, .1), (4, .1),
+        equaliser = [(0, -0.065), (1, .135), (2, .130), (3, .1), (4, .1),
                   (5, .05), (6, 0.075), (7, .0), (8, .0), (9, .0),
                   (10, .0), (11, .0), (12, .125), (13, .15), (14, .05)]
         eq = [-0.075, 0.125, 0.125, 0.1, 0.1, 0.05, 0.075, 0.0, 0.0, 0.0, 0.0, 0.0, 0.125, 0.15, 0.05]
