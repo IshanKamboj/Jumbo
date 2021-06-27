@@ -288,6 +288,7 @@ class Music(commands.Cog):
         player.queue.clear()
         # Stop the current track so Lavalink consumes less resources.
         await player.stop()
+        self.repeat_mode = RepeatMode.NONE
         # Disconnect from the voice channel.
         await ctx.guild.change_voice_state(channel=None)
         await ctx.send(':mailbox_with_no_mail: Disconnected.')
