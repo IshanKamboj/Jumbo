@@ -14,6 +14,7 @@ from spotipy.oauth2 import SpotifyClientCredentials
 from enum import Enum
 import os
 
+radio_list = ['anime','edm','pop','study','party']
 client_id = os.getenv('spotify_client_id')
 client_secret = os.getenv('spotify_client_secret')
 sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(client_id=client_id,client_secret=client_secret))
@@ -71,7 +72,7 @@ class Music(commands.Cog):
     async def ensure_voice(self, ctx):
         """ This check ensures that the bot and command author are in the same voicechannel. """
         player = self.bot.lavalink.player_manager.create(ctx.guild.id, endpoint=str(ctx.guild.region))
-        should_connect = ctx.command.name in ('play','ytsearch','connect')
+        should_connect = ctx.command.name in ('play','ytsearch','connect','radio')
 
         if not ctx.author.voice or not ctx.author.voice.channel:
             raise commands.CommandInvokeError('You are not in a voice channel')
@@ -709,6 +710,44 @@ class Music(commands.Cog):
         player.queue.clear()
         await ctx.message.add_reaction("✅")
 
+    @commands.command(name="radio",aliases=["discordfm"])
+    @commands.guild_only()
+    @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
+    @commands.cooldown(1, 7, commands.BucketType.user)
+    async def _radio(self,ctx,radio:str=None):
+        em = discord.Embed(title="Available Radios",
+        description = "\n".join(f"`{i+1}.)` **{t}**"
+        for i,t in enumerate(radio_list)
+        ),
+        color=discord.Color.random()
+
+        )
+        em.set_footer(text="Use ,radio <name>  to run any of these radios")
+        if radio in radio_list:
+            player = self.bot.lavalink.player_manager.get(ctx.guild.id)
+            if radio == "anime":
+                query = "https://www.youtube.com/watch?v=UoMbwCoJTYM"
+            elif radio == "edm":
+                query = "https://www.youtube.com/watch?v=hJT1I4w6PxI"
+            elif radio == "study":
+                query = "https://www.youtube.com/watch?v=5qap5aO4i9A"
+            elif radio == "pop":
+                query = "https://www.youtube.com/watch?v=UHcrk4tHbmQ"
+            elif radio == "party":
+                query = "https://www.youtube.com/watch?v=YSBO7Zl8mU4"
+            
+            results = await player.node.get_tracks(query)
+            track = results['tracks'][0]
+            #print(track)
+            # You can attach additional information to audiotracks through kwargs, however this involves
+            # constructing the AudioTrack class yourself.
+            track = lavalink.models.AudioTrack(track, ctx.author.id, recommended=True)
+            player.add(requester=ctx.author.id, track=track)
+            if not player.is_playing:
+                await player.play()
+        else:
+            await ctx.send(embed=em)
 def setup(bot):
     bot.add_cog(Music(bot))
 
