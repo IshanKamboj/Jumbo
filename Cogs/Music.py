@@ -14,7 +14,17 @@ from spotipy.oauth2 import SpotifyClientCredentials
 from enum import Enum
 import os
 
-radio_list = ['anime','edm','pop','study','party']
+radio_dict = {
+    'anime':'https://www.youtube.com/watch?v=UoMbwCoJTYM',
+    'edm':'https://www.youtube.com/watch?v=hJT1I4w6PxI',
+    'electro':'https://www.youtube.com/watch?v=iM3donnEU9U',
+    'k-pop':'https://www.youtube.com/watch?v=F4aby5WN1Rw',
+    'lofi':'https://www.youtube.com/watch?v=5qap5aO4i9A',
+    'pop':'https://www.youtube.com/watch?v=UHcrk4tHbmQ',
+    'party':'https://www.youtube.com/watch?v=YSBO7Zl8mU4',
+    'nightcore':'https://www.youtube.com/watch?v=6vIceK3MqTo'
+}
+# radio_list = ['anime','edm','pop','study','party']
 client_id = os.getenv('spotify_client_id')
 client_secret = os.getenv('spotify_client_secret')
 sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(client_id=client_id,client_secret=client_secret))
@@ -300,7 +310,7 @@ class Music(commands.Cog):
     async def _queue(self,ctx):
         player = self.bot.lavalink.player_manager.get(ctx.guild.id)
         if player.is_playing or len(player.queue) != 0:
-            items_per_page = 6
+            items_per_page = 10
             current_page = 1
             entries = len(player.queue)
             pages = math.ceil(entries / items_per_page)
@@ -353,19 +363,18 @@ class Music(commands.Cog):
             else:
                 em.add_field(name=":mute: Volume",value="-------")
             if len(player.queue) != 0:
-                em.add_field(
-                    name="Up Next",
-                    value="\n".join(f"{i+1}. [{t.title}]({t.uri}) ({int((t.duration/60000)%60)}:{str(int((t.duration/1000)%60)).zfill(2)})"
+                # em.add_field(
+                #     name="Up Next",
+                #     value="\n".join(f"{i+1}. [{t.title}]({t.uri}) ({int((t.duration/60000)%60)}:{str(int((t.duration/1000)%60)).zfill(2)})"
+                #     for i , t in enumerate(player.queue[:items_per_page])
+                #     ),
+                #     inline=False
+                # )
+                em.description = "\n\n".join(f"`{i+1}. {t.title[0:40]}... ({int((t.duration/60000)%60)}:{str(int((t.duration/1000)%60)).zfill(2)})`"
                     for i , t in enumerate(player.queue[:items_per_page])
-                    ),
-                    inline=False
-                )
+                    )
             else:
-                em.add_field(
-                    name="Up Next",
-                    value="No more songs add some using `[p]play <name>`",
-                    inline=False
-                )
+                em.description = "No more songs add some using `[p]play <name>`"
             
             em.set_thumbnail(url="https://cdn.discordapp.com/emojis/830772596538343506.gif?v=1")
             em.set_footer(text=f"Page : {current_page}/{pages}\nInvoked by {ctx.author.name}",icon_url=ctx.author.avatar_url)
@@ -405,14 +414,17 @@ class Music(commands.Cog):
                             pages = math.ceil(entries / items_per_page)
                             start = (current_page - 1) * items_per_page
                             end = start + items_per_page
-                            em.remove_field(7)
-                            #em = discord.Embed(title=f"Search Results for: {query}",description="",color=discord.Color.random())
-                            em.add_field(
-                            name="Next up",
-                            value="\n".join(f"{i+1+start}. [{t.title}]({t.uri}) ({int((t.duration/60000)%60)}:{str(int((t.duration/1000)%60)).zfill(2)})" 
+                            # em.remove_field(7)
+                            # #em = discord.Embed(title=f"Search Results for: {query}",description="",color=discord.Color.random())
+                            # em.add_field(
+                            # name="Next up",
+                            # value="\n".join(f"{i+1+start}. [{t.title}]({t.uri}) ({int((t.duration/60000)%60)}:{str(int((t.duration/1000)%60)).zfill(2)})" 
+                            # for i, t in enumerate(player.queue[start:end])
+                            # ),
+                            # inline=False
+                            # )
+                            em.description = "\n\n".join(f"`{i+1}. {t.title[0:35]}... ({int((t.duration/60000)%60)}:{str(int((t.duration/1000)%60)).zfill(2)})`" 
                             for i, t in enumerate(player.queue[start:end])
-                            ),
-                            inline=False
                             )
                             #em.set_footer(text=f"Page : {current_page}/{pages}\nYou can use these as `:name:` to send emojis")
                             em.set_footer(text=f"Page : {current_page}/{pages}\nInvoked by {ctx.author.name}",icon_url=ctx.author.avatar_url)
@@ -718,30 +730,23 @@ class Music(commands.Cog):
     async def _radio(self,ctx,radio:str=None):
         em = discord.Embed(title="Available Radios",
         description = "\n".join(f"`{i+1}.)` **{t}**"
-        for i,t in enumerate(radio_list)
+        for i,t in enumerate(radio_dict.keys())
         ),
         color=discord.Color.random()
 
         )
         em.set_footer(text="Use ,radio <name>  to run any of these radios")
-        if radio in radio_list:
+        if radio in radio_dict.keys():
             player = self.bot.lavalink.player_manager.get(ctx.guild.id)
-            if radio == "anime":
-                query = "https://www.youtube.com/watch?v=UoMbwCoJTYM"
-            elif radio == "edm":
-                query = "https://www.youtube.com/watch?v=hJT1I4w6PxI"
-            elif radio == "study":
-                query = "https://www.youtube.com/watch?v=5qap5aO4i9A"
-            elif radio == "pop":
-                query = "https://www.youtube.com/watch?v=UHcrk4tHbmQ"
-            elif radio == "party":
-                query = "https://www.youtube.com/watch?v=YSBO7Zl8mU4"
-            
+            query = radio_dict[radio]
             results = await player.node.get_tracks(query)
             track = results['tracks'][0]
             #print(track)
             # You can attach additional information to audiotracks through kwargs, however this involves
             # constructing the AudioTrack class yourself.
+            player.queue.clear()
+            # Stop the current track so Lavalink consumes less resources.
+            await player.stop()
             track = lavalink.models.AudioTrack(track, ctx.author.id, recommended=True)
             player.add(requester=ctx.author.id, track=track)
             if not player.is_playing:
