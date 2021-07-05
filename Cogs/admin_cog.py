@@ -135,32 +135,30 @@ class Admin(commands.Cog):
             command_disable = self.bot.get_command(command)
             
             disabledCommands = db.child('Disabled').child(str(ctx.guild.id)).child(str(command_disable)).get()
-            if str(ctx.guild.owner_id) == str(ctx.author.id):
-                if disabledCommands.val() is None:
-                    if command_disable is None:
-                        await ctx.send("`No command with that name found`")
-                    elif command_disable == ctx.command or command_disable == "enable":
-                        await ctx.send("`You cannot disable this command`")
-                    else:
-                        em = discord.Embed(description=f"**`{command_disable}` command is now disabled**")
-                        db.child('Disabled').child(str(ctx.guild.id)).child(str(command_disable)).set({'isEnabled':False})
+            
+            if disabledCommands.val() is None:
+                if command_disable is None:
+                    await ctx.send("`No command with that name found`")
+                elif command_disable == ctx.command or command_disable == "enable":
+                    await ctx.send("`You cannot disable this command`")
+                else:
+                    em = discord.Embed(description=f"**`{command_disable}` command is now disabled**")
+                    db.child('Disabled').child(str(ctx.guild.id)).child(str(command_disable)).set({'isEnabled':False})
+                    await ctx.send(embed=em)
+            elif disabledCommands.val() is not None:
+                if command_disable is None:
+                    await ctx.send("`No command with that name found`")
+                elif command_disable == ctx.command or str(command_disable) == 'settings'  or str(command_disable) == "enable" or str(command_disable) == "help" or str(command_disable) == "prefix":
+                    await ctx.send("`You cannot enable/disable this command`")
+                else:
+                    if disabledCommands.val()["isEnabled"] is True:
+                        em = discord.Embed(description=f"**`{command_disable}` command is now disabled**",color=discord.Color.random())
+                        db.child('Disabled').child(str(ctx.guild.id)).child(str(command_disable)).update({'isEnabled':False})
                         await ctx.send(embed=em)
-                elif disabledCommands.val() is not None:
-                    if command_disable is None:
-                        await ctx.send("`No command with that name found`")
-                    elif command_disable == ctx.command or str(command_disable) == 'settings'  or str(command_disable) == "enable" or str(command_disable) == "help" or str(command_disable) == "prefix":
-                        await ctx.send("`You cannot enable/disable this command`")
-                    else:
-                        if disabledCommands.val()["isEnabled"] is True:
-                            em = discord.Embed(description=f"**`{command_disable}` command is now disabled**",color=discord.Color.random())
-                            db.child('Disabled').child(str(ctx.guild.id)).child(str(command_disable)).update({'isEnabled':False})
-                            await ctx.send(embed=em)
-                        elif disabledCommands.val()["isEnabled"] is False:
-                            await ctx.send(f"**`{command_disable}` command is already disabled**")
+                    elif disabledCommands.val()["isEnabled"] is False:
+                        await ctx.send(f"**`{command_disable}` command is already disabled**")
                     #print(disabledCommands.val())
-            else:
-                em = discord.Embed(description="This is an owner only command.",color=discord.Color.red())
-                await ctx.send(embed=em)
+            
     # @_disable.error
     # async def disable_error(self,ctx,error):
     #     if isinstance(error,commands.MissingRequiredArgument):
@@ -181,26 +179,23 @@ class Admin(commands.Cog):
         command_disable = self.bot.get_command(command)
         disabledCommands = db.child('Disabled').child(str(ctx.guild.id)).child(str(command_disable)).get()
 
-        if str(ctx.guild.owner_id) == str(ctx.author.id):
-            if disabledCommands.val() is None:
-                if command_disable is not None:
+        
+        if disabledCommands.val() is None:
+            if command_disable is not None:
+                await ctx.send(f"**`{command_disable}` command is already enabled**")
+            elif command_disable is None:
+                await ctx.send("`No command with that name found`")
+        elif disabledCommands.val() is not None:
+            if command_disable is None:
+                await ctx.send("`No command with that name found`")
+            else:
+                if disabledCommands.val()["isEnabled"] is False:
+                    em = discord.Embed(description=f"**`{command_disable}` command is now enabled**",color=discord.Color.random())
+                    db.child('Disabled').child(str(ctx.guild.id)).child(str(command_disable)).remove()
+                    await ctx.send(embed=em)
+                elif disabledCommands.val()["isEnabled"] is True:
                     await ctx.send(f"**`{command_disable}` command is already enabled**")
-                elif command_disable is None:
-                    await ctx.send("`No command with that name found`")
-            elif disabledCommands.val() is not None:
-                if command_disable is None:
-                    await ctx.send("`No command with that name found`")
-                else:
-                    if disabledCommands.val()["isEnabled"] is False:
-                        em = discord.Embed(description=f"**`{command_disable}` command is now enabled**",color=discord.Color.random())
-                        db.child('Disabled').child(str(ctx.guild.id)).child(str(command_disable)).remove()
-                        await ctx.send(embed=em)
-                    elif disabledCommands.val()["isEnabled"] is True:
-                        await ctx.send(f"**`{command_disable}` command is already enabled**")
-        else:
-
-            em = discord.Embed(description="This is an owner only command.",color=discord.Color.red())
-            await ctx.send(embed=em)
+        
 
     # @_enable.error
     # async def enable_error(self,ctx,error):
