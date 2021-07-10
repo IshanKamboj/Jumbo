@@ -17,10 +17,10 @@ import os
 radio_dict = {
     'anime':'https://www.youtube.com/watch?v=UoMbwCoJTYM',
     'edm':'https://www.youtube.com/watch?v=hJT1I4w6PxI',
-    'electro':'https://www.youtube.com/watch?v=iM3donnEU9U',
+    'electro':'https://www.youtube.com/watch?v=qWf-FPFmVw0',
     'k-pop':'https://www.youtube.com/watch?v=F4aby5WN1Rw',
     'lofi':'https://www.youtube.com/watch?v=5qap5aO4i9A',
-    'pop':'https://www.youtube.com/watch?v=UHcrk4tHbmQ',
+    'pop':'https://www.youtube.com/watch?v=gnyW6uaUgk4',
     'party':'https://www.youtube.com/watch?v=YSBO7Zl8mU4',
     'nightcore':'https://www.youtube.com/watch?v=6vIceK3MqTo'
 }
@@ -423,7 +423,7 @@ class Music(commands.Cog):
                             # ),
                             # inline=False
                             # )
-                            em.description = "\n\n".join(f"`{i+1}. {t.title[0:35]}... ({int((t.duration/60000)%60)}:{str(int((t.duration/1000)%60)).zfill(2)})`" 
+                            em.description = "\n\n".join(f"`{i+1+start}. {t.title[0:35]}... ({int((t.duration/60000)%60)}:{str(int((t.duration/1000)%60)).zfill(2)})`" 
                             for i, t in enumerate(player.queue[start:end])
                             )
                             #em.set_footer(text=f"Page : {current_page}/{pages}\nYou can use these as `:name:` to send emojis")
