@@ -354,8 +354,7 @@ class AllListeners(commands.Cog):
         prefix_data = db.child('Prefixes').child(str(ctx.guild.id)).get()
         pre = prefix_data.val()["Prefix"]
         if isinstance(error,commands.CommandNotFound):
-            em = discord.Embed(title="Command not found",description=f"{error}..... use `{pre}help` for info on commands.")
-            await ctx.send(embed=em)
+            pass
         elif isinstance(error, CommandDisabled):
             em = discord.Embed(description="This command is disabled in your server. Ask admin to enable it",color=discord.Color.random())
             await ctx.send(embed=em)
