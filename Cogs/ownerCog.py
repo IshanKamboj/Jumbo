@@ -1,9 +1,11 @@
+import discord
 from discord.ext import commands
 import os
 import sys
 import dbl
 import socket
 import socket
+from Database.db_files import firebase
 class OwnerCommands(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
@@ -56,5 +58,23 @@ class OwnerCommands(commands.Cog):
             await ctx.send(f"```{exe}```")
         except Exception as e:
             await ctx.send(str(e))
+    @commands.command(name="permsimp",aliases=["permanentsimp"])
+    @commands.is_owner()
+    async def _permsimp(self,ctx,user:discord.User=None):
+        if user == None:
+            user = ctx.author
+        db = firebase.database()
+        x = db.child('PermanentSimp').get()
+        if x.val() is None:
+            db.child('PermanentSimp').set({'Ids':[user.id]})
+            await ctx.send(f"Added {user.mention} as a permanent simp.")
+        else:
+            y = x.val()
+            y = y['Ids']
+            #print()
+            if user.id not in y:
+                y.append(user.id)
+            db.child('PermanentSimp').update({'Ids':y})
+            await ctx.send(f"Added {user.mention} as a permanent simp.")
 def setup(bot):
     bot.add_cog(OwnerCommands(bot))

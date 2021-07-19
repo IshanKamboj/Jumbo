@@ -189,7 +189,7 @@ class AllListeners(commands.Cog):
                             await message.add_reaction(j)
             except Exception as e:
                 pass
-            if message.content.startswith(prefix_data.val()['Prefix']):
+            if message.content.startswith(prefix_data.val()['Prefix']) or message.content.startswith("j!"):
                 return
             else:
                 await self.check_mentions_while_afk(message)

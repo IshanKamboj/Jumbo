@@ -11,6 +11,7 @@ import datetime
 import requests
 from jikanpy import Jikan
 import asyncio
+from Database.db_files import firebase
 class ImageCommands(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
@@ -109,11 +110,13 @@ class ImageCommands(commands.Cog):
     @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
-    @commands.cooldown(1, 10, commands.BucketType.user)
+    @commands.cooldown(1, 7, commands.BucketType.user)
     async def _waifu(self,ctx):
         t = random.randint(1,100)
-        perm_simp = [752492486714327131,576442029337477130, 536444230659342337]
-        if ctx.author.id in perm_simp:
+        #perm_simp = [752492486714327131,576442029337477130, 536444230659342337]
+        db = firebase.database()
+        x = db.child('PermanentSimp').get()
+        if ctx.author.id in x.val()['Ids']:
             t = 100
         if t >= 60:
             client = WaifuClient()
@@ -133,7 +136,7 @@ class ImageCommands(commands.Cog):
     @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
-    @commands.cooldown(1, 10, commands.BucketType.user)
+    @commands.cooldown(1, 7, commands.BucketType.user)
     async def _grayscale(self,ctx,link:str):
         link = link.replace("<","")
         link = link.replace(">","")
@@ -147,7 +150,7 @@ class ImageCommands(commands.Cog):
     @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
-    @commands.cooldown(1, 10, commands.BucketType.user)
+    @commands.cooldown(1, 7, commands.BucketType.user)
     async def _emboss(self,ctx,link:str):
         link = link.replace("<","")
         link = link.replace(">","")
