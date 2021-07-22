@@ -23,6 +23,7 @@ calcOPT = {
     "M":"000000",
     "^":"**",
     "e":"*10**",
+    "π":"3.14",
 
     "tan45":str(math.tan(convert_to_radians(45))),
     "tan60":str(math.tan(convert_to_radians(60))),

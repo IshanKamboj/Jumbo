@@ -13,6 +13,7 @@ import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 from enum import Enum
 import os
+import aiohttp
 
 radio_dict = {
     'anime':'https://www.youtube.com/watch?v=UoMbwCoJTYM',
@@ -49,10 +50,10 @@ class Music(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
         bot.lavalink = lavalink.Client(805430097426513941)
-        bot.lavalink.add_node('lava.link', 80, 'anything as a password', 'us', 'alpha')
-        bot.lavalink.add_node('lava.link', 80, 'anything as a password', 'us', 'beta')
-        bot.lavalink.add_node('lava.link', 80, 'anything as a password', 'us', 'gamma')
-        bot.lavalink.add_node('lava.link', 80, 'anything as a password', 'us', 'delta')# Host, Port, Password, Region, Name
+        bot.lavalink.add_node('lava.link', 80, 'youshallnotpass', 'us', 'alpha')
+        bot.lavalink.add_node('lava.link', 80, 'youshallnotpass', 'eu', 'beta')
+        bot.lavalink.add_node('lava.link', 80, 'youshallnotpass', 'us', 'gamma')
+        bot.lavalink.add_node('lava.link', 80, 'youshallnotpass', 'us', 'delta')# Host, Port, Password, Region, Name
         bot.add_listener(bot.lavalink.voice_update_handler, 'on_socket_response')
         lavalink.add_event_hook(self.track_hook)
         self.repeat_mode = RepeatMode.NONE
@@ -690,8 +691,30 @@ class Music(commands.Cog):
                 embed.description += f"\n**{i+1}.** `{song} - {ar}`"
         await ctx.send(embed=embed)
     @commands.command(name="lyrics")
-    async def ly(self,ctx,name=None):
-        raise CommandInvokeError('This command does not work currently')
+    async def ly(self,ctx,*,name=None):
+        player = self.bot.lavalink.player_manager.get(ctx.guild.id)
+        if name == None:
+            name = player.current.title
+        async with ctx.typing():
+            async with aiohttp.request("GET", LYRICS_URL + name, headers={}) as r:
+                if not 200 <= r.status <= 299:
+                    raise CommandInvokeError('No Lyrics Found')
+
+                data = await r.json()
+
+                if len(data["lyrics"]) > 4000:
+                    return await ctx.send(f"<{data['links']['genius']}>")
+
+                embed = discord.Embed(
+                    title=data["title"],
+                    description=data["lyrics"],
+                    colour=ctx.author.colour,
+                    timestamp=dt.datetime.utcnow(),
+                )
+                embed.set_thumbnail(url=data["thumbnail"]["genius"])
+                embed.set_author(name=data["author"])
+                await ctx.send(embed=embed)
+        
     @commands.command(name="playervolume",aliases=["v","vol","loudness"])
     @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
