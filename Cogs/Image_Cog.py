@@ -116,8 +116,9 @@ class ImageCommands(commands.Cog):
         #perm_simp = [752492486714327131,576442029337477130, 536444230659342337]
         db = firebase.database()
         x = db.child('PermanentSimp').get()
-        if ctx.author.id in x.val()['Ids']:
-            t = 100
+        if x.val() is not None:
+            if ctx.author.id in x.val()['Ids']:
+                t = 100
         if t >= 60:
             client = WaifuClient()
             x = client.sfw(category='waifu')
