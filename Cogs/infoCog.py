@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from datetime import timedelta
-
+import os
 import requests
 from Database.db_files import firebase
 import asyncio
@@ -11,6 +11,7 @@ from discord import __version__ as discord_version
 from psutil import Process, virtual_memory, cpu_percent
 from .Listeners import AllListeners
 import psutil
+import aiohttp
 
 class InfoCogs(commands.Cog):
     def __init__(self, bot):
@@ -303,5 +304,22 @@ class InfoCogs(commands.Cog):
         #     x.save(image_binary,"PNG")
         #     image_binary.seek(0)
         #     await ctx.send(file=discord.File(fp=image_binary, filename='image.png'))
+    @commands.command(name="banner",aliases=["bnr"])
+    async def banner(ctx, member: discord.Member = None):
+        target = member or ctx.author
+        TOKEN = os.getenv('TOKEN')
+        headers = {"Authorization": f"{TOKEN}",
+                "Content-Type": "application/json"}
+        url = f"https://discord.com/api/v9/users/{target.id}"
+        async with aiohttp.request("GET", url=url, headers=headers) as resp:
+            data = await resp.json()
+        banner_id = data["banner"]
+        if banner_id.startswith("a"):
+            banner_type = "gif"
+        else:
+            banner_type = "png"
+        banner_url = f"https://cdn.discordapp.com/banners/{target.id}/{banner_id}.{banner_type}?size=512"
+        await ctx.send(embed=discord.Embed(color=discord.Color.random(),
+                                        description=f"{target.mention} banner").set_image(url=banner_url))
 def setup(bot):
     bot.add_cog(InfoCogs(bot))

@@ -365,3 +365,4 @@ class HelpEmbeds():
         em = discord.Embed(title="Github Command",description="Returns github stats of a user",color=discord.Color.random())
         em.add_field(name="Syntax",value="*github <username>")
         return em
+    
