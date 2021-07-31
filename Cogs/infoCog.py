@@ -306,7 +306,10 @@ class InfoCogs(commands.Cog):
         #     await ctx.send(file=discord.File(fp=image_binary, filename='image.png'))
     @commands.command(name="banner",aliases=["bnr"])
     async def banner(ctx, member: discord.Member = None):
-        target = member or ctx.author
+        target = member
+        if member == None:
+            target = ctx.author
+
         TOKEN = os.getenv('TOKEN')
         headers = {"Authorization": f"{TOKEN}",
                 "Content-Type": "application/json"}
