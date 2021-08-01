@@ -50,11 +50,10 @@ class Music(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
         bot.lavalink = lavalink.Client(805430097426513941)
-        bot.lavalink.add_node('192.168.1.128', 2333, 'youshallnotpass', 'us', 'alpha')
-#       bot.lavalink.add_node('lava.link', 80, 'youshallnotpass', 'eu', 'beta')
-#       bot.lavalink.add_node('lava.link', 80, 'youshallnotpass', 'us', 'gamma')
-#       bot.lavalink.add_node('lava.link', 80, 'youshallnotpass', 'us', 'delta')
-#       Host, Port, Password, Region, Name
+        bot.lavalink.add_node('192.168.1.128', 80, 'youshallnotpass', 'us', 'alpha')
+        bot.lavalink.add_node('lava.link', 80, 'youshallnotpass', 'eu', 'beta')
+        bot.lavalink.add_node('lava.link', 80, 'youshallnotpass', 'us', 'gamma')
+        bot.lavalink.add_node('lava.link', 80, 'youshallnotpass', 'us', 'delta') #Host, Port, Password, Region, Name
         bot.add_listener(bot.lavalink.voice_update_handler, 'on_socket_response')
         lavalink.add_event_hook(self.track_hook)
         self.repeat_mode = RepeatMode.NONE
