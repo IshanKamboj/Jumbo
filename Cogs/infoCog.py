@@ -13,7 +13,7 @@ from .Listeners import AllListeners
 import psutil
 import aiohttp
 
-class InfoCogs(commands.Cog):
+class InfoCogs(commands.Cog,name=":mag: **Info Commands**"):
     def __init__(self, bot):
         self.bot = bot
         self.sniped_msgs = {}
@@ -33,7 +33,10 @@ class InfoCogs(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _userinfo(self, ctx, user: discord.Member = None):
-        db = firebase.database()
+        """
+        This command gets the information of a user
+        """
+        #db = firebase.database()
         if user is None:
             user = ctx.author
         date_format = "%a, %d %b %Y %I:%M %p"
@@ -64,7 +67,10 @@ class InfoCogs(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _roleinfo(self, ctx, role: discord.Role):
-        db = firebase.database()
+        """
+        This command gets the information about a role
+        """
+       # db = firebase.database()
         date_format = "%a, %d %b %Y %I:%M %p"
         role_info = discord.utils.get(ctx.guild.roles, name=str(role))
         temp = [i for i in ctx.guild.roles]
@@ -95,7 +101,10 @@ class InfoCogs(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _onlineinfo(self, ctx, user: discord.Member):
-        db = firebase.database()
+        """
+        This command gets the information of what device is used by the person.
+        """
+        #db = firebase.database()
         
         if str(user.status) == "offline":
             await ctx.send(f'{user.name} is offline....... Please check about anyone else')
@@ -120,6 +129,9 @@ class InfoCogs(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _ping(self, ctx):
+        """
+        Shows the ping of the bot and other stats
+        """
         lat = round((self.bot.latency)*1000)
         em = discord.Embed(title=":ping_pong: | Pong!",color=discord.Color.gold())
         em.add_field(name="DWSP Latency:",value=f"`{lat}ms.`")
@@ -143,6 +155,9 @@ class InfoCogs(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _avatar(self, ctx, user: discord.Member = None):
+        """
+        This command shows avatar/pfp of a user
+        """
         if user == None:
             user = ctx.author
         em = discord.Embed(
@@ -168,7 +183,10 @@ class InfoCogs(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _snipe(self, ctx, channel: discord.channel.TextChannel = None):
-        db = firebase.database()
+        """
+        Snipes the most recent deleted message in a channel.
+        """
+        #db = firebase.database()
         
         try:
             if channel is None:
@@ -190,6 +208,9 @@ class InfoCogs(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _botinfo(self, ctx):
+        """
+        This shows info about the bot
+        """
         user = self.bot.user
         date_format = "%a, %d %b %Y %I:%M %p"
         em = discord.Embed(title="Jumbo's Info", color=discord.Color.random())
@@ -234,6 +255,9 @@ class InfoCogs(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _editsnipe(self, ctx, channel: discord.channel.TextChannel = None):
+        """
+        Snipes the most recent edited message in a channel.
+        """
         try:
             if channel is None:
                 message_before, message_after, author, channel, time = self.editsnipe_msgs[ctx.channel.id]
@@ -254,6 +278,9 @@ class InfoCogs(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _whois(self,ctx,u_id:int):
+        """
+        Get basic info about any user on discord.
+        """
         date_format = "%a, %d %b %Y %I:%M %p"
         user = await self.bot.fetch_user(u_id)
         em = discord.Embed(title=f"{user.name}#{user.discriminator} ---- {user.id}",color=discord.Color.random())
@@ -280,6 +307,9 @@ class InfoCogs(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _github(self,ctx,*,username:str):
+        """
+        Returns github stats of a user
+        """
         url = f"https://api.snowflake107.repl.co/api/githubstats?username={username}"
         r = requests.get(url=url,headers={"query":username,"Authorization":"NTc2NDQyMDI5MzM3NDc3MTMw.MTYxODU0MjEyNTA5Ng==.fc6b183fdd97d9bcc3cddce606e0ad70"},stream=True).json()
         #x = requests.get(url=url,headers={"query":username,"Authorization":"NTc2NDQyMDI5MzM3NDc3MTMw.MTYxODU0MjEyNTA5Ng==.fc6b183fdd97d9bcc3cddce606e0ad70"},stream=True).url

@@ -6,7 +6,7 @@ import dbl
 import socket
 import socket
 from Database.db_files import firebase
-class OwnerCommands(commands.Cog):
+class OwnerCommands(commands.Cog,name="owner"):
     def __init__(self,bot):
         self.bot = bot
         self.token = os.getenv('DBL_TOKEN')

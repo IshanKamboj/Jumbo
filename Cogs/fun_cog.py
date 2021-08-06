@@ -16,7 +16,7 @@ OPTIONS = {
     "4️⃣": 3,
 }
 
-class Fun(commands.Cog):
+class Fun(commands.Cog, name=":joystick: **Fun Commands**"):
     def __init__(self,bot):
         self.bot = bot
     
@@ -28,6 +28,9 @@ class Fun(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _facts(self,ctx):
+        """
+        This command returns a fun fact that you might not know
+        """
         x = randfacts.getFact(filter=True)
         await ctx.send(f"**{x}**")
     #-------------------------- Truth command ---------------------------------
@@ -37,7 +40,10 @@ class Fun(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _truth(self,ctx,user:discord.Member):
-        db = firebase.database()
+        """
+        This command give mentioned user a truth question to be answered.
+        """
+        #db = firebase.database()
         with open("truth.txt","r",encoding='utf-8') as f:
             truth_text = f.readlines()
         length_truth = random.randint(0,len(truth_text))
@@ -60,6 +66,9 @@ class Fun(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _dare(self,ctx,user:discord.Member):
+        """
+        This command give mentioned user a dare, that is to be done.
+        """
         with open("dare.txt","r",encoding='utf-8') as f:
             dare_text = f.readlines()
         length_dare = random.randint(0,len(dare_text))
@@ -82,6 +91,9 @@ class Fun(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _8ball(self,ctx,*,question):
+        """
+        This command answers your yes/no questions. The responses are random
+        """
         response = [
             "It is certain.",
             "It is decidedly so.",
@@ -116,6 +128,9 @@ class Fun(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _opinion(self,ctx,user:discord.Member):
+        """
+        This command tells a random opinion about the person mentioned.
+        """
         opinion_list = ["I think they are a dumbass",
         "My opinion is that they are kind of smart",
         "I guess they are stupid.",
@@ -156,6 +171,9 @@ class Fun(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _insult(self,ctx,user:discord.Member):
+        """
+        This command is used to roast the user you mentioned.
+        """
         # with open("insult.txt","r") as f:
         #     roast_list = f.readlines()
         api_url = "https://api.snowflake107.repl.co/api/roast"
@@ -174,6 +192,9 @@ class Fun(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _gayrate(self,ctx,user:discord.Member=None):
+        """
+        This command tells how much gay a person is. LOL
+        """
         x = random.randint(1,100)
         if user is None:
             user = ctx.author
@@ -190,6 +211,9 @@ class Fun(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _genius(self,ctx,user:discord.Member=None):
+        """
+        Returns random iq for the user.
+        """
         x = random.randint(1,100)
         if user is None:
             user = ctx.author
@@ -206,6 +230,9 @@ class Fun(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _joke(self,ctx):
+        """
+        This command returns a random joke
+        """
         jk = pyjokes.get_joke()
         await ctx.send(jk)
 
@@ -216,6 +243,9 @@ class Fun(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _fight(self,ctx:commands.Context,user:discord.Member):
+        """
+        See who's more powerful. The one deafeted is muted for 20-60 seconds.
+        """
         a = random.choice([ctx.author,user])
         mutedRole = discord.utils.get(ctx.guild.roles,name='Muted')
         if not mutedRole:
@@ -259,6 +289,9 @@ class Fun(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _shoot(self,ctx:commands.Context,user:discord.Member):
+        """
+        Shoot someone with a pistol but be careful u can also be shot. The person shooted will have a 50-50 chance of surviving.
+        """
         a = random.choice([ctx.author,user])
         mutedRole = discord.utils.get(ctx.guild.roles,name='Muted')
         b = random.randint(0,1)
@@ -301,6 +334,9 @@ class Fun(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _trivia(self,ctx,ques:int=None):
+        """
+        Starts the trivia with amount of question specified
+        """
         if ques is None:
             ques = 10
         if ques > 15:
@@ -382,6 +418,9 @@ class Fun(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _atrivia(self,ctx,ques:int=None):
+        """
+        Starts a trivia quiz with questions based on anime
+        """
         if ques is None:
             ques = 10
         if ques > 15:
@@ -463,6 +502,9 @@ class Fun(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 300, commands.BucketType.user)
     async def _simp(self,ctx,user:discord.User=None):
+        """
+        Just a random number specified for simp rate.
+        """
         #random.seed()
         x = random.randint(1,100)
         em = discord.Embed(title=f"{user.name}'s Simp rate",description=f"{user.mention} is **{x}%** Simp.",color=discord.Color.random())

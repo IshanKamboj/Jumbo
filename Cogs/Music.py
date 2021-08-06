@@ -26,8 +26,11 @@ radio_dict = {
     'nightcore':'https://www.youtube.com/watch?v=6vIceK3MqTo'
 }
 # radio_list = ['anime','edm','pop','study','party']
-client_id = os.getenv('spotify_client_id')
-client_secret = os.getenv('spotify_client_secret')
+# client_id = os.getenv('spotify_client_id')
+# client_secret = os.getenv('spotify_client_secret')
+
+client_id = '9f76fdf6ec2f4d3fb506297168c618b0'
+client_secret = 'f497831f91354e40acaf9538fce95367'
 LYRICS_URL = "https://some-random-api.ml/lyrics?title="
 sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(client_id=client_id,client_secret=client_secret))
 
@@ -46,11 +49,11 @@ class RepeatMode(Enum):
     SONG=1
     ALL=2
 
-class Music(commands.Cog):
+class Music(commands.Cog,name=":headphones: **Music Commands**"):
     def __init__(self,bot):
         self.bot = bot
         bot.lavalink = lavalink.Client(805430097426513941)
-        bot.lavalink.add_node('122.173.28.247', 80, 'youshallnotpass', 'us', 'alpha')
+        #bot.lavalink.add_node('122.173.28.247', 2333, 'youshallnotpass', 'us', 'alpha')
         bot.lavalink.add_node('lava.link', 80, 'youshallnotpass', 'eu', 'beta')
         bot.lavalink.add_node('lava.link', 80, 'youshallnotpass', 'us', 'gamma')
         bot.lavalink.add_node('lava.link', 80, 'youshallnotpass', 'us', 'delta') #Host, Port, Password, Region, Name
@@ -268,8 +271,10 @@ class Music(commands.Cog):
     @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
-    
     async def _connect(self,ctx):
+        """
+        Joins the specified voice channel from this command.
+        """
         player = self.bot.lavalink.player_manager.get(ctx.guild.id)
         embed=discord.Embed(description=f"Connected to voice channel",color=discord.Color.blurple())
         if player.is_connected:
@@ -308,6 +313,9 @@ class Music(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _queue(self,ctx):
+        """
+        Displays the upcoming and currently playing songs.
+        """
         player = self.bot.lavalink.player_manager.get(ctx.guild.id)
         if player.is_playing or len(player.queue) != 0:
             items_per_page = 10
@@ -434,6 +442,9 @@ class Music(commands.Cog):
     @commands.check(AllListeners.check_enabled)
     
     async def _skip(self,ctx):
+        """
+        Skips the currently playing song. Skips directly if you are the requester or have manage_guild perms.
+        """
         player = self.bot.lavalink.player_manager.get(ctx.guild.id)
         if player.is_playing:
             if AllListeners.role_check(ctx) or ctx.author.guild_permissions.manage_guild or ctx.author.id == player.current.requester or ctx.author.guild_permissions.administrator:
@@ -446,6 +457,9 @@ class Music(commands.Cog):
     @commands.check(AllListeners.check_enabled)
     
     async def _pause(self,ctx):
+        """
+        Pauses the currently playing song.
+        """
         player = self.bot.lavalink.player_manager.get(ctx.guild.id)
         if player.is_playing:
             if AllListeners.role_check(ctx) or ctx.author.guild_permissions.manage_guild or ctx.author.id == player.current.requester or ctx.author.guild_permissions.administrator:
@@ -458,6 +472,9 @@ class Music(commands.Cog):
     @commands.check(AllListeners.check_enabled)
     
     async def _resume(self,ctx):
+        """
+        Resumes the paused song.
+        """
         player = self.bot.lavalink.player_manager.get(ctx.guild.id)
         if AllListeners.role_check(ctx) or ctx.author.guild_permissions.manage_guild or ctx.author.id == player.current.requester or ctx.author.guild_permissions.administrator:
             if player.paused:
@@ -470,6 +487,9 @@ class Music(commands.Cog):
     @commands.check(AllListeners.check_enabled)
     
     async def _stop(self,ctx):
+        """
+        Stops the songs
+        """
         player = self.bot.lavalink.player_manager.get(ctx.guild.id)
         if player.is_playing:
             if AllListeners.role_check(ctx) or ctx.author.guild_permissions.manage_guild or ctx.author.id == player.current.requester or ctx.author.guild_permissions.administrator:
@@ -483,6 +503,9 @@ class Music(commands.Cog):
     @commands.check(AllListeners.role_check)
     
     async def _shuffle(self,ctx):
+        """
+        Shuffles the queue.
+        """
         player = self.bot.lavalink.player_manager.get(ctx.guild.id)
         random.shuffle(player.queue)
         await ctx.message.add_reaction("🔀")
@@ -493,6 +516,9 @@ class Music(commands.Cog):
     @commands.check(AllListeners.role_check)
     
     async def seek_command(self,ctx,time:str):
+        """
+        Jump to particular timestamp in the song using this command.
+        """
         try:
             player = self.bot.lavalink.player_manager.get(ctx.guild.id)
             if ":" in time:
@@ -521,6 +547,9 @@ class Music(commands.Cog):
     @commands.check(AllListeners.role_check)
     
     async def move_command(self,ctx,index1:int,index2:int):
+        """
+        Moves the specified song to new position
+        """
         if index1 is None or index2 is None:
             raise commands.MissingRequiredArgument
         player = self.bot.lavalink.player_manager.get(ctx.guild.id)
@@ -536,6 +565,9 @@ class Music(commands.Cog):
     @commands.check(AllListeners.role_check)
     
     async def removesong(self,ctx,index:int):
+        """
+        Removes the song from the queue using index
+        """
         if index is None:
             await ctx.send("You need to specify the index of song to remove.")
         else:
@@ -549,6 +581,9 @@ class Music(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _ytsearch(self,ctx,*,query:str):
+        """
+        Returns youtube search results for the given query.
+        """
         try:
             player = self.bot.lavalink.player_manager.get(ctx.guild.id)
             query = f'ytsearch:{query}'
@@ -597,6 +632,9 @@ class Music(commands.Cog):
     @commands.check(AllListeners.role_check)
     
     async def _nowplaying(self,ctx):
+        """
+        Shows info about the currently playing song
+        """
         player = self.bot.lavalink.player_manager.get(ctx.guild.id)
         if player.is_playing:
             embed = discord.Embed(title="Now Playing",
@@ -635,6 +673,9 @@ class Music(commands.Cog):
     @commands.check(AllListeners.role_check)
     
     async def _loop(self,ctx,loop:str="song"):
+        """
+        Loops the song or queue. Use `None` to stop loop
+        """
         player = self.bot.lavalink.player_manager.get(ctx.guild.id)
         loop = loop.lower()
         if loop =="song" or loop =="s":
@@ -659,6 +700,9 @@ class Music(commands.Cog):
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
     async def bassboost_command(self,ctx):
+        """
+        Boosts the bass of the songs
+        """
         player = self.bot.lavalink.player_manager.get(ctx.guild.id)
         equaliser=  [(0, -0.075), (1, .125), (2, .125), (3, .1), (4, .1),
                      (5, .05), (6, 0.075), (7, .0), (8, .0), (9, .0),
@@ -678,6 +722,9 @@ class Music(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _suggest(self,ctx,genre:str):
+        """
+        Returns suggestion of songs for a particular genre.
+        """
         #y = sp.recommendation_genre_seeds()
         #print(y)
         x = sp.recommendations(seed_genres=[genre],limit=10)
@@ -693,6 +740,9 @@ class Music(commands.Cog):
         await ctx.send(embed=embed)
     @commands.command(name="lyrics")
     async def ly(self,ctx,*,name=None):
+        """
+        Return lyrics of the song.
+        """
         player = self.bot.lavalink.player_manager.get(ctx.guild.id)
         if name == None:
             name = player.current.title
@@ -722,6 +772,9 @@ class Music(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _volume(self,ctx,amount:int):
+        """
+        Sets the volume of the player.
+        """
         if 0 <= amount <= 200:
             player = self.bot.lavalink.player_manager.get(ctx.guild.id)
             if amount > player.volume:
@@ -737,6 +790,9 @@ class Music(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _clearqueue(self,ctx):
+        """
+        Clear the current queue
+        """
         player = self.bot.lavalink.player_manager.get(ctx.guild.id)
         player.queue.clear()
         await ctx.message.add_reaction("✅")
@@ -747,6 +803,9 @@ class Music(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _radio(self,ctx,radio:str=None):
+        """
+        Plays a live stream
+        """
         em = discord.Embed(title="Available Radios",
         description = "\n".join(f"`{i+1}.)` **{t}**"
         for i,t in enumerate(radio_dict.keys())

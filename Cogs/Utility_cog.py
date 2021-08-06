@@ -12,7 +12,9 @@ from datetime import datetime
 from colour import Color
 import json
 import asyncio
-class Utility(commands.Cog):
+from discord import utils
+import math
+class Utility(commands.Cog,name=":tools: **Utility Commands**"):
     def __init__(self,bot,difficulty):
         self.bot = bot
         self.difficulty = difficulty
@@ -24,8 +26,8 @@ class Utility(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _level(self,ctx:commands.Context,user:discord.Member=None):
-        """Check ur Level with this.        
-        Mention ur friend or use his ID to see their level.
+        """
+        This is used to check level of yourself and others. Disabling this command will disable the full levelling system
         """
         if user == None:
             user = ctx.author
@@ -63,6 +65,9 @@ class Utility(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _leaderboard(self,ctx:commands.Context):
+        """
+        Shows the leaderboard for this Server.
+        """
         database = firebase.database()
         rnk_data = database.child('Levels').child(str(ctx.guild.id)).get()
         ti = []
@@ -104,6 +109,9 @@ class Utility(commands.Cog):
     @commands.cooldown(1, 7, commands.BucketType.user)
     # @commands.has_permissions(manage_nickname)
     async def _afk(self,ctx:commands.Context,*,reason="Busy...smh"):
+        """
+        Set AFK and let other people know. Auto removes if u message
+        """
         db = firebase.database()
         data = db.child("AFK").child(str(ctx.guild.id)).child(str(ctx.author.id)).get()
         db.child("AFK").child(str(ctx.guild.id)).child(str(ctx.author.id)).set({"reason":reason})        
@@ -123,6 +131,9 @@ class Utility(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _seen(self,ctx:commands.Context,user:discord.Member):
+        """
+        This command tells you when the mentioned person last messaged in any of the bot's server.
+        """
         db = firebase.database()
         seen_data = db.child("Last Seen").child(str(user.id)).get()
         if seen_data.val() is None:
@@ -153,6 +164,9 @@ class Utility(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _autoreact(self,ctx,sign:str,reaction):
+        """
+        This command helps set an auto react which will be triggered when u are mentioned.
+        """
         try:
             db = firebase.database()
             react_data = db.child('Reactions').child(str(ctx.guild.id)).child(str(ctx.author.id)).get()
@@ -205,7 +219,9 @@ class Utility(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _google(self,ctx,*,query):
-        db = firebase.database()
+        """
+        This command help you search on google for whatever you want
+        """
         temp = {}
         for j in search(query,tld="com" ,num=5,start=0, stop=5, pause=1): 
             #temp.append(j)
@@ -234,6 +250,9 @@ class Utility(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _wikisearch(self,ctx,*,query:str):
+        """
+        Searches the wikipedia for your query.
+        """
         x = wikipedia.summary(query,sentences=7)
         pg = wikipedia.page(query)
         link = pg.url
@@ -246,6 +265,9 @@ class Utility(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _poll(self,ctx,*,question:str):
+        """
+        Create a simple poll using this command.
+        """
         await ctx.message.delete()
         msg = await ctx.send(f'**{str(ctx.author)} asks** {question}')
         await msg.add_reaction('👍')
@@ -257,6 +279,9 @@ class Utility(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _animesearch(self,ctx,*,query:str):
+        """
+        Returns info about anime from MAL (My Anime List)
+        """
         search = AnimeSearch(query)
         url = f"https://api.jikan.moe/v3/search/anime?q={query}"
         r = requests.get(url=url).json()
@@ -292,6 +317,9 @@ class Utility(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _hex(self,ctx,*,color:str):
+        """
+        This command gives you the hex value of the color.
+        """
         c = Color(color=color)
         await ctx.send(f"The hex value for {color} color is: {c.hex_l}")
     @commands.command(name="vote",aliases=["upvote"])
@@ -300,6 +328,9 @@ class Utility(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _vote(self,ctx):
+        """
+        Vote for the bot on top.gg to show some support
+        """
         # db = firebase.database()
         # x = db.child('Items').child("gun").child(str(ctx.author.id)).get()
         # if x.val() is None:
@@ -313,6 +344,9 @@ class Utility(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _invite(self,ctx):
+        """
+        Sends invite link for the bot.
+        """
         await ctx.send(f"Invite the Bot: https://top.gg/bot/805430097426513941")
     @commands.command(name="report",aliases=["bug"])
     @commands.guild_only()
@@ -320,6 +354,9 @@ class Utility(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 60, commands.BucketType.user)
     async def report(self,ctx,*,bug):
+        """
+        Report a bug using this command. Describe it as best as u can.I will try my best to solve it.
+        """
         em = discord.Embed(title="New Bug",description=bug,color=discord.Color.red(),timestamp=datetime.utcnow())
         em.add_field(name="Reported By:",value=f'{ctx.author.name}#{ctx.author.discriminator}')
         em.add_field(name="Reporter's ID:",value=f'{ctx.author.id}')
@@ -334,6 +371,9 @@ class Utility(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 25, commands.BucketType.user)
     async def _pokedex(self,ctx,*,query):
+        """
+        Returns info about the pokemon
+        """
         api_url = f"https://api.snowflake107.repl.co/api/pokemon?name={query}"
         response = requests.get(api_url,headers={"query":str(query),"Authorization":"NTc2NDQyMDI5MzM3NDc3MTMw.MTYxODU0MjEyNTA5Ng==.fc6b183fdd97d9bcc3cddce606e0ad70"}).content.decode()
         r = json.loads(response)
@@ -363,6 +403,9 @@ class Utility(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _weather(self,ctx,*,place:str):
+        """
+        This command tells u the current weather of a place.
+        """
         if place is None:
             place = "delhi"
         url = f"http://api.openweathermap.org/data/2.5/weather?appid=1835f9064d23b2112f17339c8209e24e&q={place}"
@@ -381,6 +424,9 @@ class Utility(commands.Cog):
 
     @commands.command(name='removemydata')
     async def rmd(self,ctx):
+        """
+        Removes all your data from the bots database
+        """
         db = firebase.database()
         em = discord.Embed(title='Remove Data',description="The following action would delete all your data it is irreversible, it means all your levels in all servers would be gone and also any other data.",color=discord.Color.gold())
         r = ["❌","✅"]
@@ -409,6 +455,157 @@ class Utility(commands.Cog):
         y = db.child('Levels').get()
         for i in y.val():
             db.child('Levels').child(i).child(str(user.id)).remove()
+
+    async def getemote(self, arg):
+        emoji = utils.get(self.bot.emojis, name = arg.strip(":"))
+        if emoji is not None:
+            if emoji.animated:
+                add = "a"
+            else:
+                add = ""
+            return f"<{add}:{emoji.name}:{emoji.id}>"
+        else:
+            return None
+
+    async def getinstr(self, content):
+        ret = []
+
+        spc = content.split(" ")
+        cnt = content.split(":")
+
+        if len(cnt) > 1:
+            for item in spc:
+                if item.count(":") > 1:
+                    wr = ""
+                    if item.startswith("<") and item.endswith(">"):
+                        ret.append(item)
+                    else:
+                        cnt = 0
+                        for i in item:
+                            if cnt == 2:
+                                aaa = wr.replace(" ", "")
+                                ret.append(aaa)
+                                wr = ""
+                                cnt = 0
+
+                            if i != ":":
+                                wr += i
+                            else:
+                                if wr == "" or cnt == 1:
+                                    wr += " : "
+                                    cnt += 1
+                                else:
+                                    aaa = wr.replace(" ", "")
+                                    ret.append(aaa)
+                                    wr = ":"
+                                    cnt = 1
+
+                        aaa = wr.replace(" ", "")
+                        ret.append(aaa)
+                else:
+                    ret.append(item)
+        else:
+            return content
+
+        return ret
+
+
+    @commands.Cog.listener()
+    async def on_message(self, message):
+        if message.author.bot:
+            return
+        db = firebase.database()
+        isEnabled = db.child('Disabled').child(str(message.guild.id)).child("emojisearch").get()
+        if ":" in message.content and isEnabled.val() is None:
+            msg = await self.getinstr(message.content)
+            ret = ""
+            em = False
+            smth = message.content.split(":")
+            if len(smth) > 1:
+                for word in msg:
+                    if word.startswith(":") and word.endswith(":") and len(word) > 1:
+                        emoji = await self.getemote(word)
+                        if emoji is not None:
+                            em = True
+                            ret += f" {emoji}"
+                        else:
+                            ret += f" {word}"
+                    else:
+                        ret += f" {word}"
+
+            else:
+                ret += msg
+            
+
+            if em:
+                webhooks = await message.channel.webhooks()
+                webhook = utils.get(webhooks, name = "Imposter NQN")
+                if webhook is None:
+                    webhook = await message.channel.create_webhook(name = "Imposter NQN")
+                await message.delete()
+                await webhook.send(ret, username = message.author.name, avatar_url = message.author.avatar_url)
+    @commands.command(name="emojisearch",aliases=["esearch","emotesearch","emoji"])
+    @commands.guild_only()
+    @commands.check(AllListeners.check_enabled)
+    @commands.check(AllListeners.role_check)
+    @commands.cooldown(1,20, commands.BucketType.user)
+    async def _emojisearch(self,ctx,*,query:str):
+        """
+        Search for different emoji names for the query and then use them. If this command is disabled then bot would not send emojis. Similar system like NQN.
+        """
+        emoji_list =  list(map(str, [r.name for r in self.bot.emojis]))
+        new_query = query.replace(" ","_")
+        em = discord.Embed(title=f"Search Results for: {query}",description="",color=discord.Color.random())
+        temp_dict = {}
         
+        for i in self.bot.emojis:
+            if new_query.lower() in str(i).lower():
+                x = str(i).split(":")
+                temp_dict[str(i)]=x[1]			
+            
+        temp = list(temp_dict.items())	
+        items_per_page = 7
+        current_page = 1
+        pages = math.ceil(len(temp) / items_per_page)
+        if pages == 0:
+            em = discord.Embed(title=f"No Results found for: {query}",description="No emoji with that name found. Why not add Jumbo to more servers.",color=discord.Color.random())
+            await ctx.send(embed=em)
+        else:
+            start = (current_page - 1) * items_per_page
+            end = start + items_per_page
+            buttons = ["⬅️","➡️"]
+            for i in temp[start:end]:
+                k,v = i
+                em.add_field(name=k,value=f"`{v}`",inline=False)
+            em.set_footer(text=f"Page : {current_page}/{pages}\nYou can use these as `:name:` to send emojis")
+            msg = await ctx.send(embed=em)
+            for button in buttons:
+                await msg.add_reaction(button)
+            while True:
+                try:
+                    reaction, user = await self.bot.wait_for("reaction_add",check=lambda reaction, user: user == ctx.author and reaction.emoji in buttons, timeout=20.0)
+                except asyncio.TimeoutError:
+                    await msg.clear_reactions()
+                else:
+                    previous_pg = current_page
+                    if reaction.emoji == "⬅️":
+                        if current_page > 1:
+                            current_page -= 1
+                    elif reaction.emoji == "➡️":
+                        if current_page < pages:
+                            current_page += 1
+                    for button in buttons:
+                        await msg.remove_reaction(button,ctx.author)
+                    if previous_pg != current_page:
+                        pages = math.ceil(len(temp) / items_per_page)
+                        start = (current_page - 1) * items_per_page
+                        end = start + items_per_page
+                        em = discord.Embed(title=f"Search Results for: {query}",description="",color=discord.Color.random())
+                        for i in temp[start:end]:
+                            k,v = i
+                            em.add_field(name=k,value=f"`{v}`",inline=False)
+                        em.set_footer(text=f"Page : {current_page}/{pages}\nYou can use these as `:name:` to send emojis")
+                        await msg.edit(embed=em)
+    
 def setup(bot):
     bot.add_cog(Utility(bot,difficulty))

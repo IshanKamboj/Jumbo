@@ -2,11 +2,10 @@ import discord
 from discord.ext import commands
 from discord.ext.commands.errors import MissingRequiredArgument
 from Database.db_files import firebase
-from helpEmbeds import HelpEmbeds
 from .Listeners import AllListeners, difficulty
 import asyncio
 
-class Admin(commands.Cog):
+class Admin(commands.Cog,name=":lock: **Admin Commands**"):
     def __init__(self,bot,difficulty):
         self.bot = bot
         self.difficulty = difficulty
@@ -18,6 +17,9 @@ class Admin(commands.Cog):
     @commands.check(AllListeners.check_enabled)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _givelevel(self,ctx:commands.Context,user:discord.Member,level:int):
+        """
+        Gives Levels to users. You cannot give level more than 150.
+        """
         database = firebase.database()
         x = database.child("Levels").child(str(ctx.guild.id)).child(str(user.id)).get()
         try:
@@ -67,6 +69,9 @@ class Admin(commands.Cog):
     @commands.check(AllListeners.check_enabled)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _prefix(self,ctx:commands.Context,*,newPrefix):
+        """
+        Change the prefix for your server.
+        """
         db = firebase.database()
         prefixs = {"Prefix":newPrefix}
         db.child('Prefixes').child(str(ctx.guild.id)).update({"Prefix":newPrefix})
@@ -89,7 +94,10 @@ class Admin(commands.Cog):
     @commands.check(AllListeners.check_enabled)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _purge(self,ctx,number:int):
-        db = firebase.database()
+        """
+        This command deletes a bulk of messages. Just enter a number and that many messages would be deleted.
+        """
+        #db = firebase.database()
         try:
             await ctx.channel.purge(limit=number+1)
             # em = discord.Embed(description=f"**Messages removed: `{number}`**\n**Removed by: `{ctx.author.name}`**",color=discord.Color.random())
@@ -115,6 +123,9 @@ class Admin(commands.Cog):
     @commands.has_permissions(administrator=True)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _disable(self,ctx,*,command):
+        """
+        This command disables an already enabled command.
+        """
         db = firebase.database()
         if command == "list":
             x = db.child('Disabled').child(str(ctx.guild.id)).get()
@@ -175,6 +186,9 @@ class Admin(commands.Cog):
     @commands.has_permissions(administrator=True)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _enable(self,ctx,*,command):
+        """
+        This command enables a disabled command.
+        """
         db = firebase.database()
         command_disable = self.bot.get_command(command)
         disabledCommands = db.child('Disabled').child(str(ctx.guild.id)).child(str(command_disable)).get()
@@ -210,8 +224,12 @@ class Admin(commands.Cog):
     @commands.check(AllListeners.check_enabled)
     @commands.has_permissions(manage_roles=True)
     async def role(self,ctx):
-        db = firebase.database()
-        await ctx.send(embed=HelpEmbeds.role_embed())
+        em = discord.Embed(title="Role command",color=discord.Color.random())
+        em.add_field(name="***role add <user> <role/role ID>**",value="Gives the specified user the specifed role.",inline=False)
+        em.add_field(name="***role remove <user> <role/role ID>**",value="Removes the specified role from the user.",inline=False)
+        em.add_field(name="***role create <role name> <hoist:(True/False)> <mentionable:(True/False)>**",value="Creates a role with name specified.",inline=False)
+        em.add_field(name="***role color <role name> <color:hex_value>**",value="Changes the color of the role specified")
+        await ctx.send(embed=em)
     @role.command(name="add")
     @commands.guild_only()
     @commands.has_permissions(manage_roles=True)
@@ -305,7 +323,13 @@ class Admin(commands.Cog):
     @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     async def settings(self,ctx):
-        await  ctx.send(embed=HelpEmbeds.settings_embed())
+        em = discord.Embed(title=f"Settings Commands",color=discord.Color.random())
+        em.add_field(name="*settings show",value="Shows the command roles settings for this server.",inline=False)
+        em.add_field(name="*settings cmdrole <command_name> <role_id/role>",value="Sets the required role for using any command. Removes the role if it is already there.",inline=False)
+        em.add_field(name="*settings multi <multiplier> [channel(optional)]",value="Sets the level multiplier for a specific channel.",inline=False)
+        em.add_field(name="*settings announcements",value="Sets an announcements channel for your guild. All the level up messages are then sent in that channel.",inline=False)
+        em.add_field(name="*settings lvlrole <lvl:int> <role:id/name>",value="Sets the level roles for your guild. These roles are automatically given on reaching specified levels",inline=False)
+        await  ctx.send(embed=em)
         
     @settings.command(name="cmdrole")
     @commands.guild_only()
@@ -424,7 +448,13 @@ class Admin(commands.Cog):
         if lvl == None:
             
             if x.val() == None:
-                await  ctx.send(embed=HelpEmbeds.settings_embed())
+                em = discord.Embed(title=f"Settings Commands",color=discord.Color.random())
+                em.add_field(name="*settings show",value="Shows the command roles settings for this server.",inline=False)
+                em.add_field(name="*settings cmdrole <command_name> <role_id/role>",value="Sets the required role for using any command. Removes the role if it is already there.",inline=False)
+                em.add_field(name="*settings multi <multiplier> [channel(optional)]",value="Sets the level multiplier for a specific channel.",inline=False)
+                em.add_field(name="*settings announcements",value="Sets an announcements channel for your guild. All the level up messages are then sent in that channel.",inline=False)
+                em.add_field(name="*settings lvlrole <lvl:int> <role:id/name>",value="Sets the level roles for your guild. These roles are automatically given on reaching specified levels",inline=False)
+                await  ctx.send(embed=em)
             else:
                 em = discord.Embed(title="Level Roles:",description="",color=discord.Color.random())
                 em.set_thumbnail(url=f"{str(ctx.guild.icon_url)}")
@@ -458,6 +488,9 @@ class Admin(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _resetexp(self,ctx,user:discord.Member=None):
+        """
+        Resets the user exp.
+        """
         if user == None:
             user = ctx.author
         db = firebase.database()

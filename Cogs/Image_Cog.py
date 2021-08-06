@@ -12,7 +12,7 @@ import requests
 from jikanpy import Jikan
 import asyncio
 from Database.db_files import firebase
-class ImageCommands(commands.Cog):
+class ImageCommands(commands.Cog,name=":camera: **Image Commands**"):
     def __init__(self,bot):
         self.bot = bot
 
@@ -22,6 +22,9 @@ class ImageCommands(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _wanted(self,ctx, user:discord.Member=None):
+        """
+        Returns a wanted image of someone.
+        """
         if user is None:
             user = ctx.author
         wanted = Image.open('template_imgs/wanted.jpg')
@@ -49,6 +52,9 @@ class ImageCommands(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _rip(self,ctx,user:discord.Member=None):
+        """
+        This command returns a RIP image of someone.
+        """
         if user == None:
             user = ctx.author
         tomb = Image.open('template_imgs/tomb.jpg')
@@ -77,6 +83,9 @@ class ImageCommands(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _wallpaper(self,ctx,query:str=None):
+        """
+        This command returns a random 1080p image for wallpaper.
+        """
         if query == None:
             url = 'https://source.unsplash.com/random/1920x1080'
         else:
@@ -93,6 +102,9 @@ class ImageCommands(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _trash(self,ctx,user:discord.Member=None):
+        """
+        Generates a trash image of user.
+        """
         if user == None:
             user = ctx.author
         trash = Image.open("template_imgs/trash.jpg")
@@ -112,6 +124,9 @@ class ImageCommands(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _waifu(self,ctx):
+        """
+        Return a waifu image depending on your luck
+        """
         t = random.randint(1,100)
         #perm_simp = [752492486714327131,576442029337477130, 536444230659342337]
         db = firebase.database()
@@ -139,6 +154,9 @@ class ImageCommands(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _grayscale(self,ctx,link:str):
+        """
+        Return an image in grayscale
+        """
         link = link.replace("<","")
         link = link.replace(">","")
         x = Image.open(requests.get(link, stream=True).raw)
@@ -153,6 +171,9 @@ class ImageCommands(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _emboss(self,ctx,link:str):
+        """
+        Return an image with an emboss filter.
+        """
         link = link.replace("<","")
         link = link.replace(">","")
         x = Image.open(requests.get(link, stream=True).raw)
@@ -168,6 +189,9 @@ class ImageCommands(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _catpic(self,ctx):
+        """
+        Returns a cat picture
+        """
         # url = "https://api2.snowflakedev.xyz/api/cat"
         # x = Image.open(requests.get(url=url,headers={"Authorization":"NTc2NDQyMDI5MzM3NDc3MTMw.MTYxODU0MjEyNTA5Ng==.fc6b183fdd97d9bcc3cddce606e0ad70"},stream=True).raw)
         # with io.BytesIO() as image_binary:
@@ -189,6 +213,9 @@ class ImageCommands(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _dog(self,ctx):
+        """
+        Returns a dog picture
+        """
         url = "https://random.dog/woof.json"
         r = requests.get(url=url).json()
         final_url = r['url']
@@ -205,6 +232,9 @@ class ImageCommands(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)        
     async def _character(self,ctx,*,query:str):
+        """
+        Returns images of character of anime.
+        """
         jikan = Jikan()
         search_result = jikan.search('character', query=query)
         x = 0
@@ -247,6 +277,9 @@ class ImageCommands(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _fox(self,ctx):
+        """
+        Returns a fox picture
+        """
         url = "https://api.snowflake107.repl.co/api/fox"
         x = Image.open(requests.get(url=url,headers={"Authorization":"NTc2NDQyMDI5MzM3NDc3MTMw.MTYxODU0MjEyNTA5Ng==.fc6b183fdd97d9bcc3cddce606e0ad70"},stream=True).raw)
         with io.BytesIO() as image_binary:
@@ -259,6 +292,9 @@ class ImageCommands(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _wasted(self,ctx,user:discord.Member=None):
+        """
+        Returns an image with GTA style wasted filter
+        """
         if user == None:
             user = ctx.author
         pfp = Image.open(requests.get(url=user.avatar_url,stream=True).raw)

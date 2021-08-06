@@ -5,7 +5,6 @@ import asyncio
 from discord.ext.commands.errors import CommandInvokeError
 import random
 import datetime
-from helpEmbeds import HelpEmbeds
 from .Listeners import AllListeners
 alias = {
     "s":1,
@@ -26,7 +25,7 @@ alias = {
     "day":86400,
     "days":86400
 }
-class Giveaway(commands.Cog):
+class Giveaway(commands.Cog,name=":tada: **Giveaway Commands**"):
     def __init__(self,bot):
         self.bot = bot
     
@@ -46,7 +45,11 @@ class Giveaway(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _giveaway(self,ctx):
-        await ctx.send(embed=HelpEmbeds.giveaway_embed())
+        em = discord.Embed(title="Giveaway Commands",color=discord.Color.random())
+        em.add_field(name="*gstart <time> <winners> <message/prize>",value="Starts a giveaway for the specified amount of time.",inline=False)
+        em.add_field(name="*greroll <message_id>",value="Re rolls the winners of the giveaway.",inline=False)
+        em.add_field(name="*gend <message_id>",value="Ends the specified giveaway",inline=False)
+        await ctx.send(embed=em)
 
     @commands.command(name="gstart",aliases=["giveawaystart","gcreate"])
     @commands.guild_only()
@@ -54,6 +57,9 @@ class Giveaway(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _gstart(self,ctx,timee:str,winners:str,*,message):
+        """
+        Starts a giveaway for the specified amount of time.
+        """
         winners = winners.replace("w"," ")
         winners = int(winners)
         time = self.convert(timee)
@@ -119,6 +125,9 @@ class Giveaway(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _reroll(self,ctx,msg_id):
+        """
+        Re rolls the winners of the giveaway.
+        """
         reroll = await ctx.fetch_message(msg_id)
         em = reroll.embeds[0]
         message = em.title
@@ -139,6 +148,9 @@ class Giveaway(commands.Cog):
     @commands.check(AllListeners.role_check)
     @commands.cooldown(1, 7, commands.BucketType.user)
     async def _end(self,ctx,msg_id):
+        """
+        Ends the specified giveaway
+        """
         msg = await ctx.fetch_message(msg_id)
         if "ended" in msg.content.lower():
             return await ctx.send("That giveaway already ended. You can reroll using: `j!reroll`")
