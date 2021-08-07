@@ -1,1 +1,1 @@
-worker: python Jumbo.py
+worker: python launcher.py
