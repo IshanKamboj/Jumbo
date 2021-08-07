@@ -65,25 +65,25 @@ class LevelIMG:
         LVL = f"Level: {self.lvl}"
         LVL_w, LVL_ht = d.textsize(LVL,font=font)
 
-
+        clr_bar = (179,212,253)
         RNK = f"Rank: {self.rank}"
         RNK_w , RNK_ht = d.textsize(RNK,font=font)
 
         d.text( (avatarX + 230, y), userName, fill=(255,255,255), font=font)
         d.text((t_width+x,y+15), " #"+tag, fill=(81,81,81), font=tag_font)
-        d.text((920-XP_w,250-XP_ht),XP,fill=(147,190,243),font=font)
+        d.text((920-XP_w,250-XP_ht),XP,fill=clr_bar,font=font)
         d.text((920-LVL_w,10),LVL,fill=(255,255,255),font=font)
-        d.text((920-RNK_w-LVL_w-20,10),RNK,fill=(147,190,243),font=font)
+        d.text((920-RNK_w-LVL_w-20,10),RNK,fill=clr_bar,font=font)
        
         if di == 100:
             percentVal1 = self.exp - ((self.lvl-1)*di)
             percent = (percentVal1/di)*934
-            d.rectangle([0,272,percent,282],fill=(147,190,243))
+            d.rectangle([0,272,percent,282],fill=clr_bar)
         if di != 100:
             percentVal1 = self.exp - ((self.lvl-1)*di)
             percent = (percentVal1/di)*100
             bar_to_be_filled = (percent/100)*934
-            d.rectangle([0,272,bar_to_be_filled,282],fill=(147,190,243))
+            d.rectangle([0,272,bar_to_be_filled,282],fill=clr_bar)
         img.paste(avatarImg, (avatarX,avatarY),circle_image)
         with io.BytesIO() as image_binary:
             img.save(image_binary,"PNG")
