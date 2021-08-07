@@ -26,11 +26,9 @@ radio_dict = {
     'nightcore':'https://www.youtube.com/watch?v=6vIceK3MqTo'
 }
 # radio_list = ['anime','edm','pop','study','party']
-# client_id = os.getenv('spotify_client_id')
-# client_secret = os.getenv('spotify_client_secret')
+client_id = os.getenv('spotify_client_id')
+client_secret = os.getenv('spotify_client_secret')
 
-client_id = '9f76fdf6ec2f4d3fb506297168c618b0'
-client_secret = 'f497831f91354e40acaf9538fce95367'
 LYRICS_URL = "https://some-random-api.ml/lyrics?title="
 sp = spotipy.Spotify(client_credentials_manager=SpotifyClientCredentials(client_id=client_id,client_secret=client_secret))
 

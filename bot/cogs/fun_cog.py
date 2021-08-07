@@ -44,7 +44,7 @@ class Fun(commands.Cog, name=":joystick: **Fun Commands**"):
         This command give mentioned user a truth question to be answered.
         """
         #db = firebase.database()
-        with open("truth.txt","r",encoding='utf-8') as f:
+        with open("text_files/truth.txt","r",encoding='utf-8') as f:
             truth_text = f.readlines()
         length_truth = random.randint(0,len(truth_text))
         truth = truth_text[length_truth].replace("\n"," ")
@@ -69,7 +69,7 @@ class Fun(commands.Cog, name=":joystick: **Fun Commands**"):
         """
         This command give mentioned user a dare, that is to be done.
         """
-        with open("dare.txt","r",encoding='utf-8') as f:
+        with open("text_files/dare.txt","r",encoding='utf-8') as f:
             dare_text = f.readlines()
         length_dare = random.randint(0,len(dare_text))
 

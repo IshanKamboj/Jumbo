@@ -65,7 +65,7 @@ class LevelIMG:
         LVL = f"Level: {self.lvl}"
         LVL_w, LVL_ht = d.textsize(LVL,font=font)
 
-        clr_bar = (179,212,253)
+        clr_bar = (64,224,208)
         RNK = f"Rank: {self.rank}"
         RNK_w , RNK_ht = d.textsize(RNK,font=font)
 

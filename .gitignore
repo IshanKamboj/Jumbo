@@ -2,3 +2,4 @@
 Database/.env
 MusicCog.py
 jdk-16
+__pycache__
