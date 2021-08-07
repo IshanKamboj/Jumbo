@@ -14,12 +14,12 @@ class Jumbo(commands.Bot):
             print(f"Loaded {cog} cog.")
         print("Setup Complete.")
     
-    def run(self,version):
+    def run(self,VERSION):
         self.setup()
 
         TOKEN = os.getenv('TOKEN')
         
-        self.VERSION = version
+        self.version = VERSION
         print("Running the bot")
         super().run(TOKEN,reconnect=True)
         
