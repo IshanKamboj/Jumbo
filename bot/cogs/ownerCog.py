@@ -3,9 +3,11 @@ from discord.ext import commands
 import os
 import sys
 import dbl
-import socket
-import socket
 from Database.db_files import firebase
+import io
+import contextlib
+import textwrap
+from traceback import format_exception
 class OwnerCommands(commands.Cog,name="owner"):
     def __init__(self,bot):
         self.bot = bot
@@ -46,18 +48,43 @@ class OwnerCommands(commands.Cog,name="owner"):
             self.restart_program()
         except Exception as e:
             print(str(e))
-    @commands.command(name="ip")
-    @commands.is_owner()
-    async def _ip(self,ctx):
-        print(socket.gethostbyname(socket.gethostname()))
+    
+    def clean_code(self,content):
+        if content.startswith("```") and content.endswith("```"):
+            return "\n".join(content.split("\n")[1:])[:-3]
+        else:
+            return content
     @commands.command(name="eval")
     @commands.is_owner()
     async def _eval(self,ctx,*,code):
+        code = self.clean_code(code)
+
+        local_vars = {
+            "discord":discord,
+            "commands":commands,
+            "bot":self.bot,
+            "ctx":ctx,
+            "channel":ctx.channel,
+            "author":ctx.author,
+            "guild":ctx.guild,
+            "message":ctx.message,
+
+        }
+        stdout = io.StringIO()
+
         try:
-            exe = eval(code)
-            await ctx.send(f"```{exe}```")
+            with contextlib.redirect_stdout(stdout):
+                exec(
+                    f"async def func():\n{textwrap.indent(code,'    ')}", local_vars
+                )
+                obj = await local_vars["func"]()
+                result = f"{stdout.getvalue()}\n---- {obj}\n"
         except Exception as e:
-            await ctx.send(str(e))
+            result = "".join(format_exception(e, e, e.__traceback__))
+
+        em = discord.Embed(title="Code Execution",description=f"```py\n{result}```",color=discord.Color.red())
+        await ctx.send(embed=em)
+    
     @commands.command(name="permsimp",aliases=["permanentsimp"])
     @commands.is_owner()
     async def _permsimp(self,ctx,user:discord.User=None):

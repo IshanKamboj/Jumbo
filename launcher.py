@@ -1,6 +1,6 @@
 from bot import Jumbo
 
-VERSION = '1.0.0'
+VERSION = '1.0.1'
 
 def main():
     bot=Jumbo()
