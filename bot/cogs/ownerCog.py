@@ -68,6 +68,7 @@ class OwnerCommands(commands.Cog,name="owner"):
             "author":ctx.author,
             "guild":ctx.guild,
             "message":ctx.message,
+            "firebase":firebase
 
         }
         stdout = io.StringIO()
