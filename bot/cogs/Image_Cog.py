@@ -199,7 +199,9 @@ class ImageCommands(commands.Cog,name=":camera: **Image Commands**"):
         #     image_binary.seek(0)
         #     await ctx.send(file=discord.File(fp=image_binary, filename='image.png'))
         url = "https://api.thecatapi.com/v1/images/search"
-        r = requests.get(url=url).json()
+        async with aiohttp.request("GET",url) as r:
+            r = await r.json()
+        #r = requests.get(url=url).json()
         final_url = r[0]['url']
         x = Image.open(requests.get(final_url,stream=True).raw)
         with io.BytesIO() as image_binary:
@@ -217,7 +219,8 @@ class ImageCommands(commands.Cog,name=":camera: **Image Commands**"):
         Returns a dog picture
         """
         url = "https://random.dog/woof.json"
-        r = requests.get(url=url).json()
+        async with aiohttp.request("GET",url) as r:
+            r = await r.json()
         final_url = r['url']
         #print(r)
         x = Image.open(requests.get(final_url,stream=True).raw)
@@ -236,7 +239,9 @@ class ImageCommands(commands.Cog,name=":camera: **Image Commands**"):
         Returns images of character of anime.
         """
         jikan = Jikan()
-        search_result = jikan.search('character', query=query)
+        url = f"https://api.jikan.moe/v3/search/character?q={query}"
+        async with aiohttp.request("GET",url) as r:
+            search_result = await r.json()
         x = 0
         pages = len(search_result["results"])
         results = search_result['results'][x]

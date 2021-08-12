@@ -66,7 +66,7 @@ class LevelIMG:
         LVL_w, LVL_ht = d.textsize(LVL,font=font)
 
         clr_bar = (64,224,208)
-        RNK = f"Rank: {self.rank}"
+        RNK = f"Rank: #{self.rank}"
         RNK_w , RNK_ht = d.textsize(RNK,font=font)
 
         d.text( (avatarX + 230, y), userName, fill=(255,255,255), font=font)

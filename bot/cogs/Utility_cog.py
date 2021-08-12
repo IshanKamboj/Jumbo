@@ -1,3 +1,4 @@
+import aiohttp
 import discord
 from discord.ext import commands
 from Database.db_files import firebase
@@ -7,7 +8,6 @@ import requests
 from googlesearch import search
 from .Listeners import AllListeners,difficulty
 import wikipedia
-from mal import AnimeSearch
 from datetime import datetime
 from colour import Color
 import json
@@ -282,9 +282,11 @@ class Utility(commands.Cog,name=":tools: **Utility Commands**"):
         """
         Returns info about anime from MAL (My Anime List)
         """
-        search = AnimeSearch(query)
+        #search = AnimeSearch(query)
         url = f"https://api.jikan.moe/v3/search/anime?q={query}"
-        r = requests.get(url=url).json()
+        async with aiohttp.request("GET",url) as r:
+            r = await r.json()
+        #print(r)
         #print(r["results"][0])
         synopsis = r["results"][0]["synopsis"]
         title = r["results"][0]["title"]

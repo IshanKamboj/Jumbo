@@ -288,19 +288,20 @@ class InfoCogs(commands.Cog,name=":mag: **Info Commands**"):
         em.add_field(name="Created on:",value=user.created_at.strftime(date_format))
         #em.add_field(name="Animated Avatar:",value=user.is_avatar_animated())
         em.add_field(name="Bot:",value=user.bot,inline=False)
-        try:
-            em.add_field(name="Mutual Servers:",
-            value="\n".join(f"`{i.id}` **{i.name}**" for i in user.mutual_guilds),
-            inline = False
-            )
-            
-        except:
-            em.add_field(name="Mutual Servers:",
-            value="`None`",
-            inline = False
-            )
-        await ctx.send(embed=em)
+        t = "\n"
         #print(user.mutual_guilds)
+        if user.mutual_guilds != []:
+            for i in user.mutual_guilds:
+                t = f"`{i.id}` **{i.name}**\n"
+        else:
+            t = "None"
+        print(t)
+        em.add_field(name="Mutual Servers:",
+        value=t,
+        inline = False
+        )
+        await ctx.send(embed=em)
+        #
     @commands.command(name='github',aliases=["githubstats","gitstats"])
     @commands.guild_only()
     @commands.check(AllListeners.check_enabled)

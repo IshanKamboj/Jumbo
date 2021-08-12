@@ -1,14 +1,11 @@
-from datetime import datetime
 import discord
 from discord.ext import commands
 import randfacts
 import random
-from Database.db_files import firebase
 from .Listeners import AllListeners
 import pyjokes
-import requests
-import json
 import asyncio
+import aiohttp
 OPTIONS = {
     "1️⃣": 0,
     "2️⃣": 1,
@@ -177,8 +174,9 @@ class Fun(commands.Cog, name=":joystick: **Fun Commands**"):
         # with open("insult.txt","r") as f:
         #     roast_list = f.readlines()
         api_url = "https://api.snowflake107.repl.co/api/roast"
-        r = requests.get(api_url,headers={"Authorization":"NTc2NDQyMDI5MzM3NDc3MTMw.MTYxODU0MjEyNTA5Ng==.fc6b183fdd97d9bcc3cddce606e0ad70"}).content.decode()
-        roast = json.loads(r)["roast"]
+        async with aiohttp.request("GET", api_url, headers={"Authorization":"NTc2NDQyMDI5MzM3NDc3MTMw.MTYxODU0MjEyNTA5Ng==.fc6b183fdd97d9bcc3cddce606e0ad70"}) as r:
+            data = await r.json()
+            roast = data["roast"]
         #roast = roast_list[length_roast].replace("\n"," ")
         em = discord.Embed(title=f"{roast}",color=discord.Color.random())
         await ctx.send(embed=em)
@@ -345,8 +343,9 @@ class Fun(commands.Cog, name=":joystick: **Fun Commands**"):
             await ctx.send("Sorry cannot have less than 0 questions. So u will have 1 question")
             ques = 1
         url = f"https://opentdb.com/api.php?amount={ques}&type=multiple"
-        r = requests.get(url=url).json()
-        results = r["results"]
+        async with aiohttp.request("GET",url) as r:
+            r = await r.json()
+            results = r["results"]
         correct = 0
         for i in range(len(results)):
             cat = results[i]['category']
@@ -429,8 +428,9 @@ class Fun(commands.Cog, name=":joystick: **Fun Commands**"):
             await ctx.send("Sorry cannot have less than 0 questions. So u will have 1 question")
             ques = 1
         url = f"https://opentdb.com/api.php?amount={ques}&type=multiple&category=31"
-        r = requests.get(url=url).json()
-        results = r["results"]
+        async with aiohttp.request("GET",url) as r:
+            r = await r.json()
+            results = r["results"]
         correct = 0
         for i in range(len(results)):
             cat = results[i]['category']
