@@ -324,11 +324,12 @@ class Admin(commands.Cog,name=":lock: **Admin Commands**"):
     @commands.check(AllListeners.check_enabled)
     async def settings(self,ctx):
         em = discord.Embed(title=f"Settings Commands",color=discord.Color.random())
-        em.add_field(name="*settings show",value="Shows the command roles settings for this server.",inline=False)
-        em.add_field(name="*settings cmdrole <command_name> <role_id/role>",value="Sets the required role for using any command. Removes the role if it is already there.",inline=False)
-        em.add_field(name="*settings multi <multiplier> [channel(optional)]",value="Sets the level multiplier for a specific channel.",inline=False)
-        em.add_field(name="*settings announcements",value="Sets an announcements channel for your guild. All the level up messages are then sent in that channel.",inline=False)
-        em.add_field(name="*settings lvlrole <lvl:int> <role:id/name>",value="Sets the level roles for your guild. These roles are automatically given on reaching specified levels",inline=False)
+        em.add_field(name="j!settings show",value="Shows the command roles settings for this server.",inline=False)
+        em.add_field(name="j!settings cmdrole <command_name> <role_id/role>",value="Sets the required role for using any command. Removes the role if it is already there.",inline=False)
+        em.add_field(name="j!settings multi <multiplier> [channel(optional)]",value="Sets the level multiplier for a specific channel.",inline=False)
+        em.add_field(name="j!settings announcements",value="Sets an announcements channel for your guild. All the level up messages are then sent in that channel.",inline=False)
+        em.add_field(name="j!settings nomessage",value="Toggles between enabling and disabling the level up messages",inline=False)
+        em.add_field(name="j!settings lvlrole <lvl:int> <role:id/name>",value="Sets the level roles for your guild. These roles are automatically given on reaching specified levels",inline=False)
         await  ctx.send(embed=em)
         
     @settings.command(name="cmdrole")
@@ -415,8 +416,24 @@ class Admin(commands.Cog,name=":lock: **Admin Commands**"):
             db.child("Announcement").child(str(ctx.guild.id)).update({"channel":channel.id})
             em = discord.Embed(title="Announcements channel updated",description=f"{channel.mention} was updated as your announcements channel. Now all the level up messages would be sent their.",color=discord.Color.green())
             await ctx.send(embed=em)
-
-
+    @settings.command(name="nomessage")
+    @commands.has_permissions(manage_guild=True)
+    async def _nomessage(self,ctx,):
+        db = firebase.database()
+        x = db.child("LevelMsg").child(ctx.guild.id).get()
+        
+        if x.val() is None:
+            db.child("LevelMsg").child(ctx.guild.id).set({"enabled":False})
+            em = discord.Embed(description=f"✅ Level up messages have been disabled successfully",color=discord.Color.green())
+            await ctx.send(embed=em)
+        elif x.val() is not None:
+            y = not x.val()["enabled"]
+            db.child("LevelMsg").child(ctx.guild.id).update({"enabled":y})
+            if y:
+                em = discord.Embed(description=f"✅ Level up messages have been enabled successfully",color=discord.Color.green())
+            else:
+                em = discord.Embed(description=f"✅ Level up messages have been disabled successfully",color=discord.Color.green())
+            await ctx.send(embed=em)
     @settings.command(name='show')
     @commands.guild_only()
     async def _show(self,ctx):

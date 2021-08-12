@@ -264,6 +264,7 @@ class AllListeners(commands.Cog):
     async def level_up_func(self, message, seen_data):
         db = firebase.database()
         isEnabled = db.child('Disabled').child(str(message.guild.id)).child("level").get()
+        levelmsg = db.child("LevelMsg").child(message.guild.id).get()
         if isEnabled.val() is None:
             if not message.author.bot:
                 data = db.child("Levels").child(str(message.guild.id)).child(str(message.author.id)).get()
@@ -292,11 +293,12 @@ class AllListeners(commands.Cog):
                             )
                             .set_thumbnail(url=f"{message.author.avatar_url}")
                             )
-                            if announcement_channel.val() is None:
-                                await message.channel.send(mention,embed=lvl_embed)
-                            else:
-                                ch = announcement_channel.val()["channel"]
-                                await self.bot.get_channel(ch).send(mention,embed=lvl_embed)
+                            if levelmsg.val()["enabled"] or levelmsg.val() == None:
+                                if announcement_channel.val() is None:
+                                    await message.channel.send(mention,embed=lvl_embed)
+                                else:
+                                    ch = announcement_channel.val()["channel"]
+                                    await self.bot.get_channel(ch).send(mention,embed=lvl_embed)
                             await self.check_level_role(message,lvl)
                         if seen_data.val() is None:
                             db.child("Last Seen").child(str(message.author.id)).set({"Time":str(datetime.utcnow())})
@@ -325,11 +327,12 @@ class AllListeners(commands.Cog):
                                 )
                                 .set_thumbnail(url=f"{message.author.avatar_url}")
                                 )
-                                if announcement_channel.val() is None:
-                                    await message.channel.send(mention,embed=lvl_embed)
-                                else:
-                                    ch = announcement_channel.val()["channel"]
-                                    await self.bot.get_channel(ch).send(mention,embed=lvl_embed)
+                                if levelmsg.val()["enabled"] or levelmsg.val() == None:
+                                    if announcement_channel.val() is None:
+                                        await message.channel.send(mention,embed=lvl_embed)
+                                    else:
+                                        ch = announcement_channel.val()["channel"]
+                                        await self.bot.get_channel(ch).send(mention,embed=lvl_embed)
                                 await self.check_level_role(message,lvl)
                             if seen_data.val() is None:
                                 db.child("Last Seen").child(str(message.author.id)).set({"Time":str(datetime.utcnow())})
