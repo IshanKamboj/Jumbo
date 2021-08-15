@@ -293,7 +293,7 @@ class AllListeners(commands.Cog):
                             )
                             .set_thumbnail(url=f"{message.author.avatar_url}")
                             )
-                            if levelmsg.val()["enabled"] or levelmsg.val() is None:
+                            if levelmsg.val() is None or levelmsg.val()["enabled"]:
                                 if announcement_channel.val() is None:
                                     await message.channel.send(mention,embed=lvl_embed)
                                 else:
@@ -327,7 +327,7 @@ class AllListeners(commands.Cog):
                                 )
                                 .set_thumbnail(url=f"{message.author.avatar_url}")
                                 )
-                                if levelmsg.val()["enabled"] or levelmsg.val() is None:
+                                if levelmsg.val() is None or levelmsg.val()["enabled"]:
                                     if announcement_channel.val() is None:
                                         await message.channel.send(mention,embed=lvl_embed)
                                     else:
