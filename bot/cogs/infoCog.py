@@ -39,6 +39,9 @@ class InfoCogs(commands.Cog,name=":mag: **Info Commands**"):
         #db = firebase.database()
         if user is None:
             user = ctx.author
+        # print(user.activities.name)
+        # print(.type)
+        # print(user.status)
         date_format = "%a, %d %b %Y %I:%M %p"
         embed = discord.Embed(color=0xdfa3ff, description=user.mention)
         embed.set_author(name=str(user), icon_url=user.avatar_url)
@@ -50,6 +53,8 @@ class InfoCogs(commands.Cog,name=":mag: **Info Commands**"):
                         value=str(members.index(user)+1))
         embed.add_field(name="Registered",
                         value=user.created_at.strftime(date_format))
+        embed.add_field(name="Status",value=user.status)
+        #embed.add_field(name="Activity",value=user.activities)
         if len(user.roles) > 1:
             role_string = ' '.join([r.mention for r in user.roles][1:])
             embed.add_field(name="Roles [{}]".format(
@@ -223,7 +228,7 @@ class InfoCogs(commands.Cog,name=":mag: **Info Commands**"):
         usage = psutil.cpu_percent(2)
         #player = self.bot.lavalink.player_manager.get(ctx.guild.id)
         fields = [
-            ("Owner","TheMonkeyCoder#0001",True),
+            ("Owner","Cypher#2222",True),
             ("Python version", python_version(), True),
             ("discord.py version", discord_version, True),
             ("Uptime", uptime, True),
