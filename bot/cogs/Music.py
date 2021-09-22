@@ -133,7 +133,8 @@ class Music(commands.Cog,name=":headphones: **Music Commands**"):
                 results = await player.node.get_tracks(track)
                 player.add(requester=ctx.author.id, track=results['tracks'][0])
                 embed.title = "Track Enqueued"
-                embed.description = track
+                track = results['tracks'][0]
+                embed.description = f'[{track["info"]["title"]}]({track["info"]["uri"]})'
             else:
                 if not url_rx.match(query):
                     query = f'ytsearch:{query}'
@@ -183,13 +184,13 @@ class Music(commands.Cog,name=":headphones: **Music Commands**"):
         return track["id"]
     def getTrackFeatures(self, id):
         meta = sp.track(id)
-        features = sp.audio_features(id)
-        name = meta['name']
+        # features = sp.audio_features(id)
+        # name = meta['name']
         album = meta['album']['name']
         artist = meta['album']['artists'][0]['name']
-        release_date = meta['album']['release_date']
-        length = meta['duration_ms']
-        popularity = meta['popularity']
+        # release_date = meta['album']['release_date']
+        # length = meta['duration_ms']
+        # popularity = meta['popularity']
         return f"ytsearch:{artist} - {album}"
     def get_tracks_spotify(self,url):
         x = sp.playlist_items(url,offset=0)
@@ -281,7 +282,6 @@ class Music(commands.Cog,name=":headphones: **Music Commands**"):
     @commands.guild_only()
     @commands.check(AllListeners.check_enabled)
     @commands.check(AllListeners.role_check)
-    
     async def disconnect(self, ctx):
         """ Disconnects the player from the voice channel and clears its queue. """
         player = self.bot.lavalink.player_manager.get(ctx.guild.id)
