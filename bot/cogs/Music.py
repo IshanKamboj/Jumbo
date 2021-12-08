@@ -50,7 +50,7 @@ class RepeatMode(Enum):
 class Music(commands.Cog,name=":headphones: **Music Commands**"):
     def __init__(self,bot):
         self.bot = bot
-        bot.lavalink = lavalink.Client(805430097426513941)
+        bot.lavalink = lavalink.Client(836226306978873345)
         #bot.lavalink.add_node('122.173.28.247', 2333, 'youshallnotpass', 'us', 'alpha')
         bot.lavalink.add_node('lava.link', 80, 'youshallnotpass', 'eu', 'beta')
         bot.lavalink.add_node('lava.link', 80, 'youshallnotpass', 'us', 'gamma')
